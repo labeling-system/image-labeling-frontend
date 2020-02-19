@@ -20,6 +20,9 @@ window.addEventListener('load', () => {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.label_name = "Label 0";
+        this.label_x = 0;
+        this.label_y = 0;
     }
     
     function drawImage(){ //insert dataset for labelling
@@ -44,14 +47,22 @@ window.addEventListener('load', () => {
         onSelection = false;
         listSelection[id].width = width;
         listSelection[id].height = height;
-        // console.log(listSelection.length);
-        id += 1;
+        listSelection[id].label_x = width/2 + listSelection[id].x;
+        listSelection[id].label_y = listSelection[id].y - 10;
+        if(height < 0 ){
+            listSelection[id].label_y += height;
+        }
+        listSelection[id].label_name = "Label " + id;
+        ctx.fillText(listSelection[id].label_name, listSelection[id].label_x, listSelection[id].label_y);        
+        // console.log(listSelection[id].label_x);
+        id += 1; //increment id
     }
 
     function drawArea(){//draw all selected area in workspace
         drawImage();
         for(let i = 0 ; i < listSelection.length ; i++){
             ctx.strokeRect(listSelection[i].x,listSelection[i].y,listSelection[i].width,listSelection[i].height);
+            ctx.fillText(listSelection[i].label_name, listSelection[i].label_x, listSelection[i].label_y);        
         }
     }
 
@@ -61,8 +72,14 @@ window.addEventListener('load', () => {
 
     function draw(e){
         if(!onSelection){return;}
+        //setting for selection box
         ctx.strokeStyle ="red";
         ctx.lineWidth = 3;
+
+        //Setting for labelling
+        ctx.font ="20px Lato";
+        ctx.fillStyle = "red";
+        ctx.textAlign = "center";
 
         width = e.clientX - listSelection[id].x;
         height = e.clientY - listSelection[id].y;
@@ -70,6 +87,8 @@ window.addEventListener('load', () => {
         clear();
         drawArea();
         ctx.strokeRect(listSelection[id].x,listSelection[id].y,width,height);
+        
+
     }
 
     canvas.addEventListener("mousedown", startPosition); 
