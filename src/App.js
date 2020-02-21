@@ -9,15 +9,55 @@ class LoginControl extends React.Component {
     super(props);
     this.handleLoginClick = this.handleLoginClick.bind(this);
     this.handleSignUpClick = this.handleSignUpClick.bind(this);
-    this.state = {isLoggedIn: true, message: 'Welcome', bgColor: '#FF7D7D'};
+    this.onSubmit = this.onSubmit.bind(this);
+    this.state = {
+      isLoggedIn: true,
+      message: 'Welcome',
+      bgColor: '#FF7D7D',
+      username: '',
+      email: '',
+      password: ''
+    };
+  }
+
+  handleChange = (e) => {
+    this.setState({[e.target.name]:e. target.value})
+  }
+
+  onSubmit(){
+    fetch('http://google.com', {
+        method: 'GET',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email: 'abc@abc.com',
+            password: '123456',
+        })
+    })
+    .then((response => {
+      console.log(response);
+    }))
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   handleLoginClick() {
-    this.setState({isLoggedIn: true, message: 'Welcome', bgColor: '#FF7D7D'});
+    this.setState({
+      isLoggedIn: true,
+      message: 'Welcome',
+      bgColor: '#FF7D7D'
+    });
   }
 
   handleSignUpClick() {
-    this.setState({isLoggedIn: false, message: 'Sign Up', bgColor: 'white '});
+    this.setState({
+      isLoggedIn: false,
+      message: 'Sign Up',
+      bgColor: 'white '
+    });
   }
 
   render() {
@@ -35,13 +75,13 @@ class LoginControl extends React.Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div id='welcome-container' class="col-sm-8" style={{backgroundColor:bgColor}}>
+          <div id='welcome-container' className="col-sm-8" style={{backgroundColor:bgColor}}>
             <img id='bg' src={bg} />
           </div>
-          <div id='form-container' class="col-sm-4">
+          <div id='form-container' className="col-sm-4">
               <p id='___'>___</p>
             <p id='welcome'>{message}</p>
-            <form action="">
+            <form onSubmit={this.onSubmit}>
               <Greeting isLoggedIn={isLoggedIn} />
                 {button}
             </form>
@@ -54,37 +94,42 @@ class LoginControl extends React.Component {
 }
 
 function LoginGreeting(props) {
+  const username = props.username;
+  const password = props.password;
   return [
     <div>
-      <div class="form-group">
-        <label class="form-label" for="username">Username</label>
-        <input type="username" class="form-control" id="username" name="username"/>
+      <div className="form-group">
+        <label className="form-label" htmlFor="username">Username</label>
+        <input type="username" className="form-control" id="username" name="username" value={username} onChange={props.handleChange}/>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="pwd">Password</label>
-        <input type="password" class="form-control" id="pwd" name="pwd"/>
+      <div className="form-group">
+        <label className="form-label" htmlFor="pwd">Password</label>
+        <input type="password" className="form-control" id="password" name="password" value={password} onChange={props.handleChange}/>
       </div>	
-      <button id='submit' type="submit" class="btn btn-default">Login</button>
+      <button id='submit' type="submit" className="btn btn-default" onClick={props.onSubmit}>Login</button>
     </div>  
   ]
 }
 
 function SignUpGreeting(props) {
+  const username = props.username;
+  const password = props.password;
+  const email = props.email;
   return [
     <div>
-      <div class="form-group">
-        <label class="form-label" for="username">Username</label>
-        <input type="username" class="form-control" id="username" name="username"/>
+      <div className="form-group">
+        <label className="form-label" htmlFor="username">Username</label>
+        <input type="username" className="form-control" id="username" name="username" value={username} onChange={props.handleChange}/>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="email">Email</label>
-        <input type="email" class="form-control" id="email" name="email"/>
+      <div className="form-group">
+        <label className="form-label" htmlFor="email">Email</label>
+        <input type="email" className="form-control" id="email" name="email" value={email} onChange={props.handleChange}/>
       </div>
-      <div class="form-group">
-        <label class="form-label" for="pwd">Password</label>
-        <input type="password" class="form-control" id="pwd" name="pwd"/>
+      <div className="form-group">
+        <label className="form-label" htmlFor="pwd">Password</label>
+        <input type="password" className="form-control" id="password" name="password" value={password} onChange={props.handleChange}/>
       </div>	
-      <button id='submit' type="submit" class="btn btn-default">Sign Up</button>
+      <button id='submit' type="submit" className="btn btn-default" onClick={props.onSubmit}>Sign Up</button>
     </div>  
   ]
 }
@@ -99,16 +144,16 @@ function Greeting(props) {
 
 function LoginButton(props) {
   return (
-    <p class='register'>Already have an account?
-      <button onClick={props.onClick} id='log-in' type="button" class="btn btn-default">Login</button>
+    <p className='register'>Already have an account?
+      <button onClick={props.onClick} id='log-in' type="button" className="btn btn-default">Login</button>
     </p>
   );
 }
 
 function SignUpButton(props) {
   return (
-    <p class='register'>Don't have an account?
-      <button onClick={props.onClick} id='sign-up' type="button" class="btn btn-default">Sign Up</button>
+    <p className='register'>Don't have an account?
+      <button onClick={props.onClick} id='sign-up' type="button" className="btn btn-default">Sign Up</button>
     </p>
   );
 }
