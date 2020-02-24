@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
+import Canvas from "../components/canvas";
 
-export class Workspace extends Component{
+class Workspace extends Component{
     render(){
         return(
-            <h2>Workspace</h2>
+            
+            <div>
+                <h2>Workspace</h2>                                 
+                <Canvas />                
+            </div>
+                
         )
     }
 }
