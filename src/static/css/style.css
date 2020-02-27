@@ -13,6 +13,10 @@ code {
     monospace;
 }
 
+#app > div {
+	margin: 0 20px;
+}
+
 /* Color Pallete */
 
 .light-red {
@@ -23,6 +27,7 @@ code {
 }
 
 /* Navigaation Bar */
+
 .navigation ul {
 	list-style-type: none;
 	margin: 0;

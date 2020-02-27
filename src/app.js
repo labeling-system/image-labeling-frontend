@@ -15,7 +15,7 @@ import Login from "./containers/login";
 export default function App() {
   return (
     <Router>
-      <div>
+      <div id='app'>
         <Navigation />
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
