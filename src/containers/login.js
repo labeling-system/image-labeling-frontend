@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import bg from '../static/img/bg.png';
-import logo from '../static/img/logo.svg';
 
 class Login extends React.Component {
     constructor(props) {
@@ -75,7 +73,7 @@ class Login extends React.Component {
             <div className="container-fluid">
                 <div className="row">
                     <div id='welcome-container' className="col-sm-8" style={{ backgroundColor: bgColor }}>
-                        <img id='bg' src={bg} />
+                        <img id='bg' src={bg} alt='background' />
                     </div>
                     <div id='form-container' className="col-sm-4">
                         <p id='___'>___</p>
