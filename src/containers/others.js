@@ -1,15 +1,32 @@
 import React, { Component } from 'react';
+import { postImage } from '../api/image';
+import ErrorBox from '../components/error-box';
+import InfoBox from '../components/info-box';
 
-export class Others extends Component {
+class Others extends Component {
     constructor(props: any) {
         super(props);
+        this.state = {
+            uploaded: false,
+            error: '',
+        }
         this.handleUpload = this.handleUpload.bind(this);
     }
 
-    handleUpload(files: FileList) {
+    async handleUpload(files: FileList) {
+        let filenames = []
         Array.from(files).forEach(file => {
-            console.log(file.name);
+            filenames.push(file.name);
         });
+        try {
+            let result = await postImage(filenames);
+            this.setState({ uploaded: true });
+            this.setState({ error: '' });
+        } catch (err) {
+            console.log(err)
+            this.setState({ uploaded: false });
+            this.setState({ error: 'Error, please contact the administrator' });
+        }
     }
 
     render() {
@@ -25,12 +42,20 @@ export class Others extends Component {
                     <li>Put all images in directory <code>upload</code>.</li>
                     <li>Click the Choose File below, and choose the <code>upload</code> folder.</li>
                 </ol>
-                <input
-                    directory=''
-                    webkitdirectory=''
-                    type='file'
-                    onChange={(e) => this.handleUpload(e.target.files)}
-                />
+                {
+                    this.state.error != '' ? <ErrorBox error={this.state.error} /> : null
+                }
+                {
+                    this.state.uploaded ?
+                        <InfoBox info='Successfully Uploaded Images' /> :
+                        <input
+                            directory=''
+                            webkitdirectory=''
+                            type='file'
+                            onChange={(e) => this.handleUpload(e.target.files)}
+                        />
+                }
+
             </div>
         )
     }
