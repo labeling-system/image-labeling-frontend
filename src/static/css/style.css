@@ -26,6 +26,18 @@ code {
 	color: rgb(255, 98, 98);
 }
 
+/* Error Box */
+.error-box {
+    color: red;
+    font-weight: bold;
+}
+
+/* Info Box */
+.info-box {
+    color: green;
+    font-weight: bold;
+}
+
 /* Navigaation Bar */
 
 .navigation ul {
