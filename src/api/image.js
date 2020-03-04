@@ -19,3 +19,16 @@ export const postImage = (filenames) => {
         });
     });
 };
+
+export const getAllImages = () => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'get',
+            url: API + '/image/all'
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};

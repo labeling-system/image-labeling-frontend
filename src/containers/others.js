@@ -19,11 +19,11 @@ class Others extends Component {
             filenames.push(file.name);
         });
         try {
-            let result = await postImage(filenames);
+            await postImage(filenames);
             this.setState({ uploaded: true });
             this.setState({ error: '' });
         } catch (err) {
-            console.log(err)
+            console.log(err);
             this.setState({ uploaded: false });
             this.setState({ error: 'Error, please contact the administrator' });
         }
@@ -43,7 +43,7 @@ class Others extends Component {
                     <li>Click the Choose File below, and choose the <code>upload</code> folder.</li>
                 </ol>
                 {
-                    this.state.error != '' ? <ErrorBox error={this.state.error} /> : null
+                    this.state.error !== '' ? <ErrorBox error={this.state.error} /> : null
                 }
                 {
                     this.state.uploaded ?

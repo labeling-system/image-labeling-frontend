@@ -23,7 +23,7 @@ code {
 	color: #FF7D7D;
 }
 .red {
-	color: rgb(255, 98, 98);
+	color: #ff6262;
 }
 
 /* Error Box */
@@ -220,4 +220,45 @@ code {
   }
 }
 
-/* Other Page */
+/* Edit Page */
+#edit table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+#edit table th, #edit td {
+	border: 1px solid #ddd;
+  	padding: 8px;
+}
+
+#edit table tr:nth-child(even){
+	background-color: #f2f2f2;
+}
+
+#edit table tbody td:nth-child(3){
+	font-weight: bold;
+}
+
+#edit table tbody tr:hover {
+	background-color: #ddd;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#edit table th {
+	padding-top: 12px;
+	padding-bottom: 12px;
+	text-align: left;
+	background-color: #ff6262;
+	color: white;
+}
+
+.edit-image-labeled {
+	color: green;
+}
+
+.edit-image-editing {
+	color: red;
+}
+
+
