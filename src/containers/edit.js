@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getAllImages } from '../api/image';
+import { Redirect } from 'react-router-dom';
 import { UNLABELED, LABELED, EDITING } from '../util/const';
 
 const ID = 0;
@@ -13,6 +14,7 @@ class Edit extends Component {
         this.state = {
             images: [],
             error: '',
+            redirect: false
         };
         this.handleGetAllImages = this.handleGetAllImages.bind(this);
         this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
@@ -33,7 +35,13 @@ class Edit extends Component {
 
     // TODO: tell workspace its id
     handleRedirectToWorkspace() {
-        console.log("wagekgn");
+        this.setState({ redirect: true })
+    }
+
+    renderRedirect() {
+        if (this.state.redirect) {
+            return <Redirect to='/workspace' />
+        }
     }
 
     async componentDidMount() {
@@ -50,6 +58,7 @@ class Edit extends Component {
     render() {
         return (
             <div id='edit'>
+                {this.renderRedirect()}
                 <h2>Edit</h2>
                 <table>
                     <thead>
