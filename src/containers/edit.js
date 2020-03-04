@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { getAllImages } from '../api/image';
-import { UNLABELED, LABELED, EDITING } from '../util/const'
+import { UNLABELED, LABELED, EDITING } from '../util/const';
 
 const ID = 0;
 const STATUS = 1;
 const FILENAME = 2;
 
+// TODO: implement pagination
 class Edit extends Component {
     constructor(props) {
         super(props);
@@ -14,6 +15,7 @@ class Edit extends Component {
             error: '',
         };
         this.handleGetAllImages = this.handleGetAllImages.bind(this);
+        this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
 
     // Unused, will be used to implement refresh button
@@ -27,6 +29,11 @@ class Edit extends Component {
             this.setState({ error: 'Error, please contact the administrator' });
         }
 
+    }
+
+    // TODO: tell workspace its id
+    handleRedirectToWorkspace() {
+        console.log("wagekgn");
     }
 
     async componentDidMount() {
@@ -55,7 +62,7 @@ class Edit extends Component {
                     <tbody>
                         {
                             this.state.images.map((image, i) => (
-                                <tr id={'edit-image-' + image[ID]}>
+                                <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}>
                                     <td>{i + 1}</td>
                                     <td>{image[FILENAME]}</td>
                                     {
