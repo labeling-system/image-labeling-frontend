@@ -1,5 +1,7 @@
 import React from 'react';
 import bg from '../static/img/bg.png';
+import { loginAuth, userRegister } from '../api/auth';
+import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
     constructor(props) {
@@ -8,42 +10,57 @@ class Login extends React.Component {
         this.handleSignUpClick = this.handleSignUpClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
-            isLoggedIn: true,
+            inLogin: true,
+            redirect: false,
             message: 'Welcome',
             bgColor: '#FF7D7D',
             username: '',
-            email: '',
             password: ''
         };
+        this.handleChange = this.handleChange.bind(this)
     }
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    onSubmit() {
-        fetch('http://google.com', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: 'abc@abc.com',
-                password: '123456',
-            })
-        })
-            .then((response => {
-                console.log(response);
-            }))
-            .catch((err) => {
-                console.log(err);
-            })
+    renderRedirect() {
+        if (this.state.redirect) {
+            return <Redirect to='/workspace' />
+        }
     }
+
+    async onSubmit() {
+        if (this.state.inLogin == true) {
+            try {
+                let username = this.state.username;
+                let password = this.state.password;
+                let result = await loginAuth(username, password);
+                if(result.status == 200) {
+                    this.props.handler(true);
+                    this.state.redirect = true;
+                } 
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            try {
+                let username = this.state.username;
+                let password = this.state.password;
+                let result = await userRegister(username, password);
+                if(result.status == 200) {
+                    alert("Succesfully Registered");
+                } 
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+        
 
     handleLoginClick() {
         this.setState({
-            isLoggedIn: true,
+            inLogin: true,
             message: 'Welcome',
             bgColor: '#FF7D7D'
         });
@@ -51,19 +68,19 @@ class Login extends React.Component {
 
     handleSignUpClick() {
         this.setState({
-            isLoggedIn: false,
+            inLogin: false,
             message: 'Sign Up',
             bgColor: 'white '
         });
     }
 
     render() {
-        const isLoggedIn = this.state.isLoggedIn;
+        const inLogin = this.state.inLogin;
         const message = this.state.message;
         const bgColor = this.state.bgColor;
         let button;
 
-        if (isLoggedIn) {
+        if (inLogin) {
             button = <SignUpButton onClick={this.handleSignUpClick} />;
         } else {
             button = <LoginButton onClick={this.handleLoginClick} />;
@@ -71,6 +88,7 @@ class Login extends React.Component {
 
         return (
             <div className="container-fluid">
+                {this.renderRedirect()}
                 <div className="row">
                     <div id='welcome-container' className="col-sm-8" style={{ backgroundColor: bgColor }}>
                         <img id='bg' src={bg} alt='background' />
@@ -78,10 +96,8 @@ class Login extends React.Component {
                     <div id='form-container' className="col-sm-4">
                         <p id='___'>___</p>
                         <p id='welcome'>{message}</p>
-                        <form onSubmit={this.onSubmit}>
-                            <Greeting isLoggedIn={isLoggedIn} />
+                            <Greeting inLogin={inLogin} onSubmit={this.onSubmit} handleChange={this.handleChange}/>
                             {button}
-                        </form>
                     </div>
                 </div>
             </div>
@@ -111,16 +127,11 @@ function LoginGreeting(props) {
 function SignUpGreeting(props) {
     const username = props.username;
     const password = props.password;
-    const email = props.email;
     return [
         <div>
             <div className="form-group">
                 <label className="form-label" htmlFor="username">Username</label>
                 <input type="username" className="form-control" id="username" name="username" value={username} onChange={props.handleChange} />
-            </div>
-            <div className="form-group">
-                <label className="form-label" htmlFor="email">Email</label>
-                <input type="email" className="form-control" id="email" name="email" value={email} onChange={props.handleChange} />
             </div>
             <div className="form-group">
                 <label className="form-label" htmlFor="pwd">Password</label>
@@ -132,11 +143,12 @@ function SignUpGreeting(props) {
 }
 
 function Greeting(props) {
-    const isLoggedIn = props.isLoggedIn;
-    if (isLoggedIn) {
-        return <LoginGreeting />;
+    const inLogin = props.inLogin;
+    if (inLogin) {
+        return <LoginGreeting onSubmit={props.onSubmit} handleChange={props.handleChange}/>;
+    } else {
+        return <SignUpGreeting onSubmit={props.onSubmit} handleChange={props.handleChange}/>;
     }
-    return <SignUpGreeting />;
 }
 
 function LoginButton(props) {
