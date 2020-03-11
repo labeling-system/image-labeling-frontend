@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { postImage } from '../api/image';
 import ErrorBox from '../components/error-box';
 import InfoBox from '../components/info-box';
+import { Redirect } from 'react-router-dom';
+
 
 class Others extends Component {
     constructor(props: any) {
@@ -30,7 +32,7 @@ class Others extends Component {
     }
 
     render() {
-        return (
+        return !this.props.isAuth ? <Redirect to='/login'/> : (
             <div id='other'>
                 <h2>Upload Images</h2>
                 <p>

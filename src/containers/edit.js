@@ -56,7 +56,7 @@ class Edit extends Component {
     }
 
     render() {
-        return (
+        return !this.props.isAuth ? <Redirect to='/login'/> : (
             <div id='edit'>
                 {this.renderRedirect()}
                 <h2>Edit</h2>
