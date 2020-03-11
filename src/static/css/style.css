@@ -221,31 +221,31 @@ code {
 }
 
 /* Edit Page */
-#edit table {
+table.table-label {
 	border-collapse: collapse;
 	width: 100%;
 }
 
-#edit table th, #edit td {
+table.table-label th, #edit td {
 	border: 1px solid #ddd;
   	padding: 8px;
 }
 
-#edit table tr:nth-child(even){
+table.table-label tr:nth-child(even){
 	background-color: #f2f2f2;
 }
 
-#edit table tbody td:nth-child(3){
+table.table-label tbody td:nth-child(3){
 	font-weight: bold;
 }
 
-#edit table tbody tr:hover {
+table.table-label tbody tr:hover {
 	background-color: #ddd;
 	text-decoration: underline;
 	cursor: pointer;
 }
 
-#edit table th {
+table.table-label th {
 	padding-top: 12px;
 	padding-bottom: 12px;
 	text-align: left;
@@ -261,4 +261,40 @@ code {
 	color: red;
 }
 
+/* UserRole */
+
+#userrole .dropbtn {
+	background-color: #4CAF50;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+}
+  
+#userrole .dropdown {
+	position: relative;
+	display: inline-block;
+}
+  
+#userrole .dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f1f1f1;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+}
+  
+#userrole .dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+  
+#userrole .dropdown-content a:hover {background-color: #ddd;}
+  
+#userrole .dropdown:hover .dropdown-content {display: block;}
+  
+#userrole .dropdown:hover .dropbtn {background-color: #3e8e41;}
 
