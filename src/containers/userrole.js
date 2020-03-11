@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { getAllUsers, postUser } from '../api/user';
 
 
@@ -41,13 +40,8 @@ class UserRole extends Component{
             this.setState({ error: 'Error, please contact the administrator' });
         }
     }
-=======
-import { Redirect } from 'react-router-dom';
-
->>>>>>> 4dbfc2376f470796f4816ea4edf68ba74d91a01f
 
     render(){
-<<<<<<< HEAD
         return (
             <div id='userrole'>
                 <h2>Users</h2>
@@ -80,10 +74,6 @@ import { Redirect } from 'react-router-dom';
                     </tbody>
                 </table>
             </div>
-=======
-        return !this.props.isAuth ? <Redirect to='/login'/> : (
-            <h2>UserRole</h2>
->>>>>>> 4dbfc2376f470796f4816ea4edf68ba74d91a01f
         )
     }
 
