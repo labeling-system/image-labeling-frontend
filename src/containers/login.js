@@ -58,7 +58,7 @@ class Login extends React.Component {
                         </Form.Group>
                         <p className="login-content-register">Don't have account? <a href="/register">Register</a> here.</p>
                         <Button variant="primary" type="submit" block>
-                            Submit
+                            Login
                         </Button>
                     </Form>
                 </div>

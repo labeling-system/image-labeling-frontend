@@ -78,116 +78,6 @@ code {
 	color: #707070;
 }
 
-/* Login */
-
-#bg{
-	width: 100%;
-	height: 100%;
-}
-
-#welcome-container{
-	height: 100vh;
-	/* background-color:#FF7D7D; */
-}
-
-#sign-up-container{
-	height: 100vh;
-	background-color: white;
-}
-
-#welcome{
-	font-family: 'Raleway';
-	font-weight: bolder;
-	font-size: 78px;
-	color: #707070;
-}
-
-#___{
-	font-family: 'Arial';
-	font-weight: bolder;
-	font-size: 78px;
-	white-space: pre-line;
-	color: #FF7D7D;
-}
-
-#form-container{
-	background-color:white;
-}
-
-#email{
-	/*width: 50vw;*/
-}
-
-#pwd{
-	/*width: 50vw;*/
-}
-
-.form-label{
-	font-family: 'Raleway';
-	font-weight: lighter;
-	font-size: 25px;
-	white-space: pre-line;
-	color: #707070;
-}
-
-.form-control{
-	height: 57px;
-	border-radius: 34px;
-}
-
-#submit{
-	font-family: 'Raleway';
-	border-radius: 34px;
-	background-color: #FF7D7D; 
-	color: white;
-	height: 57px;
-	width: 100%;
-	font-size: 25px;
-	font-weight: lighter;
-}
-
-.register{
-	font-family: 'Raleway';
-	font-size: 15px;
-	color: #707070;
-	margin: 30px;
-	text-align: center;
-	font-weight: bold;
-}
-
-#link{
-	font-family: 'Raleway';
-	font-size: 15px;
-	margin: 30px;
-	text-align: center;
-	font-weight: bold;
-	color: #FF7D7D;
-}
-
-#sign-up{
-	border-radius: 20px;
-	border: none;
-	color: #FF7D7D;
-	background-color: white;
-}
-
-#sign-up:hover {
-  background-color: #FF7D7D;
-  color: white;
-}
-
-#log-in{
-	border-radius: 20px;
-	border: none;
-	color: #FF7D7D;
-	background-color: white;
-}
-
-#log-in:hover {
-  background-color: #FF7D7D;
-  color: white;
-}
-
 /* App */
 
 .App {
@@ -229,14 +119,14 @@ code {
   }
 }
 
-/* Login */
-#login {
+/* Login, Register */
+#login, #register {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	height: 100%;
 }
-.login-content {
+.login-content, .register-content {
 	display: flex;
 	flex-direction: column;
 	-webkit-box-shadow: 10px 6px 36px -11px rgba(0,0,0,0.75);
@@ -244,16 +134,16 @@ code {
 	box-shadow: 10px 6px 36px -11px rgba(0,0,0,0.75);
 	border-radius: 15px;
 	padding: 4vh 7vh;
-	min-width: 33vw;
+	width: 33vw;
 	max-width: 450px;
 	background-color: #ffffff;
 }
-.login-content-title {
+.login-content-title, .register-content-title {
 	text-align: center;
 	font-weight: bold;
 	margin-bottom: 20px;
 }
-.login-content-register {
+.login-content-register, .register-content-register {
 	color: gray;
 	font-size: 0.8em;
 }
