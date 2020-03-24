@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getAllUsers, postUser } from '../api/user';
+import { Redirect } from 'react-router-dom';
 
 
 const ID = 0;
@@ -42,7 +43,7 @@ class UserRole extends Component{
     }
 
     render(){
-        return (
+        return !this.props.isAuth ? <Redirect to='/login'/> : (
             <div id='userrole'>
                 <h2>Users</h2>
                 <table className="table-label">

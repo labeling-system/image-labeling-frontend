@@ -13,6 +13,7 @@ import Others from "./containers/others";
 import Login from "./containers/login";
 import Register from "./containers/register"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { WORKSPACE, USER, EDIT, UPLOAD } from "./util/const";
 
 class App extends Component {
   constructor(props) {
@@ -34,8 +35,6 @@ class App extends Component {
     return (
       <Router>
         <div id='app'>
-          {/* A <Switch> looks through its children <Route>s and
-              renders the first one that matches the current URL. */}
           <Switch>
             <Route exact path="/">
               <Login handler={this.handler} />
@@ -47,19 +46,19 @@ class App extends Component {
               <Register handler={this.handler} />
             </Route>
             <Route path="/userrole">
-              <Navigation handlerNav={this.handler}/>
+              <Navigation handlerNav={this.handler} page={USER}/>
               <UserRole isAuth={this.state.isAuth}/>
             </Route>
             <Route path="/edit">
-              <Navigation handlerNav={this.handler}/>
+              <Navigation handlerNav={this.handler} page={EDIT}/>
               <Edit isAuth={this.state.isAuth}/>
             </Route>
             <Route path="/others">
-              <Navigation handlerNav={this.handler}/>
+              <Navigation handlerNav={this.handler} page={UPLOAD}/>
               <Others isAuth={this.state.isAuth}/>
             </Route>
             <Route path="/workspace">
-              <Navigation handlerNav={this.handler}/>
+              <Navigation handlerNav={this.handler} page={WORKSPACE}/>
               <Workspace isAuth={this.state.isAuth}/>
             </Route>
           </Switch>

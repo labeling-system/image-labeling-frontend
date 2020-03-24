@@ -22,9 +22,6 @@ code {
 	height: 100%;
 	background-color: #f7f7f7;
 }
-#app > div {
-	margin: 0 20px;
-}
 
 /* Color Pallete */
 
@@ -49,33 +46,48 @@ code {
 
 /* Navigaation Bar */
 
-.navigation ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background-color: #FF7D7D;
+.navigation {
+	background-color: #343a40;
+	display: flex;
+	justify-content: center;
+}
+.navigation-wrapper {
+	display: flex;
+	justify-content: space-between;
+	max-width: 1200px;
+	width: 100%;
 }
 
-.navigation li {
-	float: left;
+.navigation-link {
+	display: flex;
 }
 
-.navigation  li a {
+.navigation-button {
+	display: flex;
+	padding: 7px 0;
+}
+
+.navigation a {
 	display: block;
-	color: white;
+	color: rgba(255,255,255,0.5);
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
+	outline: none;
 }
 
-.navigation li a:hover:not(.active) {
-	background-color: rgb(255, 98, 98);
+.navigation a:hover:not(.active) {
+	text-decoration: none;
+	color: white;
+	outline: none;
 }
 
 .navigation .active {
-	background-color: white;
-	color: #707070;
+	color: white;
+	font-weight: bold;
+	cursor: auto;
+	text-decoration: none;
+	outline: none;
 }
 
 /* App */
@@ -125,6 +137,7 @@ code {
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+	background-color: #f7f7f7;
 }
 .login-content, .register-content {
 	display: flex;
