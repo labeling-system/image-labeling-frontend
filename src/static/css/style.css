@@ -1,4 +1,7 @@
 /* General */
+html {
+	height: 100%;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -6,13 +9,19 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
 }
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
+#root {
+	height: 100%;
+}
+#app {
+	height: 100%;
+	background-color: #f7f7f7;
+}
 #app > div {
 	margin: 0 20px;
 }
@@ -218,6 +227,35 @@ code {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Login */
+#login {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+.login-content {
+	display: flex;
+	flex-direction: column;
+	-webkit-box-shadow: 10px 6px 36px -11px rgba(0,0,0,0.75);
+	-moz-box-shadow: 10px 6px 36px -11px rgba(0,0,0,0.75);
+	box-shadow: 10px 6px 36px -11px rgba(0,0,0,0.75);
+	border-radius: 15px;
+	padding: 4vh 7vh;
+	min-width: 33vw;
+	max-width: 450px;
+	background-color: #ffffff;
+}
+.login-content-title {
+	text-align: center;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+.login-content-register {
+	color: gray;
+	font-size: 0.8em;
 }
 
 /* Edit Page */

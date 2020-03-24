@@ -11,9 +11,11 @@ import UserRole from "./containers/userrole";
 import Edit from "./containers/edit";
 import Others from "./containers/others";
 import Login from "./containers/login";
+import Register from "./containers/register"
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
-  constructor(props: any) {
+  constructor(props) {
     super(props);
     this.state = {
         isAuth: false,
@@ -35,8 +37,14 @@ class App extends Component {
           {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
           <Switch>
+            <Route exact path="/">
+              <Login handler={this.handler} />
+            </Route>
             <Route path="/login">
               <Login handler={this.handler} />
+            </Route>
+            <Route path="/register">
+              <Register handler={this.handler} />
             </Route>
             <Route path="/userrole">
               <Navigation/>

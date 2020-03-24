@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-class Login extends React.Component {
+class Register extends React.Component {
     constructor(props) {
         super(props);
         this.handleLoginClick = this.handleLoginClick.bind(this);
@@ -16,11 +16,12 @@ class Login extends React.Component {
         this.state = {
             inLogin: true,
             redirect: false,
+            message: 'Welcome',
+            bgColor: '#FF7D7D',
             username: '',
             password: ''
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this)
     }
 
     handleChange = (e) => {
@@ -28,28 +29,53 @@ class Login extends React.Component {
     }
 
     renderRedirect() {
-        console.log("redirect kepanggil");
         if (this.state.redirect) {
-
-            console.log("redirect to");
             return <Redirect to='/workspace' />
         }
     }
 
-    async handleSubmit(e){
-        e.preventDefault();
-        try {
-            let username = this.state.username;
-            let password = this.state.password;
-            let result = await loginAuth(username, password);
-            if(result.status == 200) {
-                this.props.handler(true);
-                this.setState({ redirect: true });
-                console.log("wakgeng")
-            } 
-        } catch (err) {
-            console.log(err);
+    async onSubmit() {
+        if (this.state.inLogin == true) {
+            try {
+                let username = this.state.username;
+                let password = this.state.password;
+                // let result = await loginAuth(username, password);
+                // if(result.status == 200) {
+                    this.props.handler(true);
+                    this.state.redirect = true;
+                // } 
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            try {
+                let username = this.state.username;
+                let password = this.state.password;
+                let result = await userRegister(username, password);
+                if(result.status == 200) {
+                    alert("Succesfully Registered");
+                } 
+            } catch (err) {
+                console.log(err);
+            }
         }
+    }
+        
+
+    handleLoginClick() {
+        this.setState({
+            inLogin: true,
+            message: 'Welcome',
+            bgColor: '#FF7D7D'
+        });
+    }
+
+    handleSignUpClick() {
+        this.setState({
+            inLogin: false,
+            message: 'Sign Up',
+            bgColor: 'white '
+        });
     }
 
     render() {
@@ -66,19 +92,18 @@ class Login extends React.Component {
 
         return (
             <div id="login">
-                {this.renderRedirect()}
                 <div className="login-content">
-                    <h4 className="login-content-title">Login</h4>
-                    <Form onSubmit={this.handleSubmit}>
-                        <Form.Group controlId="formBasicText">
+                    <h4 className="login-content-title">Register</h4>
+                    <Form>
+                        <Form.Group controlId="formBasicEmail">
                             <h6>Username</h6>
-                            <Form.Control type="text" name="username" placeholder="Enter username" onChange={this.handleChange}/>
+                            <Form.Control type="email" placeholder="Enter username" />
                         </Form.Group>
                         <Form.Group controlId="formBasicPassword">
                             <h6>Password</h6>
-                            <Form.Control type="password" name="password" placeholder="Password" onChange={this.handleChange}/>
+                            <Form.Control type="password" placeholder="Password" />
                         </Form.Group>
-                        <p className="login-content-register">Don't have account? <a href="/register">Register</a> here.</p>
+                        <p className="login-content-register">Don't have account? <a>Register</a> here.</p>
                         <Button variant="primary" type="submit" block>
                             Submit
                         </Button>
@@ -165,4 +190,4 @@ function SignUpButton(props) {
     );
 }
 
-export default Login;
+export default Register;
