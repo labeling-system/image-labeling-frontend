@@ -47,19 +47,19 @@ class App extends Component {
               <Register handler={this.handler} />
             </Route>
             <Route path="/userrole">
-              <Navigation/>
+              <Navigation handlerNav={this.handler}/>
               <UserRole isAuth={this.state.isAuth}/>
             </Route>
             <Route path="/edit">
-              <Navigation/>
+              <Navigation handlerNav={this.handler}/>
               <Edit isAuth={this.state.isAuth}/>
             </Route>
             <Route path="/others">
-              <Navigation/>
+              <Navigation handlerNav={this.handler}/>
               <Others isAuth={this.state.isAuth}/>
             </Route>
             <Route path="/workspace">
-              <Navigation/>
+              <Navigation handlerNav={this.handler}/>
               <Workspace isAuth={this.state.isAuth}/>
             </Route>
           </Switch>

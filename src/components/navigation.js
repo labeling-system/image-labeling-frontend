@@ -11,7 +11,9 @@ export class Navigation extends Component {
             userrole: false,
             edit: false,
             others: false
+
         }
+        this.onLogout = this.onLogout.bind(this)
     }
 
     handleChange = (e) => {
@@ -26,6 +28,10 @@ export class Navigation extends Component {
             )
         }
         console.log(this.state[e.target.name]);
+    }
+
+    onLogout() {
+        this.props.handlerNav(false);
     }
 
     render() {
@@ -58,6 +64,11 @@ export class Navigation extends Component {
                             className={this.state.others ? 'active' : null}
                             name="others" onClick={this.handleChange}>
                             Others
+                    </Link>
+                    </li>
+                    <li>
+                        <Link to="/login" onClick={this.onLogout}>
+                            Logout
                     </Link>
                     </li>
                 </ul>
