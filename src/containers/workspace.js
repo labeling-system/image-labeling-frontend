@@ -3,10 +3,6 @@ import Canvas from "../components/canvas";
 import { Redirect } from 'react-router-dom';
 
 class Workspace extends Component{
-    constructor(props) {
-        super(props);
-    }
-
     render(){
         return !this.props.isAuth ? <Redirect to='/login'/> : (
             

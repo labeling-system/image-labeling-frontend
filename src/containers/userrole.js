@@ -63,9 +63,9 @@ class UserRole extends Component{
                                         <div className="dropdown">
                                             <button className="dropbtn">{user[ROLE]}</button>
                                             <div className="dropdown-content">
-                                                <a onClick={() => this.onUpdateRole(user[ID], 'admin')}>admin</a>
-                                                <a onClick={() => this.onUpdateRole(user[ID], 'labeller')}>labeller</a>
-                                                <a onClick={() => this.onUpdateRole(user[ID], 'editor')}>editor</a>
+                                                <button href="" onClick={() => this.onUpdateRole(user[ID], 'admin')}>admin</button>
+                                                <button href="" onClick={() => this.onUpdateRole(user[ID], 'labeller')}>labeller</button>
+                                                <button href="" onClick={() => this.onUpdateRole(user[ID], 'editor')}>editor</button>
                                             </div>
                                         </div>
                                     </td>
