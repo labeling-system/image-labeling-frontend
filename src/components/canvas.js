@@ -84,101 +84,94 @@ export class canvas extends React.Component {
     }
 
     onMouseDown({nativeEvent}) {
-        this.onSelection=true;
-        const {offsetX, offsetY} = nativeEvent;
-        // console.log(offsetX, "  ", offsetY);
-        this.select = new Selection(this.currentId);
-        // this.mySelection.push(this.select);
-        
-        // select.label.setLabelName("Todo");
-        // select.label.setLabelPosition(1,1);
-        // console.log(this.select);
-        // const {offsetX, offsetY} = nativeEvent;
-        // this.onSelection = true;
-        this.startPos = {offsetX,offsetY};
-        this.lastPos = {offsetX,offsetY};
-        this.width = 0;
-        this.height = 0;
-        // console.log("wak");
-        // this.maxSize = {offsetX,offsetY};
+        if(this.props.parentState.rectangle === true) {
+            this.onSelection=true;
+            const {offsetX, offsetY} = nativeEvent;
+            // console.log(offsetX, "  ", offsetY);
+            this.select = new Selection(this.currentId);
+            // this.mySelection.push(this.select);
+            
+            // select.label.setLabelName("Todo");
+            // select.label.setLabelPosition(1,1);
+            // console.log(this.select);
+            // const {offsetX, offsetY} = nativeEvent;
+            // this.onSelection = true;
+            this.startPos = {offsetX,offsetY};
+            this.lastPos = {offsetX,offsetY};
+            this.width = 0;
+            this.height = 0;
+            // console.log("wak");
+            // this.maxSize = {offsetX,offsetY};
+        }
     }
 
     onMouseMove({nativeEvent}) {
-        if(!this.onSelection) {
-            return;
-        }
-        const {offsetX, offsetY} = nativeEvent;
-        this.lastPos = {offsetX,offsetY};
-        // if(Math.abs(this.lastPos.offsetX) > Math.abs(this.maxSize.offsetX) ) {
-        //     this.maxSize.offsetX = this.lastPos.offsetX;
-        // }
-        // if(Math.abs(this.lastPos.offsetY) > Math.abs(this.maxSize.offsetY) ) {
-        //     this.maxSize.offsetY = this.lastPos.offsetY;
-        // }
-        
-        
-        this.width = this.lastPos.offsetX - this.startPos.offsetX;
-        this.height = this.lastPos.offsetY - this.startPos.offsetY;
-        
-        console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
-        // console.log(offsetY);
-        this.clear();
-        this.drawArea();
-        this.ctx.strokeRect(
-            this.startPos.offsetX, 
-            this.startPos.offsetY, 
-            this.width, 
-            this.height
-            );
+        if(this.props.parentState.rectangle === true) {
+            if(!this.onSelection) {
+                return;
+            }
+            const {offsetX, offsetY} = nativeEvent;
+            this.lastPos = {offsetX,offsetY};
+            // if(Math.abs(this.lastPos.offsetX) > Math.abs(this.maxSize.offsetX) ) {
+            //     this.maxSize.offsetX = this.lastPos.offsetX;
+            // }
+            // if(Math.abs(this.lastPos.offsetY) > Math.abs(this.maxSize.offsetY) ) {
+            //     this.maxSize.offsetY = this.lastPos.offsetY;
+            // }
+            
+            
+            this.width = this.lastPos.offsetX - this.startPos.offsetX;
+            this.height = this.lastPos.offsetY - this.startPos.offsetY;
+            
+            console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
+            // console.log(offsetY);
+            this.clear();
+            this.drawArea();
+            this.ctx.strokeRect(
+                this.startPos.offsetX, 
+                this.startPos.offsetY, 
+                this.width, 
+                this.height
+                );
+            }
         }
 
     onMouseUp({nativeEvent}) {
-        this.onSelection = false;
-        // console.log("geng");
+        if(this.props.parentState.rectangle === true) {
+            this.onSelection = false;
+            // console.log("geng");
+            
+            // Bagian membuat koordinat x dan ya di pojok kiri atas
+            //Kasus kuadran 2
+            if(this.width < 0 && this.height < 0) {
+                this.startPos.offsetX =  this.lastPos.offsetX;
+                this.startPos.offsetY =  this.lastPos.offsetY;
+            }
+            //Kasus Kuadran 1
+            else if(this.height < 0) {
+                this.startPos.offsetY -=  Math.abs(this.height);
+            }
+            //kasus Kuadran 3
+            else if(this.width < 0) {
+                this.startPos.offsetX -=  Math.abs(this.width);
+            }
+            
+            //Absolute width and height
+            this.width = Math.abs(this.width);
+            this.height = Math.abs(this.height);
 
-        // Bagian membuat koordinat x dan ya di pojok kiri atas
-        //Kasus kuadran 2
-        if(this.width < 0 && this.height < 0) {
-            this.startPos.offsetX =  this.lastPos.offsetX;
-            this.startPos.offsetY =  this.lastPos.offsetY;
+            this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
+            this.select.setHeight(this.height);
+            this.select.setWidth(this.width);
+            
+            if(!this.select.empty()) {
+                // console.log("check");
+                this.mySelection.push(this.select);
+                this.currentId += 1;
+            }
+            console.log("Result: ", this.select);
+            console.log(this.mySelection);
         }
-        //Kasus Kuadran 1
-        else if(this.height < 0) {
-            this.startPos.offsetY -=  Math.abs(this.height);
-        }
-        //kasus Kuadran 3
-        else if(this.width < 0) {
-            this.startPos.offsetX -=  Math.abs(this.width);
-        }
-
-        //Absolute width and height
-        this.width = Math.abs(this.width);
-        this.height = Math.abs(this.height);
-
-        this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
-        this.select.setHeight(this.height);
-        this.select.setWidth(this.width);
-        
-        if(!this.select.empty()) {
-            // console.log("check");
-            this.mySelection.push(this.select);
-            this.currentId += 1;
-        }
-        console.log("Result: ", this.select);
-        console.log(this.mySelection);
-
-        // console.log(this.startPos.offsetX + "  " +this.startPos.offsetY);
-        // console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
-        // console.log(this.height + "  " +this.width);
-
-        // this.mySelection[this.currentId].setWidth(this.tempWidth)
-        // this.mySelection[this.currentId].setHeight(this.tempHeight)
-        // this.mySelection[this.currentId].setCoordinates(
-        //     Math.abs((this.tempWidth-this.mySelection[this.currentId].getStartX())/2),
-        //     (Math.abs(this.tempHeight-this.mySelection[this.currentId].getStartY())/2)
-        // )
-        // this.currentId = this.currentId+1;
-        
     }
 
     render() {
