@@ -45,3 +45,16 @@ export const deleteAllImages = () => {
         });
     });
 };
+
+export const pingImage = (id) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'post',
+            url: API + '/image/ping/' + id
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};

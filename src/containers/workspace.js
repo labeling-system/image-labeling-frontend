@@ -6,6 +6,7 @@ import { STATE_EDIT, STATE_RECTANGLE, STATE_OTHER} from "../util/const";
 import { Redirect } from 'react-router-dom';
 import { Container, Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
+import { pingImage } from '../api/image';
 
 
 class Workspace extends Component{
@@ -19,8 +20,8 @@ class Workspace extends Component{
             data: 'images/data.jpeg',
             buttonText: 'Start',
             labelList : [],
-            error: ''  
-            
+            error: '',
+            intervalId: 0
         };
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
@@ -38,13 +39,21 @@ class Workspace extends Component{
         try {
             let result = await getMostUsedLabels();
             this.setState({ labelList: result.data.labelList });
-            
+
+            // ping backend
+            let intervalId = setInterval(async () => {
+                await pingImage(1);
+            }, 3000);
+            this.setState({ intervalId: intervalId });
+
         } catch (err) {
             this.setState({ error: err });
         }
     }
 
-
+    async componentWillUnmount() {
+        clearInterval(this.state.intervalId);
+    }
 
     handler(someState){
         this.setState({[someState]: !this.state[someState]})
