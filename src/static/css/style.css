@@ -23,6 +23,12 @@ code {
 	background-color: #f7f7f7;
 }
 
+/*Canvas*/
+.canvas {
+	border:1px solid black;
+}
+
+
 /* Color Pallete */
 
 .light-red {
@@ -83,6 +89,125 @@ code {
 }
 
 .navigation .active {
+	background-color: white;
+	color: #707070;
+}
+
+/*WorkSpace*/
+.workspace {
+	display:flex;
+}
+
+.workspace-edit  {
+	margin-top: 10px;
+	margin-left: 10px;
+	display: flex;
+}
+
+
+
+/* Tools Bar */
+.tools-word {
+	background: rgb(139, 139, 139);
+	font-size: large;
+	/* width:auto; */
+}
+
+.tools {
+	/* float:left; */
+	margin-top: 10px;
+	text-align: center;
+	padding: 7px 15px;
+	border-radius: 4px;
+	color: white;
+	font-weight: bold;
+	background-color: rgb(209, 209, 209);
+
+}
+
+.tools .active {
+	padding: 7px 15px;
+	border-radius: 4px;
+	color: white;
+	font-size: 13px;
+	font-weight: bold;
+	background: rgb(56, 56, 56);
+	margin: 10px;
+}
+
+.tools .not-active {
+	padding: 7px 15px;
+	border-radius: 4px;
+	color: white;
+	font-size: 13px;
+	font-weight: bold;
+	background: rgb(109, 109, 109);
+	margin: 10px;
+}
+
+
+
+/* Login */
+
+#bg{
+	width: 100%;
+	height: 100%;
+}
+
+#welcome-container{
+	height: 100vh;
+	/* background-color:#FF7D7D; */
+}
+
+#sign-up-container{
+	height: 100vh;
+	background-color: white;
+}
+
+#welcome{
+	font-family: 'Raleway';
+	font-weight: bolder;
+	font-size: 78px;
+	color: #707070;
+}
+
+#___{
+	font-family: 'Arial';
+	font-weight: bolder;
+	font-size: 78px;
+	white-space: pre-line;
+	color: #FF7D7D;
+}
+
+#form-container{
+	background-color:white;
+}
+
+#email{
+	/*width: 50vw;*/
+}
+
+#pwd{
+	/*width: 50vw;*/
+}
+
+.form-label{
+	font-family: 'Raleway';
+	font-weight: lighter;
+	font-size: 25px;
+	white-space: pre-line;
+	color: #707070;
+}
+
+.form-control{
+	height: 57px;
+	border-radius: 34px;
+}
+
+#submit{
+	font-family: 'Raleway';
+	border-radius: 34px;
+	background-color: #FF7D7D; 
 	color: white;
 	font-weight: bold;
 	cursor: auto;
