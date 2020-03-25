@@ -98,6 +98,11 @@ export class canvas extends React.Component {
             this.activeId = null;
             console.log("wak");
         }
+        if(this.props.parentState.rectangle === true) {
+            this.clear();
+            this.drawAllSelection();
+            this.activeId = null;
+        }
         console.log("geng");
     }
 
