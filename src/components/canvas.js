@@ -47,6 +47,7 @@ export class canvas extends React.Component {
     }
 
     drawAllSelection() {
+        this.ctx.strokeStyle = "red";
         for(let i = 0; i < this.mySelection.length; i++) {
             // console.log("check ke ", i);
             this.ctx.strokeRect(
@@ -77,7 +78,27 @@ export class canvas extends React.Component {
     }
 
     deleteSelection(id) {
-        // if()
+        if(this.mySelection != null) {
+            let idx = 0;
+            for(let i = 0; i < this.mySelection.length; i++) {
+                if(this.mySelection[i].getId() === id) {
+                    this.mySelection.splice(i,1);              
+                    break;
+                }
+            }
+        }
+    }
+
+    componentDidUpdate() {
+        if(this.props.parentState.delete === true ) {
+            this.deleteSelection(this.activeId);
+            console.log(this.mySelection);
+            this.clear();
+            this.drawAllSelection();
+            this.activeId = null;
+            console.log("wak");
+        }
+        console.log("geng");
     }
 
     clear(){
@@ -107,15 +128,16 @@ export class canvas extends React.Component {
             this.height = 0;
 
         }
-        // else if(this.props.parentState.edit === false) {
 
-        // }
+        
+
 
         else if(this.props.parentState.edit === true) {
             const {offsetX,offsetY} = nativeEvent;
-            this.ctx.strokeStyle = "red";
+            this.clear();
             this.drawAllSelection();
-            this.drawActiveSelection(this.getTargetSelection(offsetX,offsetY));
+            this.activeId = this.getTargetSelection(offsetX,offsetY);
+            this.drawActiveSelection(this.activeId);
             this.props.parentActive();
             // console.log(this.getTargetSelection(offsetX,offsetY));
         }

@@ -26,7 +26,8 @@ class Workspace extends Component{
         console.log("lalala");
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
-        this.handleActive = this.handleActive.bind(this);
+        this.makeActive = this.makeActive.bind(this);
+        this.makeNotActive = this.makeNotActive.bind(this);
         // this.handleGetAllImages = this.handleGetAllImages.bind(this);
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
@@ -47,8 +48,12 @@ class Workspace extends Component{
         }
     }
 
-    handleActive(){
-        this.setState({anActive: !this.state.anActive});
+    makeActive(){
+        this.setState({anActive: true});
+    }
+
+    makeNotActive(){
+        this.setState({anActive: false});
     }
 
 
@@ -75,8 +80,8 @@ class Workspace extends Component{
             <Row>
                 <Col>
                     <div className ="workspace">
-                        <Tools parentState ={this.state} parentHandler = {this.handler} />
-                        <Canvas parentState = {this.state} parentActive = {this.handleActive} />
+                        <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
+                        <Canvas parentState = {this.state} parentActive = {this.makeActive} />
                         {
                             this.state.isInitiated ?
                             <div> 

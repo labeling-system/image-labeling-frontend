@@ -9,14 +9,16 @@ export class Tools extends Component {
 
     }
     handleChangeEdit () {
-        this.props.parentHandler(STATE_EDIT);
+        this.props.parentHandler(STATE_EDIT);        
     }
     handleChangeRectangle () {
+        this.props.parentNotActive();
         this.props.parentHandler(STATE_RECTANGLE);
     }
     handleChangeDelete () {
         if(this.props.parentState.anActive === true){
             this.props.parentHandler(STATE_DELETE);
+            this.props.parentNotActive();
         }
     }
 
