@@ -50,9 +50,9 @@ class Workspace extends Component{
                 {
                     this.state.isInitiated ? <Button variant="primary" onClick={() => this.handleOnClick(false, "Start")}>{this.state.buttonText}</Button> : <Button variant="success" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
                 }
-                {/* {console.log("rectangle: " + this.state.rectangle)}
+                {console.log("rectangle: " + this.state.rectangle)}
                 {console.log("edit: " + this.state.edit)}
-                {console.log("other: " + this.state.other)} */}
+                {console.log("other: " + this.state.other)}
             </div>        
         )
     }

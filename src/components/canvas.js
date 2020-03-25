@@ -64,70 +64,114 @@ export class canvas extends React.Component {
 
     drawArea() {
         for(let i = 0; i < this.mySelection.length; i++) {
+            console.log("check ke ", i);
             this.ctx.strokeRect(
-                this.mySelection[i].getStartX(), 
-                this.mySelection[i].getStartY(), 
+                this.mySelection[i].getX(), 
+                this.mySelection[i].getY(), 
                 this.mySelection[i].getWidth(), 
                 this.mySelection[i].getHeight());
         }
     }
 
     clear(){
-        this.ctx.clearRect(this.startPos.offsetX,this.startPos.offsetY,this.widthSize,this.heightSize);
+        this.ctx.clearRect(
+            0,0,
+            // this.startPos.offsetX,this.startPos.offsetY,
+            // (this.lastPos.offsetX - this.startPos.offsetX),
+            // (this.lastPos.offsetY - this.startPos.offsetY));
+            (this.widthSize),
+            (this.heightSize));
     }
 
     onMouseDown({nativeEvent}) {
-        this.onSelection=true;
-        const {offsetX, offsetY} = nativeEvent;
-        // console.log(offsetX, "  ", offsetY);
-        this.select = new Selection(this.currentId,offsetX,offsetY);
-        // this.mySelection.push(this.select);
-        
-        // select.label.setLabelName("Todo");
-        // select.label.setLabelPosition(1,1);
-        console.log(this.select);
-        // const {offsetX, offsetY} = nativeEvent;
-        // this.onSelection = true;
-        this.startPos = {offsetX,offsetY};
+        if(this.props.parentState.rectangle === true) {
+            this.onSelection=true;
+            const {offsetX, offsetY} = nativeEvent;
+            // console.log(offsetX, "  ", offsetY);
+            this.select = new Selection(this.currentId);
+            // this.mySelection.push(this.select);
+            
+            // select.label.setLabelName("Todo");
+            // select.label.setLabelPosition(1,1);
+            // console.log(this.select);
+            // const {offsetX, offsetY} = nativeEvent;
+            // this.onSelection = true;
+            this.startPos = {offsetX,offsetY};
+            this.lastPos = {offsetX,offsetY};
+            this.width = 0;
+            this.height = 0;
+            // console.log("wak");
+            // this.maxSize = {offsetX,offsetY};
+        }
     }
 
     onMouseMove({nativeEvent}) {
-        if(!this.onSelection) {
-            return;
+        if(this.props.parentState.rectangle === true) {
+            if(!this.onSelection) {
+                return;
+            }
+            const {offsetX, offsetY} = nativeEvent;
+            this.lastPos = {offsetX,offsetY};
+            // if(Math.abs(this.lastPos.offsetX) > Math.abs(this.maxSize.offsetX) ) {
+            //     this.maxSize.offsetX = this.lastPos.offsetX;
+            // }
+            // if(Math.abs(this.lastPos.offsetY) > Math.abs(this.maxSize.offsetY) ) {
+            //     this.maxSize.offsetY = this.lastPos.offsetY;
+            // }
+            
+            
+            this.width = this.lastPos.offsetX - this.startPos.offsetX;
+            this.height = this.lastPos.offsetY - this.startPos.offsetY;
+            
+            console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
+            // console.log(offsetY);
+            this.clear();
+            this.drawArea();
+            this.ctx.strokeRect(
+                this.startPos.offsetX, 
+                this.startPos.offsetY, 
+                this.width, 
+                this.height
+                );
+            }
         }
-        const {offsetX, offsetY} = nativeEvent;
-        this.lastPos = {offsetX,offsetY};
-        
-        this.width = offsetX - this.startPos.offsetX;
-        this.height = offsetY - this.startPos.offsetY;
-        
-        this.clear();
-        this.drawArea();
-        console.log(offsetX + "  " +offsetY);
-        // console.log(offsetY);
-        this.ctx.strokeRect(
-            this.startPos.offsetX, 
-            this.startPos.offsetY, 
-            this.width, 
-            this.height
-        );
-    }
 
     onMouseUp({nativeEvent}) {
-        this.onSelection = false;
-        console.log("Result: ")
-        console.log(this.startPos.offsetX + "  " +this.startPos.offsetY);
-        console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
-        console.log(Math.abs(this.height) + "  " +Math.abs(this.width));
+        if(this.props.parentState.rectangle === true) {
+            this.onSelection = false;
+            // console.log("geng");
+            
+            // Bagian membuat koordinat x dan ya di pojok kiri atas
+            //Kasus kuadran 2
+            if(this.width < 0 && this.height < 0) {
+                this.startPos.offsetX =  this.lastPos.offsetX;
+                this.startPos.offsetY =  this.lastPos.offsetY;
+            }
+            //Kasus Kuadran 1
+            else if(this.height < 0) {
+                this.startPos.offsetY -=  Math.abs(this.height);
+            }
+            //kasus Kuadran 3
+            else if(this.width < 0) {
+                this.startPos.offsetX -=  Math.abs(this.width);
+            }
+            
+            //Absolute width and height
+            this.width = Math.abs(this.width);
+            this.height = Math.abs(this.height);
 
-        // this.mySelection[this.currentId].setWidth(this.tempWidth)
-        // this.mySelection[this.currentId].setHeight(this.tempHeight)
-        // this.mySelection[this.currentId].setCoordinates(
-        //     Math.abs((this.tempWidth-this.mySelection[this.currentId].getStartX())/2),
-        //     (Math.abs(this.tempHeight-this.mySelection[this.currentId].getStartY())/2)
-        // )
-        // this.currentId = this.currentId+1;
-        
+            this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
+            this.select.setHeight(this.height);
+            this.select.setWidth(this.width);
+            
+            if(!this.select.empty()) {
+                // console.log("check");
+                this.mySelection.push(this.select);
+                this.currentId += 1;
+            }
+            console.log("Result: ", this.select);
+            console.log(this.mySelection);
+        }
     }
 
     render() {

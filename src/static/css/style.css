@@ -44,6 +44,12 @@ code {
 }
 
 
+/*Canvas*/
+.canvas {
+	border:1px solid black;
+}
+
+
 /* Color Pallete */
 
 .light-red {
