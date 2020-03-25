@@ -8,15 +8,13 @@ import {Label} from './label'
 // label = label untuk slection dengan id sekian
 
  class Selection{
-    constructor(id,startX,startY) {
+    constructor(id) {
         
         this.id = id;
-        this.startX = startX;
-        this.startY = startY;
-        this.x = 0;
-        this.y = 0;
-        this.width = 0;
-        this.height = 0;
+        this.x = null;
+        this.y = null;
+        this.width = null;
+        this.height = null;
         this.label = new Label()
     }
 
@@ -33,12 +31,12 @@ import {Label} from './label'
         this.height = height;
     }
 
-    getStartX() {
-        return this.startX;
+    getX() {
+        return this.x;        
     }
 
-    getStartY() {
-        return this.startY;
+    getY() {
+        return this.y;
     }
 
     getWidth() {
@@ -47,6 +45,11 @@ import {Label} from './label'
 
     getHeight() {
         return this.height;
+    }
+
+    empty(){
+        // return isNaN(this.height) && isNaN(this.width);
+        return this.height === 0 && this.width === 0;
     }
 }
 
