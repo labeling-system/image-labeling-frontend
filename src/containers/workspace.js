@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Canvas from "../components/canvas";
 import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
-import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE} from "../util/const";
+import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
 import { Container, Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
@@ -15,6 +15,7 @@ class Workspace extends Component{
             edit: true,
             rectangle: false,
             delete: false,
+            resize: false,
             anActive: false,
             isInitiated: false,
             data: 'images/data.jpeg',
@@ -69,6 +70,9 @@ class Workspace extends Component{
         if(this.state.delete === true && someState !== STATE_DELETE) {
             this.setState({delete: false});
         }
+        if(this.state.resize === true && someState !== STATE_RESIZE) {
+            this.setState({resize: false});
+        }
         
     }
 
@@ -93,7 +97,12 @@ class Workspace extends Component{
                                 <Button variant="primary" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
                             )    
                         }
-                        
+                        {console.log("State bapak")}
+                        {console.log("rectangle: " + this.state.rectangle)}
+                        {console.log("edit: " + this.state.edit)}
+                        {console.log("delete: " + this.state.delete)}
+                        {console.log("active: " + this.state.anActive)}
+                        {console.log("resize: " + this.state.resize)}
                     </div>
                 </Col>
 

@@ -11,6 +11,7 @@ export class canvas extends React.Component {
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.setWorkspaceSetting = this.setWorkspaceSetting.bind(this);
     }
 
 
@@ -26,7 +27,7 @@ export class canvas extends React.Component {
         this.getActiveSelection().setLabel(e.target.value)
     }
 
-    setWorkspaceSetting(){
+    setWorkspaceSetting(x,y){
         let _setWorkspaceSetting = {
             marginTop: "10px",
             marginLeft: "10px",
@@ -37,7 +38,7 @@ export class canvas extends React.Component {
             height: `${this.heightSize}`,
             width: `${this.widthSize}`,
             position: "relative",
-            cursor: `${this.setCursor()}`
+            cursor: `${this.setCursor(x,y)}`
         };
         return _setWorkspaceSetting;
     }
@@ -157,10 +158,7 @@ export class canvas extends React.Component {
             this.width = 0;
             this.height = 0;
 
-        }
-
-        
-
+        }    
 
         else if(this.props.parentState.edit === true) {
             const {offsetX,offsetY} = nativeEvent;
@@ -198,7 +196,13 @@ export class canvas extends React.Component {
                 this.height
                 );
             }
+            
+        else if(this.props.parentState.resize === true) {
+            const {offsetX, offsetY} = nativeEvent;
+            console.log(offsetX, "  " ,offsetY);
+            this.setWorkspaceSetting(offsetX,offsetY);
         }
+    }
 
     onMouseUp({nativeEvent}) {
         if(this.props.parentState.rectangle === true) {
@@ -246,10 +250,35 @@ export class canvas extends React.Component {
                      (rectY <= pointY) && (rectY + rectHeight >= pointY);
     }
 
+    isPointNSRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectX <= pointX && rectX + rectWidth >= pointX && pointY === rectY)
+            || (rectX <= pointX && rectX + rectWidth >= pointX && pointY === rectY + rectHeight);
+    }
 
-    setCursor() {
+    isPointEWRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectY <= pointY && rectY + rectHeight >= pointY && pointX === rectX)
+            || (rectY <= pointY && rectY + rectHeight >= pointY && pointX === rectX + rectWidth);
+    }
+
+    setCursor(x,y) {
         if(this.props.parentState.rectangle === true) {
             return "crosshair";
+        }
+        if(this.props.parentState.resize === true) {       
+            console.log("wak wak")     ;
+            let obj = this.getActiveSelection();
+
+            if(this.isPointEWRect(x,y,obj.getX(),
+            obj.getY(),obj.getWidth(),obj.getHeight())) {
+                console.log("kena  kiri kanan");
+                return "ew-resize";
+            }
+            if(this.isPointNSRect(x,y,obj.getX(),
+            obj.getY(),obj.getWidth(),obj.getHeight())) {
+                console.log("kena  atas bawah");
+                return "ns-resize";
+            }
+
         }
         else {
             return "default"

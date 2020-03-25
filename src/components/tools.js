@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE} from "../util/const";
+import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 export class Tools extends Component {
     constructor(props) {
         super(props);
         this.handleChangeEdit = this.handleChangeEdit.bind(this);
         this.handleChangeRectangle = this.handleChangeRectangle.bind(this);
         this.handleChangeDelete = this.handleChangeDelete.bind(this);
+        this.handleChangeResize = this.handleChangeResize.bind(this);
 
     }
     handleChangeEdit () {
@@ -21,6 +22,12 @@ export class Tools extends Component {
             this.props.parentNotActive();
         }
     }
+    handleChangeResize () {
+        if(this.props.parentState.anActive === true){
+            this.props.parentHandler(STATE_RESIZE);
+        }
+    }
+    
 
     render() {
         return (            
@@ -42,7 +49,12 @@ export class Tools extends Component {
                     className={this.props.parentState.delete ? 'active' : 'not-active'}
                     name="delete" onClick={this.handleChangeDelete}>
                     Delete
-                </button>     
+                </button>
+                <button 
+                    className={this.props.parentState.resize ? 'active' : 'not-active'}
+                    name="resize" onClick={this.handleChangeResize}>
+                    Resize
+                </button>          
             </div>
         )
     }
