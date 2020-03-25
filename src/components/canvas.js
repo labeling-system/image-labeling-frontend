@@ -5,10 +5,17 @@ import Workspace from '../containers/workspace';
 export class canvas extends React.Component {
     constructor(props) {
         super(props);
+        
+        // this.props = props;
+        // console.log(this.props[data]);
+        //this.data = props.data;
         this.mySelection = [];
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
-        this.onMouseUp = this.onMouseUp.bind(this);        
+        this.onMouseUp = this.onMouseUp.bind(this);
+        console.log(data);
+        
+        //console.log(props.data);        
     }
 
     currentId = 0;             
@@ -16,12 +23,17 @@ export class canvas extends React.Component {
     heightSize = 800;
     tempWidth = 0;
     tempHeight = 0;
+    data = "../static/img/data.jpeg";
+    
+    
 
     setWorkspaceSetting = {
         marginTop: "10px",
         marginLeft: "10px",
         display: "flex",
-        backgroundImage: `url(${data})`,
+        //backgroundImage: `url(${this.data})`,
+        //{ console.log(data); }
+        backgroundImage: `${"D:/Desktop/PPL/ppl-frontend/src/static/img/data.jpg"}`,
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         height: `${this.heightSize}`,
@@ -131,6 +143,7 @@ export class canvas extends React.Component {
     }
 
     render() {
+        //console.log(this.props);
         return (
             <div style = {this.setWorkspaceSetting} >                
                 <canvas className="canvas"

@@ -14,7 +14,8 @@ class Workspace extends Component{
             rectangle: false,
             other: false,
             isInitiated: false,
-            buttonText: "Start"
+            data: '../static/img/data.jpeg',
+            buttonText: 'Start'
             
         };
         this.handleOnClick = this.handleOnClick.bind(this);
@@ -48,7 +49,14 @@ class Workspace extends Component{
                 <Tools parentState ={this.state} parentHandler = {this.handler} />
                 <Canvas parentState = {this.state} />
                 {
-                    this.state.isInitiated ? <Button variant="primary" onClick={() => this.handleOnClick(false, "Start")}>{this.state.buttonText}</Button> : <Button variant="success" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
+                    this.state.isInitiated ?
+                    <div> 
+                        <Button variant="success" onClick={() => this.handleOnClick(false, "Start")}>{this.state.buttonText}</Button> 
+                    </div> 
+                    
+                    : (
+                        <Button variant="primary" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
+                    )    
                 }
                 {/* {console.log("rectangle: " + this.state.rectangle)}
                 {console.log("edit: " + this.state.edit)}
