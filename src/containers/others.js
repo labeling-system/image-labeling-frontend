@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { postImage } from '../api/image';
+import { postImage, deleteAllImages } from '../api/image';
 import { Redirect } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -23,6 +23,7 @@ class Others extends Component {
             filenames.push(file.name);
         });
         try {
+            await deleteAllImages();
             await postImage(filenames);
             this.setState({ uploaded: true });
             this.setState({ error: '' });

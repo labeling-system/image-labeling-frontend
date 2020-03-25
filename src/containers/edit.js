@@ -9,7 +9,6 @@ const ID = 0;
 const STATUS = 1;
 const FILENAME = 2;
 
-// TODO: implement pagination
 class Edit extends Component {
     constructor(props) {
         super(props);
@@ -29,6 +28,7 @@ class Edit extends Component {
             let result = await getAllImages(page);
             this.setState({ images: result.data.images });
             this.setState({ error: '' });
+            window.scrollTo(0, 0);
         } catch (err) {
             console.log(err);
             this.setState({ error: 'Error, please contact the administrator' });

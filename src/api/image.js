@@ -32,3 +32,16 @@ export const getAllImages = (page) => {
         });
     });
 };
+
+export const deleteAllImages = () => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'delete',
+            url: API + '/image/all'
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
