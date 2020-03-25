@@ -3,6 +3,7 @@ import { userRegister } from '../api/auth';
 import { Redirect } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { LABELER } from '../util/const';
 
 class Register extends React.Component {
     constructor(props) {
@@ -34,6 +35,7 @@ class Register extends React.Component {
             let result = await userRegister(username, password);
             if(result.status === 200) {
                 this.props.handler(true);
+                this.props.roleHandler(LABELER);
                 this.setState({ redirect: true });
             } 
         } catch (err) {
@@ -42,7 +44,7 @@ class Register extends React.Component {
     }
 
     render() {
-        return (
+        return this.props.isAuth ? <Redirect to='/workspace'/> : (
             <div id="register">
                 {this.renderRedirect()}
                 <div className="register-content">

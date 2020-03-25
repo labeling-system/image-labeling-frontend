@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
-import { WORKSPACE, USER, EDIT, UPLOAD } from "../util/const";
+import { WORKSPACE, USER, EDIT, UPLOAD, ADMIN, EDITOR } from "../util/const";
 
 export class Navigation extends Component {
     constructor(props) {
@@ -11,6 +11,7 @@ export class Navigation extends Component {
 
     onLogout() {
         this.props.handlerNav(false);
+        this.props.roleHandler('');
     }
 
     render() {
@@ -21,15 +22,27 @@ export class Navigation extends Component {
                         <Link to="/workspace" className={this.props.page === WORKSPACE ? 'active' : null}>
                             Workspace
                         </Link>
-                        <Link to="/userrole" className={this.props.page === USER ? 'active' : null}>
-                            User
-                        </Link>
-                        <Link to="/edit" className={this.props.page === EDIT ? 'active' : null}>
-                            Edit
-                        </Link>
-                        <Link to="/others" className={this.props.page === UPLOAD ? 'active' : null}>
-                            Upload
-                        </Link>
+                        {
+                            this.props.role === ADMIN ?
+                            <Link to="/userrole" className={this.props.page === USER ? 'active' : null}>
+                                User
+                            </Link>
+                            : null
+                        }
+                        {
+                            this.props.role === ADMIN || this.props.role === EDITOR  ?
+                            <Link to="/edit" className={this.props.page === EDIT ? 'active' : null}>
+                                Edit
+                            </Link>
+                            : null
+                        }
+                        {
+                            this.props.role === ADMIN ?
+                            <Link to="/others" className={this.props.page === UPLOAD ? 'active' : null}>
+                                Upload
+                            </Link>
+                            : null
+                        }
                     </div>
                     <div className="navigation-button">
                         <Button variant="outline-info" onClick={this.onLogout}>Logout</Button>  
