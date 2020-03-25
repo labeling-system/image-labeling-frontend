@@ -92,8 +92,11 @@ code {
 }
 
 .navigation .active {
-	background-color: white;
-	color: #707070;
+	color: white;
+	font-weight: bold;
+	cursor: auto;
+	text-decoration: none;
+	outline: none;
 }
 
 /*WorkSpace*/
