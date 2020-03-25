@@ -15,7 +15,7 @@ export class Navigation extends Component {
 
     render() {
         return (
-            <div className="navigation parent-wrapper">
+            <div id='navigation' className="parent-wrapper">
                 <div className="navigation-wrapper wrapper">
                     <div className="navigation-link">
                         <Link to="/workspace" className={this.props.page === WORKSPACE ? 'active' : null}>
