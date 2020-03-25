@@ -22,6 +22,24 @@ code {
 	height: 100%;
 	background-color: #f7f7f7;
 }
+.parent-wrapper {
+	display: flex;
+	justify-content: center;
+}
+.wrapper {
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 12px;
+}
+.page-title {
+	padding-top: 20px;
+}
+
+/*Canvas*/
+.canvas {
+	border:1px solid black;
+}
+
 
 /*Canvas*/
 .canvas {
@@ -54,14 +72,10 @@ code {
 
 .navigation {
 	background-color: #343a40;
-	display: flex;
-	justify-content: center;
 }
 .navigation-wrapper {
 	display: flex;
 	justify-content: space-between;
-	max-width: 1200px;
-	width: 100%;
 }
 
 .navigation-link {
@@ -71,6 +85,10 @@ code {
 .navigation-button {
 	display: flex;
 	padding: 7px 0;
+}
+
+.navigation a:first-child {
+	padding-left: 0px;
 }
 
 .navigation a {
@@ -286,81 +304,24 @@ code {
 	font-size: 0.8em;
 }
 
-/* Edit Page */
-table.table-label {
-	border-collapse: collapse;
-	width: 100%;
-}
-
-table.table-label th, #edit td {
-	border: 1px solid #ddd;
-  	padding: 8px;
-}
-
-table.table-label tr:nth-child(even){
-	background-color: #f2f2f2;
-}
-
-table.table-label tbody td:nth-child(3){
-	font-weight: bold;
-}
-
-table.table-label tbody tr:hover {
-	background-color: #ddd;
-	text-decoration: underline;
+/* Table */
+table tr:hover {
 	cursor: pointer;
 }
-
-table.table-label th {
-	padding-top: 12px;
-	padding-bottom: 12px;
-	text-align: left;
-	background-color: #ff6262;
-	color: white;
+table tr th:first-child, table tr td:first-child {
+	width: 40px;
+}
+table tr th:last-child, table tr td:last-child {
+	width: 160px;
 }
 
+/* Edit Page */
+.edit-image-labeled, .edit-image-editing { 
+	font-weight: bold;
+}
 .edit-image-labeled {
 	color: green;
 }
-
 .edit-image-editing {
 	color: red;
 }
-
-/* UserRole */
-
-#userrole .dropbtn {
-	background-color: #4CAF50;
-	color: white;
-	padding: 16px;
-	font-size: 16px;
-	border: none;
-}
-  
-#userrole .dropdown {
-	position: relative;
-	display: inline-block;
-}
-  
-#userrole .dropdown-content {
-	display: none;
-	position: absolute;
-	background-color: #f1f1f1;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
-}
-  
-#userrole .dropdown-content a {
-	color: black;
-	padding: 12px 16px;
-	text-decoration: none;
-	display: block;
-}
-  
-#userrole .dropdown-content a:hover {background-color: #ddd;}
-  
-#userrole .dropdown:hover .dropdown-content {display: block;}
-  
-#userrole .dropdown:hover .dropbtn {background-color: #3e8e41;}
-

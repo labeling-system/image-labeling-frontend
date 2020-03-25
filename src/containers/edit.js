@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { getAllImages } from '../api/image';
 import { Redirect } from 'react-router-dom';
 import { UNLABELED, LABELED, EDITING } from '../util/const';
+import Table from 'react-bootstrap/Table';
 
 const ID = 0;
 const STATUS = 1;
@@ -57,36 +58,38 @@ class Edit extends Component {
 
     render() {
         return !this.props.isAuth ? <Redirect to='/login'/> : (
-            <div id='edit'>
+            <div id='edit' className='parent-wrapper'>
                 {this.renderRedirect()}
-                <h2>Edit</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Filename</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.images.map((image, i) => (
-                                <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}>
-                                    <td>{i + 1}</td>
-                                    <td>{image[FILENAME]}</td>
-                                    {
-                                        image[STATUS] === UNLABELED && <td className='edit-image-unlabeled'>{image[STATUS]}</td>
-                                    }
-                                    {
-                                        image[STATUS] === LABELED && <td className='edit-image-labeled'>{image[STATUS]}</td>
-                                    }
-                                    {
-                                        image[STATUS] === EDITING && <td className='edit-image-editing'>{image[STATUS]}</td>
-                                    }
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+                <div className='wrapper'>
+                    <h2 className='page-title'>Editor</h2>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Filename</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.images.map((image, i) => (
+                                    <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}>
+                                        <td>{i + 1}</td>
+                                        <td>{image[FILENAME]}</td>
+                                        {
+                                            image[STATUS] === UNLABELED && <td className='edit-image-unlabeled'>{image[STATUS]}</td>
+                                        }
+                                        {
+                                            image[STATUS] === LABELED && <td className='edit-image-labeled'>{image[STATUS]}</td>
+                                        }
+                                        {
+                                            image[STATUS] === EDITING && <td className='edit-image-editing'>{image[STATUS]}</td>
+                                        }
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </Table>
+                </div>
             </div>
         )
     }
