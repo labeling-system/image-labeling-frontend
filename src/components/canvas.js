@@ -11,7 +11,7 @@ export class canvas extends React.Component {
         this.onMouseUp = this.onMouseUp.bind(this);        
     }
 
-    currentId = 0;
+    currentId = 0;             
     widthSize = 1000;
     heightSize = 800;
     tempWidth = 0;
@@ -73,21 +73,22 @@ export class canvas extends React.Component {
     }
 
     clear(){
-        this.ctx.clearRect(0,0,this.widthSize,this.heightSize);
+        this.ctx.clearRect(this.startPos.offsetX,this.startPos.offsetY,this.widthSize,this.heightSize);
     }
 
     onMouseDown({nativeEvent}) {
         this.onSelection=true;
         const {offsetX, offsetY} = nativeEvent;
+        // console.log(offsetX, "  ", offsetY);
         this.select = new Selection(this.currentId,offsetX,offsetY);
-        this.mySelection.push(this.select);
+        // this.mySelection.push(this.select);
         
         // select.label.setLabelName("Todo");
         // select.label.setLabelPosition(1,1);
         console.log(this.select);
         // const {offsetX, offsetY} = nativeEvent;
         // this.onSelection = true;
-        this.prevPos = {offsetX,offsetY};
+        this.startPos = {offsetX,offsetY};
     }
 
     onMouseMove({nativeEvent}) {
@@ -95,31 +96,37 @@ export class canvas extends React.Component {
             return;
         }
         const {offsetX, offsetY} = nativeEvent;
+        this.lastPos = {offsetX,offsetY};
         
-        this.tempWidth = offsetX - this.select.getStartX();
-        this.tempHeight = offsetY - this.select.getStartX();
+        this.width = offsetX - this.startPos.offsetX;
+        this.height = offsetY - this.startPos.offsetY;
         
         this.clear();
         this.drawArea();
         console.log(offsetX + "  " +offsetY);
         // console.log(offsetY);
         this.ctx.strokeRect(
-            this.mySelection[this.currentId].getStartX(), 
-            this.mySelection[this.currentId].getStartY(), 
-            this.tempWidth, 
-            this.tempHeight
+            this.startPos.offsetX, 
+            this.startPos.offsetY, 
+            this.width, 
+            this.height
         );
     }
 
     onMouseUp({nativeEvent}) {
         this.onSelection = false;
-        this.mySelection[this.currentId].setWidth(this.tempWidth)
-        this.mySelection[this.currentId].setHeight(this.tempHeight)
-        this.mySelection[this.currentId].setCoordinates(
-            Math.abs((this.tempWidth-this.mySelection[this.currentId].getStartX())/2),
-            (Math.abs(this.tempHeight-this.mySelection[this.currentId].getStartY())/2)
-        )
-        this.currentId = this.currentId+1;
+        console.log("Result: ")
+        console.log(this.startPos.offsetX + "  " +this.startPos.offsetY);
+        console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
+        console.log(Math.abs(this.height) + "  " +Math.abs(this.width));
+
+        // this.mySelection[this.currentId].setWidth(this.tempWidth)
+        // this.mySelection[this.currentId].setHeight(this.tempHeight)
+        // this.mySelection[this.currentId].setCoordinates(
+        //     Math.abs((this.tempWidth-this.mySelection[this.currentId].getStartX())/2),
+        //     (Math.abs(this.tempHeight-this.mySelection[this.currentId].getStartY())/2)
+        // )
+        // this.currentId = this.currentId+1;
         
     }
 

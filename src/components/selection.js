@@ -1,4 +1,12 @@
 import {Label} from './label'
+
+// x,y = koordinat pojok kiri atas dari kotak
+// startX,startY = koordinat ketika dilakukan klik
+// width = lebar (positif)
+// height = tinggi (positif)
+// id = id selection 
+// label = label untuk slection dengan id sekian
+
  class Selection{
     constructor(id,startX,startY) {
         
