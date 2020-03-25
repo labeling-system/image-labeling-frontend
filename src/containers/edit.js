@@ -3,6 +3,7 @@ import { getAllImages } from '../api/image';
 import { Redirect } from 'react-router-dom';
 import { UNLABELED, LABELED, EDITING } from '../util/const';
 import Table from 'react-bootstrap/Table';
+import Pagination from 'react-bootstrap/Pagination';
 
 const ID = 0;
 const STATUS = 1;
@@ -15,16 +16,17 @@ class Edit extends Component {
         this.state = {
             images: [],
             error: '',
-            redirect: false
+            redirect: false,
+            active: 1,
+            count: 1,
         };
         this.handleGetAllImages = this.handleGetAllImages.bind(this);
         this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
 
-    // Unused, will be used to implement refresh button
-    async handleGetAllImages() {
+    async handleGetAllImages(page) {
         try {
-            let result = await getAllImages();
+            let result = await getAllImages(page);
             this.setState({ images: result.data.images });
             this.setState({ error: '' });
         } catch (err) {
@@ -47,8 +49,9 @@ class Edit extends Component {
 
     async componentDidMount() {
         try {
-            let result = await getAllImages();
+            let result = await getAllImages(1);
             this.setState({ images: result.data.images });
+            this.setState({ count: result.data.count})
             this.setState({ error: '' });
         } catch (err) {
             console.log(err);
@@ -56,7 +59,26 @@ class Edit extends Component {
         }
     }
 
+    handleChangeActivePage(page) {
+        this.setState({active: page});
+        this.handleGetAllImages(page);
+    }
+
     render() {
+        let active = this.state.active;
+        let items = [];
+
+        let max_number = this.state.count/25;
+        if (this.state.count%25 !== 0) {
+            max_number += 1;
+        }
+        for (let number = 1; number <= max_number; number++) {
+        items.push(
+            <Pagination.Item key={number} active={number === active} onClick={() => this.handleChangeActivePage(number)}>
+            {number}
+            </Pagination.Item>,
+        );
+        }
         return !this.props.isAuth ? <Redirect to='/login'/> : (
             <div id='edit' className='parent-wrapper'>
                 {this.renderRedirect()}
@@ -74,7 +96,7 @@ class Edit extends Component {
                             {
                                 this.state.images.map((image, i) => (
                                     <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}>
-                                        <td>{i + 1}</td>
+                                        <td>{i + (this.state.active - 1)*25 + 1}</td>
                                         <td>{image[FILENAME]}</td>
                                         {
                                             image[STATUS] === UNLABELED && <td className='edit-image-unlabeled'>{image[STATUS]}</td>
@@ -89,6 +111,11 @@ class Edit extends Component {
                                 ))}
                         </tbody>
                     </Table>
+                    <div className='center'>
+                        {
+                            this.state.count > 25 && <Pagination>{items}</Pagination>
+                        }
+                    </div>
                 </div>
             </div>
         )

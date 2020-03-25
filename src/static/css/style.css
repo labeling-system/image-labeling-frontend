@@ -37,6 +37,11 @@ code {
 .page-title {
 	padding-top: 20px;
 }
+.center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 
 /*Canvas*/
 .canvas {
@@ -203,7 +208,7 @@ table td {
 	vertical-align: middle !important;
 }
 table tr th:first-child, table tr td:first-child {
-	width: 40px;
+	width: 52px;
 }
 table tr th:last-child, table tr td:last-child {
 	width: 160px;
