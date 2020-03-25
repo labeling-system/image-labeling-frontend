@@ -20,10 +20,11 @@ class Workspace extends Component{
             data: 'images/data.jpeg',
             buttonText: 'Start',
             labelList : [],
+            
             error: ''  
             
         };
-        console.log("lalala");
+        
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
         this.makeActive = this.makeActive.bind(this);
@@ -92,10 +93,7 @@ class Workspace extends Component{
                                 <Button variant="primary" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
                             )    
                         }
-                        {console.log("rectangle: " + this.state.rectangle)}
-                        {console.log("edit: " + this.state.edit)}
-                        {console.log("delete: " + this.state.delete)}
-                        {console.log("active: " + this.state.anActive)}
+                        
                     </div>
                 </Col>
 

@@ -224,3 +224,8 @@ table tr th:last-child, table tr td:last-child {
 .edit-image-editing {
 	color: red;
 }
+
+/* Input label */
+#input-label {
+	position: absolute;
+}

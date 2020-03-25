@@ -32,9 +32,28 @@ export class canvas extends React.Component {
             backgroundRepeat: "no-repeat",
             height: `${this.heightSize}`,
             width: `${this.widthSize}`,
+            position: "relative",
             cursor: `${this.setCursor()}`
         };
         return _setWorkspaceSetting;
+    }
+
+    getActiveSelection() {
+        var result = this.mySelection.find(obj => {
+            return obj.id === this.activeId
+          })
+        
+        return result
+    }
+
+    setInputLabel() {
+        let posInputLabel = {
+            top: this.getActiveSelection().getY() - 30,
+            left: this.getActiveSelection().getX()
+
+        };
+
+        return posInputLabel
     }
 
 
@@ -272,6 +291,12 @@ export class canvas extends React.Component {
                 onMouseMove = {this.onMouseMove}
                 onMouseUp = {this.onMouseUp}
                     />
+                {
+                    this.activeId != null ?
+                    <input style = {this.setInputLabel()} type="text" value="Halo" id="input-label"/>
+
+                    : null
+                }
             </div>
         );
     }
