@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { getAllUsers, postUser } from '../api/user';
 import { Redirect } from 'react-router-dom';
-
+import Table from 'react-bootstrap/Table';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+import { ADMIN, EDITOR, LABELER } from '../util/const';
 
 const ID = 0;
 const ROLE = 2;
 const NAME = 1;
 
-class UserRole extends Component{
+class UserRole extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -44,36 +47,42 @@ class UserRole extends Component{
 
     render(){
         return !this.props.isAuth ? <Redirect to='/login'/> : (
-            <div id='userrole'>
-                <h2>Users</h2>
-                <table className="table-label">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.users.map((user, i) => (
-                                <tr id={'user-' + user[ID]} key={i}>
-                                    <td>{i + 1}</td>
-                                    <td>{user[NAME]}</td>
-                                    <td>
-                                        <div className="dropdown">
-                                            <button className="dropbtn">{user[ROLE]}</button>
-                                            <div className="dropdown-content">
-                                                <button href="" onClick={() => this.onUpdateRole(user[ID], 'admin')}>admin</button>
-                                                <button href="" onClick={() => this.onUpdateRole(user[ID], 'labeller')}>labeller</button>
-                                                <button href="" onClick={() => this.onUpdateRole(user[ID], 'editor')}>editor</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </table>
+            <div id='userrole' className='parent-wrapper'>
+                <div className='wrapper'>
+                    <h2 className='page-title'>User Management</h2>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.users.map((user, i) => (
+                                    <tr id={'user-' + user[ID]} key={i}>
+                                        <td>{i + 1}</td>
+                                        <td>{user[NAME]}</td>
+                                        <td>
+                                        <DropdownButton title={user[ROLE]}>
+                                            {
+                                                user[ROLE] !== ADMIN && <Dropdown.Item as="button" onClick={() => this.onUpdateRole(user[ID], ADMIN)}>{ADMIN}</Dropdown.Item>
+                                            }
+                                            {
+                                                user[ROLE] !== LABELER && <Dropdown.Item as="button" onClick={() => this.onUpdateRole(user[ID], LABELER)}>{LABELER}</Dropdown.Item>
+                                            }
+                                            {
+                                                user[ROLE] !== EDITOR && <Dropdown.Item as="button" onClick={() => this.onUpdateRole(user[ID], EDITOR)}>{EDITOR}</Dropdown.Item>
+                                            }
+                                        </DropdownButton>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </Table>
+                </div>
             </div>
         )
     }

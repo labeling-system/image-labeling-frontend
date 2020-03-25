@@ -15,11 +15,12 @@ import Register from "./containers/register"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { WORKSPACE, USER, EDIT, UPLOAD } from "./util/const";
 
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        isAuth: false,
+        isAuth: true,
     }
 
     this.handler = this.handler.bind(this)
