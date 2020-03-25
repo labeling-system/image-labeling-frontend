@@ -47,6 +47,10 @@ import {Label} from './label'
         return this.height;
     }
 
+    getId() {
+        return this.id;
+    }
+    
     empty(){
         // return isNaN(this.height) && isNaN(this.width);
         return this.height === 0 && this.width === 0;
