@@ -13,7 +13,7 @@ import Others from "./containers/others";
 import Login from "./containers/login";
 import Register from "./containers/register"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { WORKSPACE, USER, EDIT, UPLOAD } from "./util/const";
+import { WORKSPACE, USER, EDIT, UPLOAD, ADMIN, EDITOR } from "./util/const";
 
 
 class App extends Component {
@@ -21,15 +21,19 @@ class App extends Component {
     super(props);
     this.state = {
         isAuth: false,
+        role:''
     }
 
     this.handler = this.handler.bind(this)
+    this.roleHandler = this.roleHandler.bind(this)
   }
 
   handler(bool) {
-    this.setState({
-      isAuth: bool
-    })
+    this.setState({isAuth: bool})
+  }
+
+  roleHandler(role) {
+    this.setState({role : role})
   }
 
   render() {
@@ -38,28 +42,28 @@ class App extends Component {
         <div id='app'>
           <Switch>
             <Route exact path="/">
-              <Login handler={this.handler} />
+              <Login isAuth={this.state.isAuth} handler={this.handler} roleHandler={this.roleHandler}/>
             </Route>
             <Route path="/login">
-              <Login handler={this.handler} />
+              <Login isAuth={this.state.isAuth} handler={this.handler} roleHandler={this.roleHandler}/>
             </Route>
             <Route path="/register">
-              <Register handler={this.handler} />
+              <Register isAuth={this.state.isAuth} handler={this.handler} roleHandler={this.roleHandler}/>
             </Route>
             <Route path="/userrole">
-              <Navigation handlerNav={this.handler} page={USER}/>
-              <UserRole isAuth={this.state.isAuth}/>
+              <Navigation handlerNav={this.handler} roleHandler={this.roleHandler} role={this.state.role} page={USER}/>
+              <UserRole isAuth={this.state.role === ADMIN }/>
             </Route>
             <Route path="/edit">
-              <Navigation handlerNav={this.handler} page={EDIT}/>
-              <Edit isAuth={this.state.isAuth}/>
+              <Navigation handlerNav={this.handler} roleHandler={this.roleHandler} role={this.state.role} page={EDIT}/>
+              <Edit isAuth={this.state.role === ADMIN || this.state.role === EDITOR}/>
             </Route>
             <Route path="/others">
-              <Navigation handlerNav={this.handler} page={UPLOAD}/>
-              <Others isAuth={this.state.isAuth}/>
+              <Navigation handlerNav={this.handler} roleHandler={this.roleHandler} role={this.state.role} page={UPLOAD}/>
+              <Others isAuth={this.state.role === ADMIN }/>
             </Route>
             <Route path="/workspace">
-              <Navigation handlerNav={this.handler} page={WORKSPACE}/>
+              <Navigation handlerNav={this.handler} roleHandler={this.roleHandler} role={this.state.role} page={WORKSPACE}/>
               <Workspace isAuth={this.state.isAuth}/>
             </Route>
           </Switch>

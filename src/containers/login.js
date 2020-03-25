@@ -20,12 +20,6 @@ class Login extends React.Component {
         this.setState({ [e.target.name]: e.target.value })
     }
 
-    renderRedirect() {
-        if (this.state.redirect) {
-            return <Redirect to='/workspace' />
-        }
-    }
-
     async handleSubmit(e){
         e.preventDefault();
         try {
@@ -34,7 +28,7 @@ class Login extends React.Component {
             let result = await loginAuth(username, password);
             if(result.status === 200) {
                 this.props.handler(true);
-                this.setState({ redirect: true });
+                this.props.roleHandler(result.data.role)
             } 
         } catch (err) {
             console.log(err);
@@ -42,9 +36,10 @@ class Login extends React.Component {
     }
 
     render() {
-        return (
+        console.log("login : " + this.props.isAuth)
+
+        return this.props.isAuth ? <Redirect to='/workspace'/> :(
             <div id="login">
-                {this.renderRedirect()}
                 <div className="login-content">
                     <h4 className="login-content-title">Login</h4>
                     <Form onSubmit={this.handleSubmit}>

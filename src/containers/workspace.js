@@ -63,7 +63,7 @@ class Workspace extends Component{
         const title = {
             fontWeight: "bold"
         }
-
+        console.log(this.props.isAuth)
         return !this.props.isAuth ? <Redirect to='/login'/> : (       
             <Row>
                 <Col>
