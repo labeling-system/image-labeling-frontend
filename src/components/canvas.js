@@ -1,24 +1,14 @@
 import React from 'react';
-import data from '../static/img/data.jpeg';
+// import data from '../static/img/data.jpeg';
 import Selection from './selection'
 import Workspace from '../containers/workspace';
 export class canvas extends React.Component {
     constructor(props) {
         super(props);
-        
-        // this.props = props;
-        // console.log(this.props[data]);
-        //this.data = props.data;
         this.mySelection = [];
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
-        if(this.props.parentState.data === "images/data.jpeg"){
-            console.log("yuhu");
-        }
-        console.log(this.props.parentState.data);
-        
-        //console.log(props.data);        
     }
 
     currentId = 0;             
@@ -27,8 +17,6 @@ export class canvas extends React.Component {
     tempWidth = 0;
     tempHeight = 0;
     data = "url(" + this.props.parentState.data + ")";
-    // temp = this.props.parentState.data;
-    // data = `url(${require(this.temp)})`;
     
     
     
@@ -37,9 +25,6 @@ export class canvas extends React.Component {
         marginTop: "10px",
         marginLeft: "10px",
         display: "flex",
-        //backgroundImage: `url(${this.data})`,
-        //{ console.log(data); }
-        //backgroundImage: `url(${data})`,
         backgroundImage: this.data,
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
