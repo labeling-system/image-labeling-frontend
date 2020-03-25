@@ -46,15 +46,38 @@ export class canvas extends React.Component {
         this.ctx.lineWidth = 2;        
     }
 
-    drawArea() {
+    drawAllSelection() {
         for(let i = 0; i < this.mySelection.length; i++) {
-            console.log("check ke ", i);
+            // console.log("check ke ", i);
             this.ctx.strokeRect(
                 this.mySelection[i].getX(), 
                 this.mySelection[i].getY(), 
                 this.mySelection[i].getWidth(), 
                 this.mySelection[i].getHeight());
         }
+    }
+
+    drawActiveSelection(id) {
+        // console.log("ini id nya ", id);
+        if(this.mySelection != null) {
+            for(let i = 0; i < this.mySelection.length; i++) {
+                if(this.mySelection[i].getId() === id) {
+                    if(this.props.parentState.edit === true) {
+                        this.ctx.strokeStyle = "green";
+                    }
+                    this.ctx.strokeRect(
+                        this.mySelection[i].getX(), 
+                        this.mySelection[i].getY(), 
+                        this.mySelection[i].getWidth(), 
+                        this.mySelection[i].getHeight());
+                    break;
+                }                
+            }                        
+        }                
+    }
+
+    deleteSelection(id) {
+        // if()
     }
 
     clear(){
@@ -66,6 +89,7 @@ export class canvas extends React.Component {
 
     onMouseDown({nativeEvent}) {
         if(this.props.parentState.rectangle === true) {
+            this.ctx.strokeStyle = "red";
             this.onSelection=true;
             const {offsetX, offsetY} = nativeEvent;
             // console.log(offsetX, "  ", offsetY);
@@ -83,12 +107,20 @@ export class canvas extends React.Component {
             this.height = 0;
 
         }
+        // else if(this.props.parentState.edit === false) {
+
+        // }
 
         else if(this.props.parentState.edit === true) {
             const {offsetX,offsetY} = nativeEvent;
-            
-            console.log(this.getTargetSelection(offsetX,offsetY));
+            this.ctx.strokeStyle = "red";
+            this.drawAllSelection();
+            this.drawActiveSelection(this.getTargetSelection(offsetX,offsetY));
+            this.props.parentActive();
+            // console.log(this.getTargetSelection(offsetX,offsetY));
         }
+
+        // else if()
     }
 
     onMouseMove({nativeEvent}) {
@@ -106,7 +138,7 @@ export class canvas extends React.Component {
             console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
             // console.log(offsetY);
             this.clear();
-            this.drawArea();
+            this.drawAllSelection();
             this.ctx.strokeRect(
                 this.startPos.offsetX, 
                 this.startPos.offsetY, 
@@ -140,13 +172,16 @@ export class canvas extends React.Component {
             this.width = Math.abs(this.width);
             this.height = Math.abs(this.height);
 
+
             this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
             this.select.setHeight(this.height);
             this.select.setWidth(this.width);
+
+
             
             if(!this.select.empty()) {
                 // console.log("check");
-                this.mySelection.push(this.select);
+                this.mySelection.push(this.select);            
                 this.currentId += 1;
             }
             console.log("Result: ", this.select);
@@ -172,26 +207,27 @@ export class canvas extends React.Component {
     getTargetSelection(x,y) {
         let arr = [];        
         for(let i = 0; i < this.mySelection.length; i++) {
-            console.log(this.mySelection.length);
+            // console.log(this.mySelection.length);
             if(this.isPointInsideRect(x,y,this.mySelection[i].getX(),
                 this.mySelection[i].getY(),this.mySelection[i].getWidth(),this.mySelection[i].getHeight())){
-                    console.log("geng");
+                    // console.log("geng");
                     arr.push(this.mySelection[i].getId());
                 }
         }
-        console.log(arr);
+        // console.log(arr);
 
         if(arr.length !== 0) {
             let minWidth = this.mySelection[0].getWidth();
             let minHeight = this.mySelection[0].getHeight();
             let id = 0;
             for(let i = 0; i < arr.length; i++) {
-                if(this.mySelection[i].getWidth() < minWidth && this.mySelection[i].getHeight() < minHeight) {
+                if(this.mySelection[i].getWidth() <= minWidth && this.mySelection[i].getHeight() <= minHeight) {
                     minWidth = this.mySelection[i].getWidth();
                     minHeight = this.mySelection[i].getHeight();
                     id = arr[i];
                 }
             }
+            // console.log("yg aktif ", id);
             return id;
         }
         else {

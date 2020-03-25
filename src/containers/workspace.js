@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Canvas from "../components/canvas";
 import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
-import { STATE_EDIT, STATE_RECTANGLE, STATE_OTHER} from "../util/const";
+import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE} from "../util/const";
 import { Redirect } from 'react-router-dom';
 import { Container, Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
@@ -14,7 +14,8 @@ class Workspace extends Component{
         this.state = {
             edit: true,
             rectangle: false,
-            other: false,
+            delete: false,
+            anActive: false,
             isInitiated: false,
             data: 'images/data.jpeg',
             buttonText: 'Start',
@@ -22,8 +23,10 @@ class Workspace extends Component{
             error: ''  
             
         };
+        console.log("lalala");
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
+        this.handleActive = this.handleActive.bind(this);
         // this.handleGetAllImages = this.handleGetAllImages.bind(this);
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
@@ -44,6 +47,9 @@ class Workspace extends Component{
         }
     }
 
+    handleActive(){
+        this.setState({anActive: !this.state.anActive});
+    }
 
 
     handler(someState){
@@ -54,9 +60,10 @@ class Workspace extends Component{
         if(this.state.rectangle === true && someState !== STATE_RECTANGLE) {
             this.setState({rectangle: false});
         }
-        if(this.state.other === true && someState !== STATE_OTHER) {
-            this.setState({other: false});
+        if(this.state.delete === true && someState !== STATE_DELETE) {
+            this.setState({delete: false});
         }
+        
     }
 
     render() {  
@@ -69,7 +76,7 @@ class Workspace extends Component{
                 <Col>
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} />
-                        <Canvas parentState = {this.state} />
+                        <Canvas parentState = {this.state} parentActive = {this.handleActive} />
                         {
                             this.state.isInitiated ?
                             <div> 
@@ -82,7 +89,8 @@ class Workspace extends Component{
                         }
                         {console.log("rectangle: " + this.state.rectangle)}
                         {console.log("edit: " + this.state.edit)}
-                        {console.log("other: " + this.state.other)}
+                        {console.log("delete: " + this.state.delete)}
+                        {console.log("active: " + this.state.anActive)}
                     </div>
                 </Col>
 

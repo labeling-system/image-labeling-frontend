@@ -16,5 +16,5 @@ export const LABELER='labeler';
 // WORKSPACE
 export const STATE_EDIT = 'edit';
 export const STATE_RECTANGLE = 'rectangle';
-export const STATE_OTHER = 'other';
+export const STATE_DELETE = 'delete';
 
