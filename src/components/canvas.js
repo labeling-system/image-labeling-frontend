@@ -22,6 +22,10 @@ export class canvas extends React.Component {
     onSelection = false;    
     data = "url(" + this.props.parentState.data + ")";
 
+    handleChange = (e) => {
+        this.getActiveSelection().setLabel(e.target.value)
+    }
+
     setWorkspaceSetting(){
         let _setWorkspaceSetting = {
             marginTop: "10px",
@@ -67,6 +71,7 @@ export class canvas extends React.Component {
 
     drawAllSelection() {
         this.ctx.strokeStyle = "red";
+        this.ctx.font = "25px Arial";
         for(let i = 0; i < this.mySelection.length; i++) {
             // console.log("check ke ", i);
             this.ctx.strokeRect(
@@ -74,6 +79,7 @@ export class canvas extends React.Component {
                 this.mySelection[i].getY(), 
                 this.mySelection[i].getWidth(), 
                 this.mySelection[i].getHeight());
+            this.ctx.strokeText(this.mySelection[i].getLabel(), this.mySelection[i].getX(), this.mySelection[i].getY() - 5);
         }
     }
 
@@ -293,7 +299,7 @@ export class canvas extends React.Component {
                     />
                 {
                     this.activeId != null ?
-                    <input style = {this.setInputLabel()} type="text" value="Halo" id="input-label"/>
+                    <input style = {this.setInputLabel()} type="text" id="input-label" onChange={this.handleChange}/>
 
                     : null
                 }
