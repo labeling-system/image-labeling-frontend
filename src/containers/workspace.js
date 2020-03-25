@@ -16,7 +16,7 @@ class Workspace extends Component{
             rectangle: false,
             other: false,
             isInitiated: false,
-            data: '../static/img/data.jpeg',
+            data: 'images/data.jpeg',
             buttonText: 'Start',
             labelList : [],
             error: ''  

@@ -13,7 +13,10 @@ export class canvas extends React.Component {
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
-        console.log(data);
+        if(this.props.parentState.data === "images/data.jpeg"){
+            console.log("yuhu");
+        }
+        console.log(this.props.parentState.data);
         
         //console.log(props.data);        
     }
@@ -23,7 +26,10 @@ export class canvas extends React.Component {
     heightSize = 800;
     tempWidth = 0;
     tempHeight = 0;
-    data = "../static/img/data.jpeg";
+    data = "url(" + this.props.parentState.data + ")";
+    // temp = this.props.parentState.data;
+    // data = `url(${require(this.temp)})`;
+    
     
     
 
@@ -33,7 +39,8 @@ export class canvas extends React.Component {
         display: "flex",
         //backgroundImage: `url(${this.data})`,
         //{ console.log(data); }
-        backgroundImage: `${"D:/Desktop/PPL/ppl-frontend/src/static/img/data.jpg"}`,
+        //backgroundImage: `url(${data})`,
+        backgroundImage: this.data,
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
         height: `${this.heightSize}`,
