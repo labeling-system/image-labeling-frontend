@@ -20,11 +20,11 @@ export const postImage = (filenames) => {
     });
 };
 
-export const getAllImages = () => {
+export const getAllImages = (page) => {
     return new Promise((resolve, reject) => {
         axios({
             method: 'get',
-            url: API + '/image/all'
+            url: API + '/image/all/' + page
         }).then((res) => {
             resolve(res);
         }).catch((err) => {
