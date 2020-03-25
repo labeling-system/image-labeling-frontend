@@ -47,18 +47,6 @@ code {
 	color: green;
 }
 
-/* Error Box */
-.error-box {
-    color: red;
-    font-weight: bold;
-}
-
-/* Info Box */
-.info-box {
-    color: green;
-    font-weight: bold;
-}
-
 /* Navigaation Bar */
 
 .navigation {
