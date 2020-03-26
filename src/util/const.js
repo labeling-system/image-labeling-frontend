@@ -21,5 +21,5 @@ export const STATE_DELETE = 'delete';
 export const STATE_RESIZE = 'resize';
 
 // Var
-export const ERROR = 5;
+export const ERROR = 10;
 
