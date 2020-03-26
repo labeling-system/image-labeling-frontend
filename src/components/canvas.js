@@ -1,6 +1,7 @@
 import React from 'react';
 // import data from '../static/img/data.jpeg';
 import Selection from './selection'
+import {ERROR} from '../util/const'
 export class canvas extends React.Component {
     
 
@@ -14,7 +15,7 @@ export class canvas extends React.Component {
         this.setWorkspaceSetting = this.setWorkspaceSetting.bind(this);
 
         this.state = {
-
+            cursor: "default"
         }
     }
 
@@ -31,7 +32,7 @@ export class canvas extends React.Component {
         this.getActiveSelection().setLabel(e.target.value)
     }
 
-    setWorkspaceSetting(x,y){
+    setWorkspaceSetting(){
         let _setWorkspaceSetting = {
             marginTop: "10px",
             marginLeft: "10px",
@@ -42,7 +43,7 @@ export class canvas extends React.Component {
             height: `${this.heightSize}`,
             width: `${this.widthSize}`,
             position: "relative",
-            cursor: `${this.setCursor(x,y)}`
+            cursor: `${this.state.cursor}`
         };
         return _setWorkspaceSetting;
     }
@@ -129,10 +130,14 @@ export class canvas extends React.Component {
             console.log("wak");
         }
         if(this.props.parentState.rectangle === true) {
+            this.setCursor(0,0);
             this.clear();
             this.drawAllSelection();
             this.activeId = null;
         }
+        if(this.props.parentState.edit === true) {
+            this.setCursor(0,0);
+        }        
         console.log("geng");
     }
 
@@ -210,7 +215,7 @@ export class canvas extends React.Component {
         else if(this.props.parentState.resize === true) {
             const {offsetX, offsetY} = nativeEvent;
             console.log(offsetX, "  " ,offsetY);
-            this.setWorkspaceSetting(offsetX,offsetY);
+            this.setCursor(offsetX,offsetY);
         }
     }
 
@@ -261,19 +266,25 @@ export class canvas extends React.Component {
     }
 
     isPointNSRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
-        return (rectX <= pointX && rectX + rectWidth >= pointX && pointY === rectY)
-            || (rectX <= pointX && rectX + rectWidth >= pointX && pointY === rectY + rectHeight);
+        return (rectX <= pointX && rectX + rectWidth >= pointX && pointY >= rectY - ERROR && pointY <= rectY + ERROR )
+            || (rectX <= pointX && rectX + rectWidth >= pointX && pointY >= (rectY + rectHeight) - ERROR && pointY <= (rectY + rectHeight) + ERROR);
     }
 
     isPointEWRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
-        return (rectY <= pointY && rectY + rectHeight >= pointY && pointX === rectX)
-            || (rectY <= pointY && rectY + rectHeight >= pointY && pointX === rectX + rectWidth);
+        return (rectY <= pointY && rectY + rectHeight >= pointY && pointX >= rectX - ERROR && pointX <= rectX + ERROR)
+            || (rectY <= pointY && rectY + rectHeight >= pointY && pointX >= (rectX + rectWidth) - ERROR &&  pointX <= (rectX + rectWidth) + ERROR );
     }
 
     setCursor(x,y) {
         if(this.props.parentState.rectangle === true) {
-            return "crosshair";
+            if(this.state.cursor === "crosshair") {
+                return;
+            }
+            else{
+                this.setState({cursor: "crosshair"});
+            }
         }
+
         if(this.props.parentState.resize === true) {       
             console.log("wak wak")     ;
             let obj = this.getActiveSelection();
@@ -281,17 +292,40 @@ export class canvas extends React.Component {
             if(this.isPointEWRect(x,y,obj.getX(),
             obj.getY(),obj.getWidth(),obj.getHeight())) {
                 console.log("kena  kiri kanan");
-                return "ew-resize";
+                if(this.state.cursor === "ew-resize") {
+                    return;
+                }
+                else{
+                    this.setState({cursor: "ew-resize"});
+                }
             }
-            if(this.isPointNSRect(x,y,obj.getX(),
+            else if(this.isPointNSRect(x,y,obj.getX(),
             obj.getY(),obj.getWidth(),obj.getHeight())) {
                 console.log("kena  atas bawah");
-                return "ns-resize";
+                if(this.state.cursor === "ns-resize") {
+                    return;
+                }
+                else{
+                    this.setState({cursor: "ns-resize"});
+                }
+            }
+            else {
+                if(this.state.cursor === "default") {
+                    return;
+                }
+                else{
+                    this.setState({cursor: "default"});
+                }
             }
 
         }
-        else {
-            return "default"
+        if(this.props.parentState.edit === true) {
+            if(this.state.cursor === "default") {
+                return;
+            }
+            else{
+                this.setState({cursor: "default"});
+            }
         }
     }    
 
@@ -338,10 +372,6 @@ export class canvas extends React.Component {
                     />
                 {
                     (this.activeId != null && this.props.parentState.edit === true) ?
-                        // (this.props.parentState.delete !== true ||
-                        //     this.props.parentState.rectangle !== true ||
-                        //         this.props.parentState.resize !== true
-                        //      )) ?
                     <input style = {this.setInputLabel()} type="text" id="input-label" onChange={this.handleChange}/>
 
                     : null

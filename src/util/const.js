@@ -20,3 +20,6 @@ export const STATE_RECTANGLE = 'rectangle';
 export const STATE_DELETE = 'delete';
 export const STATE_RESIZE = 'resize';
 
+// Var
+export const ERROR = 5;
+
