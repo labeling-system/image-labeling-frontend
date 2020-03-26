@@ -12,6 +12,10 @@ export class canvas extends React.Component {
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
         this.setWorkspaceSetting = this.setWorkspaceSetting.bind(this);
+
+        this.state = {
+
+        }
     }
 
 
@@ -105,7 +109,6 @@ export class canvas extends React.Component {
 
     deleteSelection(id) {
         if(this.mySelection != null) {
-            let idx = 0;
             for(let i = 0; i < this.mySelection.length; i++) {
                 if(this.mySelection[i].getId() === id) {
                     this.mySelection.splice(i,1);              
@@ -114,6 +117,7 @@ export class canvas extends React.Component {
             }
         }
     }
+
 
     componentDidUpdate() {
         if(this.props.parentState.delete === true ) {
@@ -166,7 +170,13 @@ export class canvas extends React.Component {
             this.drawAllSelection();
             this.activeId = this.getTargetSelection(offsetX,offsetY);
             this.drawActiveSelection(this.activeId);
-            this.props.parentActive();
+            console.log("active id :", this.activeId);
+            if(this.activeId == null){
+                this.props.parentNotActive();
+            }
+            else {
+                this.props.parentActive();
+            }
             // console.log(this.getTargetSelection(offsetX,offsetY));
         }
 
@@ -327,11 +337,17 @@ export class canvas extends React.Component {
                 onMouseUp = {this.onMouseUp}
                     />
                 {
-                    this.activeId != null ?
+                    (this.activeId != null && this.props.parentState.edit === true) ?
+                        // (this.props.parentState.delete !== true ||
+                        //     this.props.parentState.rectangle !== true ||
+                        //         this.props.parentState.resize !== true
+                        //      )) ?
                     <input style = {this.setInputLabel()} type="text" id="input-label" onChange={this.handleChange}/>
 
                     : null
                 }
+                {/* {this.clear()}
+                {this.drawAllSelection()} */}
             </div>
         );
     }

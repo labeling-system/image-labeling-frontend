@@ -86,7 +86,7 @@ class Workspace extends Component{
                 <Col>
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
-                        <Canvas parentState = {this.state} parentActive = {this.makeActive} />
+                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} />
                         {
                             this.state.isInitiated ?
                             <div> 
