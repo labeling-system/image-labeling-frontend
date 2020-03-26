@@ -1,94 +1,147 @@
 import React from 'react';
 // import data from '../static/img/data.jpeg';
 import Selection from './selection'
-import Workspace from '../containers/workspace';
 export class canvas extends React.Component {
+    
+
+
     constructor(props) {
         super(props);
         this.mySelection = [];
         this.onMouseDown = this.onMouseDown.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseUp = this.onMouseUp.bind(this);
+        this.setWorkspaceSetting = this.setWorkspaceSetting.bind(this);
     }
+
 
     currentId = 0;             
     widthSize = 1000;
     heightSize = 800;
     tempWidth = 0;
     tempHeight = 0;
+    onSelection = false;    
     data = "url(" + this.props.parentState.data + ")";
-    
-    
-    
 
-    setWorkspaceSetting = {
-        marginTop: "10px",
-        marginLeft: "10px",
-        display: "flex",
-        backgroundImage: this.data,
-        backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
-        height: `${this.heightSize}`,
-        width: `${this.widthSize}`
-    };
+    handleChange = (e) => {
+        this.getActiveSelection().setLabel(e.target.value)
+    }
 
-    onSelection = false;
+    setWorkspaceSetting(x,y){
+        let _setWorkspaceSetting = {
+            marginTop: "10px",
+            marginLeft: "10px",
+            display: "flex",
+            backgroundImage: this.data,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            height: `${this.heightSize}`,
+            width: `${this.widthSize}`,
+            position: "relative",
+            cursor: `${this.setCursor(x,y)}`
+        };
+        return _setWorkspaceSetting;
+    }
+
+    getActiveSelection() {
+        var result = this.mySelection.find(obj => {
+            return obj.id === this.activeId
+          })
+        
+        return result
+    }
+
+    setInputLabel() {
+        let posInputLabel = {
+            top: this.getActiveSelection().getY() - 30,
+            left: this.getActiveSelection().getX()
+
+        };
+
+        return posInputLabel
+    }
+
 
     componentDidMount() {
-        console.log("test");
         this.canvas.width = this.widthSize;
         this.canvas.height = this.heightSize;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.strokeStyle = "red";
-        this.ctx.lineWidth = 3;
-        
-        // this.canvasRect = this.canvas.getBoundingClientRect(); 
-        // const image = new Image();
-        // // image.onload = drawImageActualSize();
-        // image.src = data;
-        // // this.ctx.drawImage(image, this.canvasRect.left,this.canvasRect.top);
-        // // this.ctx.drawImage(image, 0,0,this.canvas.width,this.canvas.height);
-        
-        // // drawImageProp(this.ctx,image, 0, 0, this.canvas.width, this.canvas.height);
-        // image.onload = () => {
-        //     console.log(image.naturalHeight);
-        //     let imgHeight = image.naturalHeight;
-        //     let imgWidth = image.naturalWidth;
-        //     if(image.naturalWidth >= this.canvas.width) {
-        //             imgWidth = this.canvas.width
-        //         }
-        //     if(image.naturalHeight >= this.canvas.height) {
-        //         imgHeight = this.canvas.height;
-        //     }
-
-        //     this.ctx.drawImage(image, 0,0,imgWidth,imgHeight);
-        //     console.log("wakgeng");
-        // };    
+        this.ctx.lineWidth = 2;        
     }
 
-    drawArea() {
+    drawAllSelection() {
+        this.ctx.strokeStyle = "red";
+        this.ctx.font = "25px Arial";
         for(let i = 0; i < this.mySelection.length; i++) {
-            console.log("check ke ", i);
+            // console.log("check ke ", i);
             this.ctx.strokeRect(
                 this.mySelection[i].getX(), 
                 this.mySelection[i].getY(), 
                 this.mySelection[i].getWidth(), 
                 this.mySelection[i].getHeight());
+            this.ctx.strokeText(this.mySelection[i].getLabel(), this.mySelection[i].getX(), this.mySelection[i].getY() - 5);
         }
+    }
+
+    drawActiveSelection(id) {
+        // console.log("ini id nya ", id);
+        if(this.mySelection != null) {
+            for(let i = 0; i < this.mySelection.length; i++) {
+                if(this.mySelection[i].getId() === id) {
+                    if(this.props.parentState.edit === true) {
+                        this.ctx.strokeStyle = "green";
+                    }
+                    this.ctx.strokeRect(
+                        this.mySelection[i].getX(), 
+                        this.mySelection[i].getY(), 
+                        this.mySelection[i].getWidth(), 
+                        this.mySelection[i].getHeight());
+                    break;
+                }                
+            }                        
+        }                
+    }
+
+    deleteSelection(id) {
+        if(this.mySelection != null) {
+            let idx = 0;
+            for(let i = 0; i < this.mySelection.length; i++) {
+                if(this.mySelection[i].getId() === id) {
+                    this.mySelection.splice(i,1);              
+                    break;
+                }
+            }
+        }
+    }
+
+    componentDidUpdate() {
+        if(this.props.parentState.delete === true ) {
+            this.deleteSelection(this.activeId);
+            console.log(this.mySelection);
+            this.clear();
+            this.drawAllSelection();
+            this.activeId = null;
+            console.log("wak");
+        }
+        if(this.props.parentState.rectangle === true) {
+            this.clear();
+            this.drawAllSelection();
+            this.activeId = null;
+        }
+        console.log("geng");
     }
 
     clear(){
         this.ctx.clearRect(
             0,0,
-            // this.startPos.offsetX,this.startPos.offsetY,
-            // (this.lastPos.offsetX - this.startPos.offsetX),
-            // (this.lastPos.offsetY - this.startPos.offsetY));
             (this.widthSize),
             (this.heightSize));
     }
 
     onMouseDown({nativeEvent}) {
         if(this.props.parentState.rectangle === true) {
+            this.ctx.strokeStyle = "red";
             this.onSelection=true;
             const {offsetX, offsetY} = nativeEvent;
             // console.log(offsetX, "  ", offsetY);
@@ -104,9 +157,20 @@ export class canvas extends React.Component {
             this.lastPos = {offsetX,offsetY};
             this.width = 0;
             this.height = 0;
-            // console.log("wak");
-            // this.maxSize = {offsetX,offsetY};
+
+        }    
+
+        else if(this.props.parentState.edit === true) {
+            const {offsetX,offsetY} = nativeEvent;
+            this.clear();
+            this.drawAllSelection();
+            this.activeId = this.getTargetSelection(offsetX,offsetY);
+            this.drawActiveSelection(this.activeId);
+            this.props.parentActive();
+            // console.log(this.getTargetSelection(offsetX,offsetY));
         }
+
+        // else if()
     }
 
     onMouseMove({nativeEvent}) {
@@ -116,12 +180,6 @@ export class canvas extends React.Component {
             }
             const {offsetX, offsetY} = nativeEvent;
             this.lastPos = {offsetX,offsetY};
-            // if(Math.abs(this.lastPos.offsetX) > Math.abs(this.maxSize.offsetX) ) {
-            //     this.maxSize.offsetX = this.lastPos.offsetX;
-            // }
-            // if(Math.abs(this.lastPos.offsetY) > Math.abs(this.maxSize.offsetY) ) {
-            //     this.maxSize.offsetY = this.lastPos.offsetY;
-            // }
             
             
             this.width = this.lastPos.offsetX - this.startPos.offsetX;
@@ -130,7 +188,7 @@ export class canvas extends React.Component {
             console.log(this.lastPos.offsetX + "  " +this.lastPos.offsetY);
             // console.log(offsetY);
             this.clear();
-            this.drawArea();
+            this.drawAllSelection();
             this.ctx.strokeRect(
                 this.startPos.offsetX, 
                 this.startPos.offsetY, 
@@ -138,7 +196,13 @@ export class canvas extends React.Component {
                 this.height
                 );
             }
+            
+        else if(this.props.parentState.resize === true) {
+            const {offsetX, offsetY} = nativeEvent;
+            console.log(offsetX, "  " ,offsetY);
+            this.setWorkspaceSetting(offsetX,offsetY);
         }
+    }
 
     onMouseUp({nativeEvent}) {
         if(this.props.parentState.rectangle === true) {
@@ -164,13 +228,16 @@ export class canvas extends React.Component {
             this.width = Math.abs(this.width);
             this.height = Math.abs(this.height);
 
+
             this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
             this.select.setHeight(this.height);
             this.select.setWidth(this.width);
+
+
             
             if(!this.select.empty()) {
                 // console.log("check");
-                this.mySelection.push(this.select);
+                this.mySelection.push(this.select);            
                 this.currentId += 1;
             }
             console.log("Result: ", this.select);
@@ -178,16 +245,93 @@ export class canvas extends React.Component {
         }
     }
 
+    isPointInsideRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight){
+        return  (rectX <= pointX) && (rectX + rectWidth >= pointX) &&
+                     (rectY <= pointY) && (rectY + rectHeight >= pointY);
+    }
+
+    isPointNSRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectX <= pointX && rectX + rectWidth >= pointX && pointY === rectY)
+            || (rectX <= pointX && rectX + rectWidth >= pointX && pointY === rectY + rectHeight);
+    }
+
+    isPointEWRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectY <= pointY && rectY + rectHeight >= pointY && pointX === rectX)
+            || (rectY <= pointY && rectY + rectHeight >= pointY && pointX === rectX + rectWidth);
+    }
+
+    setCursor(x,y) {
+        if(this.props.parentState.rectangle === true) {
+            return "crosshair";
+        }
+        if(this.props.parentState.resize === true) {       
+            console.log("wak wak")     ;
+            let obj = this.getActiveSelection();
+
+            if(this.isPointEWRect(x,y,obj.getX(),
+            obj.getY(),obj.getWidth(),obj.getHeight())) {
+                console.log("kena  kiri kanan");
+                return "ew-resize";
+            }
+            if(this.isPointNSRect(x,y,obj.getX(),
+            obj.getY(),obj.getWidth(),obj.getHeight())) {
+                console.log("kena  atas bawah");
+                return "ns-resize";
+            }
+
+        }
+        else {
+            return "default"
+        }
+    }    
+
+    getTargetSelection(x,y) {
+        let arr = [];        
+        for(let i = 0; i < this.mySelection.length; i++) {
+            // console.log(this.mySelection.length);
+            if(this.isPointInsideRect(x,y,this.mySelection[i].getX(),
+                this.mySelection[i].getY(),this.mySelection[i].getWidth(),this.mySelection[i].getHeight())){
+                    // console.log("geng");
+                    arr.push(this.mySelection[i].getId());
+                }
+        }
+        // console.log(arr);
+
+        if(arr.length !== 0) {
+            let minWidth = this.mySelection[0].getWidth();
+            let minHeight = this.mySelection[0].getHeight();
+            let id = 0;
+            for(let i = 0; i < arr.length; i++) {
+                if(this.mySelection[i].getWidth() <= minWidth && this.mySelection[i].getHeight() <= minHeight) {
+                    minWidth = this.mySelection[i].getWidth();
+                    minHeight = this.mySelection[i].getHeight();
+                    id = arr[i];
+                }
+            }
+            // console.log("yg aktif ", id);
+            return id;
+        }
+        else {
+            return null;
+        }
+    }
+
     render() {
         //console.log(this.props);
         return (
-            <div style = {this.setWorkspaceSetting} >                
+            <div style = {this.setWorkspaceSetting()} >                
                 <canvas className="canvas"
                 ref = {(ref) => (this.canvas = ref)}
                 onMouseDown = {this.onMouseDown}
                 onMouseMove = {this.onMouseMove}
                 onMouseUp = {this.onMouseUp}
                     />
+                {
+                    this.activeId != null ?
+                    <input style = {this.setInputLabel()} type="text" id="input-label" onChange={this.handleChange}/>
+
+                    : null
+                }
             </div>
         );
     }
@@ -195,229 +339,3 @@ export class canvas extends React.Component {
 
 export default canvas
 
-
-
-// class Canvas extends React.Component {
-
-//     componentDidMount() {
-//         let edit = this.props.tools.rectangle;
-//         console.log(edit);
-//         const canvas = this.refs.canvas
-//         // const ctx = canvas.getContext("2d")
-//         // const img = this.refs.image
-
-//         window.addEventListener('load', () => {
-//             // const canvas = document.getElementById("canvas");
-//             const ctx = canvas.getContext("2d");
-//             const image = new Image();
-//             let onSelection = false;
-//             let startX; //initial coordinate for X
-//             let startY; //initial coordinate for Y
-//             let width = 0;
-//             let height = 0;
-//             let listSelection = []; //All selection box in workspace
-//             let id = 0; //Initial id for selection box
-
-//             image.src = asrap;
-
-//             resize();
-//             drawImage();
-
-//             function _selection(x, y, width, height) { //Constructor
-//                 this.x = x;
-//                 this.y = y;
-//                 this.width = width;
-//                 this.height = height;
-//                 this.label_name = "Label 0";
-//                 this.label_x = 0;
-//                 this.label_y = 0;
-//             }
-
-//             function drawImage() { //insert dataset for labelling
-//                 ctx.drawImage(image, 10, 10);
-//             }
-
-//             function resize() { //size of workspace
-//                 // canvas.height = window.innerHeight;
-//                 // canvas.width = window.innerWidth;
-//                 canvas.height = 1000;
-//                 canvas.width = 800;
-//             }
-
-//             function startPosition(e) {//start position when mouse down
-//                 onSelection = true;
-//                 startX = e.clientX;
-//                 startY = e.clientY;
-
-//                 listSelection[id] = new _selection(startX, startY, 0, 0);
-//                 // console.log(startX, startY, id);
-//             }
-
-//             function endPosition() {//ending position when mouse up
-//                 onSelection = false;
-//                 listSelection[id].width = width;
-//                 listSelection[id].height = height;
-//                 listSelection[id].label_x = width / 2 + listSelection[id].x;
-//                 listSelection[id].label_y = listSelection[id].y - 10;
-//                 if (height < 0) {
-//                     listSelection[id].label_y += height;
-//                 }
-//                 listSelection[id].label_name = "Label " + id;
-//                 ctx.fillText(listSelection[id].label_name, listSelection[id].label_x, listSelection[id].label_y);
-//                 // console.log(listSelection[id].label_x);
-//                 id += 1; //increment id
-//             }
-
-//             function drawArea() {//draw all selected area in workspace
-//                 drawImage();
-//                 for (let i = 0; i < listSelection.length; i++) {
-//                     ctx.strokeRect(listSelection[i].x, listSelection[i].y, listSelection[i].width, listSelection[i].height);
-//                     ctx.fillText(listSelection[i].label_name, listSelection[i].label_x, listSelection[i].label_y);
-//                 }
-//             }
-
-//             function clear() {
-//                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-//             }
-
-//             function draw(e) {
-//                 if (!onSelection) { return; }
-//                 //setting for selection box
-                // ctx.strokeStyle = "red";
-                // ctx.lineWidth = 3;
-
-//                 //Setting for labelling
-//                 ctx.font = "20px Lato";
-//                 ctx.fillStyle = "red";
-//                 ctx.textAlign = "center";
-
-//                 width = e.clientX - listSelection[id].x;
-//                 height = e.clientY - listSelection[id].y;
-//                 // console.log(startX,startY,width,height);
-//                 clear();
-//                 drawArea();
-//                 ctx.strokeRect(listSelection[id].x, listSelection[id].y, width, height);
-
-
-//             }
-
-//             canvas.addEventListener("mousedown", startPosition);
-//             canvas.addEventListener("mouseup", endPosition);
-//             canvas.addEventListener("mousemove", draw);
-
-//         });
-//     }
-
-//     render() {
-//         return (
-//             <div>                
-//                 <canvas ref="canvas" />
-//             </div>
-//         )
-
-//     }
-
-// }
-
-// export default Canvas;
-
-// window.addEventListener('load', () => {
-//     // const canvas = document.getElementById("canvas");
-//     const ctx = canvas.getContext("2d");
-//     const image = new Image();
-//     let onSelection = false; 
-//     let startX; //initial coordinate for X
-//     let startY; //initial coordinate for Y
-//     let width = 0;
-//     let height = 0;
-//     let listSelection = []; //All selection box in workspace
-//     let id = 0; //Initial id for selection box
-
-//     image.src = asrap;        
-
-//     resize();
-//     drawImage(); 
-
-//     function _selection(x,y, width, height){ //Constructor
-//         this.x = x;
-//         this.y = y;
-//         this.width = width;
-//         this.height = height;
-//         this.label_name = "Label 0";
-//         this.label_x = 0;
-//         this.label_y = 0;
-//     }
-
-//     function drawImage(){ //insert dataset for labelling
-//         ctx.drawImage(image,10,10);
-//     }
-
-//     function resize(){ //size of workspace
-//         canvas.height = window.innerHeight;
-//         canvas.width = window.innerWidth;
-//     }
-
-//     function startPosition(e){//start position when mouse down
-//         onSelection = true;
-//         startX = e.clientX;
-//         startY = e.clientY;
-
-//         listSelection[id] = new _selection(startX,startY, 0, 0);
-//         // console.log(startX, startY, id);
-//     }
-
-//     function endPosition(){//ending position when mouse up
-//         onSelection = false;
-//         listSelection[id].width = width;
-//         listSelection[id].height = height;
-//         listSelection[id].label_x = width/2 + listSelection[id].x;
-//         listSelection[id].label_y = listSelection[id].y - 10;
-//         if(height < 0 ){
-//             listSelection[id].label_y += height;
-//         }
-//         listSelection[id].label_name = "Label " + id;
-//         ctx.fillText(listSelection[id].label_name, listSelection[id].label_x, listSelection[id].label_y);        
-//         // console.log(listSelection[id].label_x);
-//         id += 1; //increment id
-//     }
-
-//     function drawArea(){//draw all selected area in workspace
-//         drawImage();
-//         for(let i = 0 ; i < listSelection.length ; i++){
-//             ctx.strokeRect(listSelection[i].x,listSelection[i].y,listSelection[i].width,listSelection[i].height);
-//             ctx.fillText(listSelection[i].label_name, listSelection[i].label_x, listSelection[i].label_y);        
-//         }
-//     }
-
-//     function clear(){
-//         ctx.clearRect(0,0,canvas.width,canvas.height);
-//     }
-
-//     function draw(e){
-//         if(!onSelection){return;}
-//         //setting for selection box
-//         ctx.strokeStyle ="red";
-//         ctx.lineWidth = 3;
-
-//         //Setting for labelling
-//         ctx.font ="20px Lato";
-//         ctx.fillStyle = "red";
-//         ctx.textAlign = "center";
-
-//         width = e.clientX - listSelection[id].x;
-//         height = e.clientY - listSelection[id].y;
-//         // console.log(startX,startY,width,height);
-//         clear();
-//         drawArea();
-//         ctx.strokeRect(listSelection[id].x,listSelection[id].y,width,height);
-
-
-//     }
-
-//     canvas.addEventListener("mousedown", startPosition); 
-//     canvas.addEventListener("mouseup", endPosition);
-//     canvas.addEventListener("mousemove", draw);
-
-// });
-
-// export default Canvas;

@@ -1,22 +1,33 @@
 import React, { Component } from 'react'
-import { STATE_EDIT, STATE_RECTANGLE, STATE_OTHER} from "../util/const";
+import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 export class Tools extends Component {
     constructor(props) {
         super(props);
         this.handleChangeEdit = this.handleChangeEdit.bind(this);
         this.handleChangeRectangle = this.handleChangeRectangle.bind(this);
-        this.handleChangeOther = this.handleChangeOther.bind(this);
+        this.handleChangeDelete = this.handleChangeDelete.bind(this);
+        this.handleChangeResize = this.handleChangeResize.bind(this);
 
     }
     handleChangeEdit () {
-        this.props.parentHandler(STATE_EDIT);
+        this.props.parentHandler(STATE_EDIT);        
     }
     handleChangeRectangle () {
+        this.props.parentNotActive();
         this.props.parentHandler(STATE_RECTANGLE);
     }
-    handleChangeOther () {
-        this.props.parentHandler(STATE_OTHER);
+    handleChangeDelete () {
+        if(this.props.parentState.anActive === true){
+            this.props.parentHandler(STATE_DELETE);
+            this.props.parentNotActive();
+        }
     }
+    handleChangeResize () {
+        if(this.props.parentState.anActive === true){
+            this.props.parentHandler(STATE_RESIZE);
+        }
+    }
+    
 
     render() {
         return (            
@@ -35,10 +46,15 @@ export class Tools extends Component {
                     Rectangle
                 </button>       
                 <button 
-                    className={this.props.parentState.other ? 'active' : 'not-active'}
-                    name="other" onClick={this.handleChangeOther}>
-                    Other
-                </button>     
+                    className={this.props.parentState.delete ? 'active' : 'not-active'}
+                    name="delete" onClick={this.handleChangeDelete}>
+                    Delete
+                </button>
+                <button 
+                    className={this.props.parentState.resize ? 'active' : 'not-active'}
+                    name="resize" onClick={this.handleChangeResize}>
+                    Resize
+                </button>          
             </div>
         )
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Canvas from "../components/canvas";
 import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
-import { STATE_EDIT, STATE_RECTANGLE, STATE_OTHER} from "../util/const";
+import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
 import { Container, Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
@@ -15,7 +15,9 @@ class Workspace extends Component{
         this.state = {
             edit: true,
             rectangle: false,
-            other: false,
+            delete: false,
+            resize: false,
+            anActive: false,
             isInitiated: false,
             data: 'images/data.jpeg',
             buttonText: 'Start',
@@ -23,8 +25,11 @@ class Workspace extends Component{
             error: '',
             intervalId: 0
         };
+        
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
+        this.makeActive = this.makeActive.bind(this);
+        this.makeNotActive = this.makeNotActive.bind(this);
         // this.handleGetAllImages = this.handleGetAllImages.bind(this);
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
@@ -54,6 +59,15 @@ class Workspace extends Component{
     async componentWillUnmount() {
         clearInterval(this.state.intervalId);
     }
+    
+    makeActive(){
+        this.setState({anActive: true});
+    }
+
+    makeNotActive(){
+        this.setState({anActive: false});
+    }
+
 
     handler(someState){
         this.setState({[someState]: !this.state[someState]})
@@ -63,9 +77,13 @@ class Workspace extends Component{
         if(this.state.rectangle === true && someState !== STATE_RECTANGLE) {
             this.setState({rectangle: false});
         }
-        if(this.state.other === true && someState !== STATE_OTHER) {
-            this.setState({other: false});
+        if(this.state.delete === true && someState !== STATE_DELETE) {
+            this.setState({delete: false});
         }
+        if(this.state.resize === true && someState !== STATE_RESIZE) {
+            this.setState({resize: false});
+        }
+        
     }
 
     render() {  
@@ -77,8 +95,8 @@ class Workspace extends Component{
             <Row>
                 <Col>
                     <div className ="workspace">
-                        <Tools parentState ={this.state} parentHandler = {this.handler} />
-                        <Canvas parentState = {this.state} />
+                        <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
+                        <Canvas parentState = {this.state} parentActive = {this.makeActive} />
                         {
                             this.state.isInitiated ?
                             <div> 
@@ -89,9 +107,12 @@ class Workspace extends Component{
                                 <Button variant="primary" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
                             )    
                         }
+                        {console.log("State bapak")}
                         {console.log("rectangle: " + this.state.rectangle)}
                         {console.log("edit: " + this.state.edit)}
-                        {console.log("other: " + this.state.other)}
+                        {console.log("delete: " + this.state.delete)}
+                        {console.log("active: " + this.state.anActive)}
+                        {console.log("resize: " + this.state.resize)}
                     </div>
                 </Col>
 

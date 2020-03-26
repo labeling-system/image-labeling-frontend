@@ -1,5 +1,3 @@
-import {Label} from './label'
-
 // x,y = koordinat pojok kiri atas dari kotak
 // startX,startY = koordinat ketika dilakukan klik
 // width = lebar (positif)
@@ -15,7 +13,7 @@ import {Label} from './label'
         this.y = null;
         this.width = null;
         this.height = null;
-        this.label = new Label()
+        this.label = '';
     }
 
     setCoordinates(x,y) {
@@ -29,6 +27,10 @@ import {Label} from './label'
 
     setHeight(height) {
         this.height = height;
+    }
+
+    setLabel(label) {
+        this.label = label;
     }
 
     getX() {
@@ -47,6 +49,14 @@ import {Label} from './label'
         return this.height;
     }
 
+    getId() {
+        return this.id;
+    }
+
+    getLabel() {
+        return this.label;
+    }
+    
     empty(){
         // return isNaN(this.height) && isNaN(this.width);
         return this.height === 0 && this.width === 0;
