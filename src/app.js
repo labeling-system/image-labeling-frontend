@@ -20,7 +20,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        isAuth: true,
+        isAuth: false,
         role:''
     }
 
@@ -42,8 +42,7 @@ class App extends Component {
         <div id='app'>
           <Switch>
             <Route exact path="/">
-              <Navigation handlerNav={this.handler} roleHandler={this.roleHandler} role={this.state.role} page={WORKSPACE}/>
-              <Workspace isAuth={this.state.isAuth}/>
+              <Login isAuth={this.state.isAuth} handler={this.handler} roleHandler={this.roleHandler}/>
             </Route>
             <Route path="/login">
               <Login isAuth={this.state.isAuth} handler={this.handler} roleHandler={this.roleHandler}/>
