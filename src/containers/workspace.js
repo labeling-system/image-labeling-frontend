@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
 import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
-import { Container, Table, Row, Col } from 'react-bootstrap';
+import { Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
 
 import { getWorkingImage, saveImage } from '../api/selection';
@@ -14,8 +14,8 @@ class Workspace extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            edit: true,
-            rectangle: false,
+            edit: false,
+            rectangle: true,
             delete: false,
             resize: false,
             anActive: false,
@@ -24,7 +24,7 @@ class Workspace extends Component{
             data: '',
             buttonText: 'Start',
             labelList : [],
-            
+            selectedLabel : '',
             error: ''  
              
         };
@@ -33,6 +33,7 @@ class Workspace extends Component{
         this.handler = this.handler.bind(this);
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
+        this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
         // this.handleGetAllImages = this.handleGetAllImages.bind(this);
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
@@ -54,6 +55,10 @@ class Workspace extends Component{
         console.log(this.state.data);
     }
 
+    resetSelectedLabel() {
+        this.setState({selectedLabel : ""});
+    }
+
     async componentDidMount() {
         try {
             let result = await getMostUsedLabels();
@@ -71,6 +76,10 @@ class Workspace extends Component{
     makeNotActive(){
         this.setState({anActive: false});
     }
+
+    handleLabelInput(label) {
+        this.setState({selectedLabel : label});
+    }   
 
 
     handler(someState){
@@ -100,7 +109,7 @@ class Workspace extends Component{
                 <Col>
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
-                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} />
+                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
                         {
                             this.state.isInitiated ?
                             <div> 
@@ -130,7 +139,7 @@ class Workspace extends Component{
                                 {
                                     this.state.labelList.map((label, i) => ( 
                                         <tr key={i}>
-                                            <td>{label}</td>
+                                            <td onClick={() => this.handleLabelInput(label)}>{label}</td>
                                         </tr>))
                                 }
                             </tbody>

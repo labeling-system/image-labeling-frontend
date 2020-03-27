@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { API } from '../config';
 
-export const postImage = (filenames) => {
+export const postImage = (files) => {
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',
             url: API + '/image',
             data: {
-                "filenames": filenames,
+                "files": files,
             },
             headers: {
                 'Content-Type': 'application/json'
