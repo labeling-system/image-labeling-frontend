@@ -13,7 +13,8 @@ export class canvas extends React.Component {
         this.setWorkspaceSetting = this.setWorkspaceSetting.bind(this);
 
         this.state = {
-            cursor: "default"
+            cursor: "default",
+            inputLabel: ""
         }
     }
 
@@ -56,7 +57,11 @@ export class canvas extends React.Component {
 
     // Handle input label
     handleChange = (e) => {
-        this.getActiveSelection().setLabel(e.target.value)
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        this.getActiveSelection().setLabel(this.state.inputLabel);
+        this.props.resetSelectedLabel();
     }
 
     // Draw all selection from mySelection to canvas
@@ -103,7 +108,8 @@ export class canvas extends React.Component {
           })
         
         return result
-    }    
+    } 
+    
 
     // Delete specific selection with id from mySelection
     deleteSelection(id) {
@@ -166,7 +172,7 @@ export class canvas extends React.Component {
         //Absolute width and height
         this.width = Math.abs(this.width);
         this.height = Math.abs(this.height);
-}    
+    }    
 
     onMouseDown({nativeEvent}) {
         // Start selection
@@ -425,6 +431,7 @@ export class canvas extends React.Component {
     }    
 
     componentDidUpdate() {
+
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
@@ -443,7 +450,15 @@ export class canvas extends React.Component {
         // Default cursor trigger
         if(this.props.parentState.edit === true) {
             this.setCursor(0,0);
-        }        
+        } 
+        
+        // Handle onClick change input label state
+        if(this.props.parentState.anActive === true) {
+            if(this.props.parentState.selectedLabel !== "" && this.props.parentState.selectedLabel != this.state.inputLabel) {
+                this.setState({inputLabel: this.props.parentState.selectedLabel[0]});
+            }
+            this.getActiveSelection().setLabel(this.state.inputLabel);
+        }
     }
 
     // Canvas properties
@@ -467,7 +482,7 @@ export class canvas extends React.Component {
                     />
                 {
                     (this.activeId != null && this.props.parentState.edit === true) ?
-                    <input style = {this.setInputLabel()} type="text" id="input-label" onChange={this.handleChange}/>
+                    <input name="inputLabel" style = {this.setInputLabel()} type="text" id="input-label" value={this.state.inputLabel} onChange={this.handleChange}/>
 
                     : null
                 }

@@ -21,7 +21,7 @@ class Workspace extends Component{
             data: 'images/data.jpeg',
             buttonText: 'Start',
             labelList : [],
-            
+            selectedLabel : '',
             error: ''  
             
         };
@@ -30,6 +30,7 @@ class Workspace extends Component{
         this.handler = this.handler.bind(this);
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
+        this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
         // this.handleGetAllImages = this.handleGetAllImages.bind(this);
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
@@ -38,6 +39,10 @@ class Workspace extends Component{
         this.setState({isInitiated: parameter,
                         buttonText: text});
         console.log(parameter);
+    }
+
+    resetSelectedLabel() {
+        this.setState({selectedLabel : ""});
     }
 
     async componentDidMount() {
@@ -57,6 +62,10 @@ class Workspace extends Component{
     makeNotActive(){
         this.setState({anActive: false});
     }
+
+    handleLabelInput(label) {
+        this.setState({selectedLabel : label});
+    }   
 
 
     handler(someState){
@@ -86,7 +95,7 @@ class Workspace extends Component{
                 <Col>
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
-                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} />
+                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
                         {
                             this.state.isInitiated ?
                             <div> 
@@ -116,7 +125,7 @@ class Workspace extends Component{
                                 {
                                     this.state.labelList.map((label, i) => ( 
                                         <tr key={i}>
-                                            <td>{label}</td>
+                                            <td onClick={() => this.handleLabelInput(label)}>{label}</td>
                                         </tr>))
                                 }
                             </tbody>
