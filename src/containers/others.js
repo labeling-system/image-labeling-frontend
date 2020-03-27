@@ -49,8 +49,8 @@ class Others extends Component {
                     </Alert>
                     <p>Please follow this steps to upload images</p>
                     <ol>
-                        <li>Put all images in directory <code>upload</code>.</li>
-                        <li>Click the Choose File below, and choose the <code>upload</code> folder.</li>
+                        <li>Put all images in directory <code>public/images</code>.</li>
+                        <li>Click the Choose File below, and choose the <code>public/images</code> folder.</li>
                     </ol>
                     {
                         this.state.error !== '' ? 
@@ -93,7 +93,7 @@ function ModalUpload(props) {
                 <Modal.Body>
                     By uploading new images, you will <b className='red'>lost</b> all your labeled images you have
                     now. Please make sure you have <b className='green'>download</b> all xml/json output file before.
-                    If you want to proceed, browse <code>upload</code> folder.
+                    If you want to proceed, browse <code>public/images</code> folder.
                 </Modal.Body>
                 <Modal.Footer>
                     <input
