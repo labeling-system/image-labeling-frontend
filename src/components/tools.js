@@ -4,9 +4,17 @@ import { GiArrowCursor } from 'react-icons/gi';
 import { MdDelete } from 'react-icons/md';
 import { IoMdResize } from 'react-icons/io';
 import { FaPlus } from 'react-icons/fa';
-
-
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 import Button from 'react-bootstrap/Button';
+
+function renderPopover(value) {
+    return (
+        <Popover>
+            <Popover.Content>{value}</Popover.Content>
+        </Popover>
+    );
+}
 
 export class Tools extends Component {
     constructor(props) {
@@ -42,14 +50,33 @@ export class Tools extends Component {
     render() {
         return (
             <div id="tools">
-                <Button variant="outline-info" 
-                    className={this.props.parentState.rectangle ? 'active' : ''}
-                    onClick={this.handleChangeRectangle}>
-                        <FaPlus /></Button>
-                <Button variant="outline-info"
-                    className={this.props.parentState.edit ? 'active' : ''}
-                    onClick={this.handleChangeEdit}>
-                        <GiArrowCursor /></Button>
+                <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250 }}
+                    overlay={renderPopover("Add selection")}
+                >
+                    <Button variant="outline-info" 
+                        className={this.props.parentState.rectangle ? 'active' : ''}
+                        onClick={this.handleChangeRectangle}>
+                            <FaPlus /></Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250 }}
+                    overlay={renderPopover("Select selection")}
+                >
+                    <Button variant="outline-info"
+                        className={this.props.parentState.edit ? 'active' : ''}
+                        onClick={this.handleChangeEdit}>
+                            <GiArrowCursor /></Button>
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250 }}
+                    overlay={renderPopover("Resize")}
+                >
                 {
                     this.props.parentState.anActive?
                     <Button variant="outline-info"
@@ -60,6 +87,13 @@ export class Tools extends Component {
                         <IoMdResize /></Button> 
 
                 }
+                </OverlayTrigger>
+
+                <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250 }}
+                    overlay={renderPopover("Delete")}
+                >
                 {
                     this.props.parentState.anActive?
                     <Button variant='outline-info'
@@ -70,6 +104,7 @@ export class Tools extends Component {
                         <MdDelete /></Button> 
 
                 }
+                </OverlayTrigger>
             </div>
         )
     }
