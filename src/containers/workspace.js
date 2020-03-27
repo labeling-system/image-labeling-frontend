@@ -12,8 +12,8 @@ class Workspace extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            edit: true,
-            rectangle: false,
+            edit: false,
+            rectangle: true,
             delete: false,
             resize: false,
             anActive: false,
