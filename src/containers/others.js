@@ -18,13 +18,34 @@ class Others extends Component {
     }
 
     async handleUpload(files) {
-        let filenames = []
+        let _files = []
+
+        let _URL = window.URL || window.webkitURL;
+
         Array.from(files).forEach(file => {
-            filenames.push(file.name);
+            let _file = []
+            let  img = new Image();
+            
+            _file.push(file.name);
+            img.onload = function() {
+                _file.push(this.width);
+                _file.push(this.height);
+            };
+            
+            img.onerror = function() {
+                console.log( "not a valid file: " + file.type);
+            };
+            
+            img.src = _URL.createObjectURL(file); 
+
+            _files.push(_file);
         });
+
+        // console.log(_files);
+
         try {
             await deleteAllImages();
-            await postImage(filenames);
+            await postImage(_files);
             this.setState({ uploaded: true });
             this.setState({ error: '' });
         } catch (err) {
