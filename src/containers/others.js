@@ -23,9 +23,10 @@ class Others extends Component {
         let _URL = window.URL || window.webkitURL;
 
         Array.from(files).forEach(file => {
-            let _file = []
+            let _file = [];
             let  img = new Image();
-            
+            let error = false;
+
             _file.push(file.name);
             img.onload = function() {
                 _file.push(this.width);
@@ -33,15 +34,16 @@ class Others extends Component {
             };
             
             img.onerror = function() {
+                error = true;
                 console.log( "not a valid file: " + file.type);
             };
             
             img.src = _URL.createObjectURL(file); 
 
-            _files.push(_file);
+            if (!error) {
+                _files.push(_file);
+            }
         });
-
-        // console.log(_files);
 
         try {
             await deleteAllImages();

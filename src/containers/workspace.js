@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
 import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
-import { Container, Table, Row, Col } from 'react-bootstrap';
+import { Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
 
 
