@@ -7,6 +7,8 @@ import { Redirect } from 'react-router-dom';
 import { Container, Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
 
+import { getWorkingImage, saveImage } from '../api/selection';
+
 
 class Workspace extends Component{
     constructor(props) {
@@ -18,12 +20,13 @@ class Workspace extends Component{
             resize: false,
             anActive: false,
             isInitiated: false,
-            data: 'images/data.jpeg',
+            idData: '',
+            data: '',
             buttonText: 'Start',
             labelList : [],
             
             error: ''  
-            
+             
         };
         
         this.handleOnClick = this.handleOnClick.bind(this);
@@ -34,10 +37,21 @@ class Workspace extends Component{
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
 
-    handleOnClick(parameter, text){
+    async handleOnClick(parameter, text){
+        let result;
+        if (this.state.isInitiated) {
+            result = await saveImage(this.state.idData);
+        } 
+        else {
+            result = await getWorkingImage();
+        }
+        this.setState({ idData: result.data.image_id,
+                        data: 'images/' + result.data.filename });
+
         this.setState({isInitiated: parameter,
                         buttonText: text});
         console.log(parameter);
+        console.log(this.state.data);
     }
 
     async componentDidMount() {
@@ -90,7 +104,7 @@ class Workspace extends Component{
                         {
                             this.state.isInitiated ?
                             <div> 
-                                <Button variant="success" onClick={() => this.handleOnClick(false, "Start")}>{this.state.buttonText}</Button> 
+                                <Button variant="success" onClick={() => this.handleOnClick(true, "Next")}>{this.state.buttonText}</Button> 
                             </div> 
                             
                             : (
