@@ -27,7 +27,7 @@ export class canvas extends React.Component {
     onResize = false;
     canResize = false;   
 
-    data = "url(" + this.props.parentState.data + ")";
+    //data = "url(" + this.props.parentState.data + ")";
 
     // Style for canvas
     setWorkspaceSetting(){
@@ -35,7 +35,7 @@ export class canvas extends React.Component {
             marginTop: "10px",
             marginLeft: "10px",
             display: "flex",
-            backgroundImage: this.data,
+            backgroundImage: "url(" + this.props.parentState.data + ")",
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             height: `${this.heightSize}`,
@@ -43,6 +43,7 @@ export class canvas extends React.Component {
             position: "relative",
             cursor: `${this.state.cursor}`
         };
+        console.log("yuhu", this.data);
         return _setWorkspaceSetting;
     }
 

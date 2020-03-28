@@ -53,6 +53,7 @@ class Workspace extends Component{
                         buttonText: text});
         console.log(parameter);
         console.log(this.state.data);
+        console.log(this.state.idData);
     }
 
     resetSelectedLabel() {
@@ -112,7 +113,7 @@ class Workspace extends Component{
                         <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
                         {
                             this.state.isInitiated ?
-                            <div> 
+                            <div>
                                 <Button variant="success" onClick={() => this.handleOnClick(true, "Next")}>{this.state.buttonText}</Button> 
                             </div> 
                             
