@@ -5,6 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
+import { getAllLabeled } from '../api/image'
 
 class Others extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class Others extends Component {
     handleClose() {
         this.setState({ error: '' });
     }
-
+    
     render() {
         return !this.props.isAuth ? <Redirect to='/login'/> : (
             <div id='other' className='parent-wrapper'>
@@ -69,9 +70,44 @@ class Others extends Component {
                     }
                     
                 </div>
+                <div>
+                    <button onClick={() => this.downloadXML()}>Download XML</button>
+                    <button onClick={() => this.downloadJSON()}>Download JSON</button>
+                </div>
             </div>
         )
     }
+
+    async downloadXML() {
+        console.log('download XML')
+        try {
+            let result = await getAllLabeled();
+            const url = window.URL.createObjectURL(new Blob([result.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'label.zip'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+            this.setState({ error: '' });
+            console.log(result)
+        } catch (err) {
+            console.log(err);
+            this.setState({ error: 'Error, please contact the administrator' });
+        }
+
+        // try {
+        //     let result = await postLabeled(this.state.labeled);
+        //     console.log(result);
+        // } catch (err) {
+        //     console.log(err);
+        //     this.setState({ error: 'Error, please contact the administrator' })
+        // }
+    }
+
+    async downloadJSON() {
+        console.log("download JSON")
+    }
+    
 }
 
 function ModalUpload(props) {

@@ -45,3 +45,16 @@ export const deleteAllImages = () => {
         });
     });
 };
+
+export const getAllLabeled = () => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'get',
+            url: API + '/download'
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
