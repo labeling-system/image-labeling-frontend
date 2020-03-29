@@ -19,13 +19,36 @@ class Others extends Component {
     }
 
     async handleUpload(files) {
-        let filenames = []
+        let _files = []
+
+        let _URL = window.URL || window.webkitURL;
+
         Array.from(files).forEach(file => {
-            filenames.push(file.name);
+            let _file = [];
+            let  img = new Image();
+            let error = false;
+
+            _file.push(file.name);
+            img.onload = function() {
+                _file.push(this.width);
+                _file.push(this.height);
+            };
+            
+            img.onerror = function() {
+                error = true;
+                console.log( "not a valid file: " + file.type);
+            };
+            
+            img.src = _URL.createObjectURL(file); 
+
+            if (!error) {
+                _files.push(_file);
+            }
         });
+
         try {
             await deleteAllImages();
-            await postImage(filenames);
+            await postImage(_files);
             this.setState({ uploaded: true });
             this.setState({ error: '' });
         } catch (err) {
@@ -50,8 +73,8 @@ class Others extends Component {
                     </Alert>
                     <p>Please follow this steps to upload images</p>
                     <ol>
-                        <li>Put all images in directory <code>upload</code>.</li>
-                        <li>Click the Choose File below, and choose the <code>upload</code> folder.</li>
+                        <li>Put all images in directory <code>public/images</code>.</li>
+                        <li>Click the Choose File below, and choose the <code>public/images</code> folder.</li>
                     </ol>
                     {
                         this.state.error !== '' ? 
@@ -129,7 +152,7 @@ function ModalUpload(props) {
                 <Modal.Body>
                     By uploading new images, you will <b className='red'>lost</b> all your labeled images you have
                     now. Please make sure you have <b className='green'>download</b> all xml/json output file before.
-                    If you want to proceed, browse <code>upload</code> folder.
+                    If you want to proceed, browse <code>public/images</code> folder.
                 </Modal.Body>
                 <Modal.Footer>
                     <input

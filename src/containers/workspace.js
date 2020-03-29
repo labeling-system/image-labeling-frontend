@@ -4,40 +4,60 @@ import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
 import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
-import { Container, Table, Row, Col } from 'react-bootstrap';
+import { Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
+
+import { getWorkingImage, saveImage } from '../api/selection';
 
 
 class Workspace extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            edit: true,
-            rectangle: false,
+            edit: false,
+            rectangle: true,
             delete: false,
             resize: false,
             anActive: false,
             isInitiated: false,
-            data: 'images/data.jpeg',
+            idData: '',
+            data: '',
             buttonText: 'Start',
             labelList : [],
-            
+            selectedLabel : '',
             error: ''  
-            
+             
         };
         
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
+        this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
         // this.handleGetAllImages = this.handleGetAllImages.bind(this);
         // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
 
-    handleOnClick(parameter, text){
+    async handleOnClick(parameter, text){
+        let result;
+        if (this.state.isInitiated) {
+            result = await saveImage(this.state.idData);
+        } 
+        else {
+            result = await getWorkingImage();
+        }
+        this.setState({ idData: result.data.image_id,
+                        data: 'images/' + result.data.filename });
+
         this.setState({isInitiated: parameter,
                         buttonText: text});
         console.log(parameter);
+        console.log(this.state.data);
+        console.log(this.state.idData);
+    }
+
+    resetSelectedLabel() {
+        this.setState({selectedLabel : ""});
     }
 
     async componentDidMount() {
@@ -57,6 +77,10 @@ class Workspace extends Component{
     makeNotActive(){
         this.setState({anActive: false});
     }
+
+    handleLabelInput(label) {
+        this.setState({selectedLabel : label});
+    }   
 
 
     handler(someState){
@@ -86,11 +110,11 @@ class Workspace extends Component{
                 <Col>
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
-                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} />
+                        <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
                         {
                             this.state.isInitiated ?
-                            <div> 
-                                <Button variant="success" onClick={() => this.handleOnClick(false, "Start")}>{this.state.buttonText}</Button> 
+                            <div>
+                                <Button variant="success" onClick={() => this.handleOnClick(true, "Next")}>{this.state.buttonText}</Button> 
                             </div> 
                             
                             : (
@@ -116,7 +140,7 @@ class Workspace extends Component{
                                 {
                                     this.state.labelList.map((label, i) => ( 
                                         <tr key={i}>
-                                            <td>{label}</td>
+                                            <td onClick={() => this.handleLabelInput(label)}>{label}</td>
                                         </tr>))
                                 }
                             </tbody>
