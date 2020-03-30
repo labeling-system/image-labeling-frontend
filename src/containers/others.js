@@ -102,9 +102,7 @@ class Others extends Component {
     async downloadXML() {
         console.log('download XML')
         try {
-            // let result = await getAllLabeled();
-            // console.log(result)
-            fetch('http://localhost:5000/download')
+            fetch('http://localhost:5000/downloadxml')
 			.then(response => {
 				response.blob().then(blob => {
 					let url = window.URL.createObjectURL(blob);
@@ -116,19 +114,10 @@ class Others extends Component {
 				//window.location.href = response.url;
 		    });
             this.setState({ error: '' });
-            // console.log(result)
         } catch (err) {
             console.log(err);
             this.setState({ error: 'Error, please contact the administrator' });
         }
-
-        // try {
-        //     let result = await postLabeled(this.state.labeled);
-        //     console.log(result);
-        // } catch (err) {
-        //     console.log(err);
-        //     this.setState({ error: 'Error, please contact the administrator' })
-        // }
     }
 
     async downloadJSON() {
