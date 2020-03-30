@@ -41,7 +41,8 @@ class Workspace extends Component{
     async handleOnClick(parameter, text){
         let result;
         if (this.state.isInitiated) {
-            result = await saveImage(this.state.idData);
+            //will be changed to save
+            result = await getWorkingImage();
         } 
         else {
             result = await getWorkingImage();
