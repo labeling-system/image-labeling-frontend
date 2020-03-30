@@ -5,8 +5,6 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 
-import { getAllLabeled } from '../api/image'
-
 class Others extends Component {
     constructor(props) {
         super(props);
@@ -104,15 +102,21 @@ class Others extends Component {
     async downloadXML() {
         console.log('download XML')
         try {
-            let result = await getAllLabeled();
-            const url = window.URL.createObjectURL(new Blob([result.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'label.zip'); //or any other extension
-            document.body.appendChild(link);
-            link.click();
+            // let result = await getAllLabeled();
+            // console.log(result)
+            fetch('http://localhost:5000/download')
+			.then(response => {
+				response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'label.zip';
+					a.click();
+				});
+				//window.location.href = response.url;
+		    });
             this.setState({ error: '' });
-            console.log(result)
+            // console.log(result)
         } catch (err) {
             console.log(err);
             this.setState({ error: 'Error, please contact the administrator' });
