@@ -42,7 +42,7 @@ class Workspace extends Component{
         let result;
         if (this.state.isInitiated) {
             //will be changed to save
-            result = await getWorkingImage();
+            result = await saveImage(this.state.idData);
         } 
         else {
             result = await getWorkingImage();

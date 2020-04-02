@@ -21,7 +21,7 @@ export const saveImage = (image_id) => {
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',
-            url: API + '/selection/next',
+            url: API + '/selection/next/' + image_id,
             data: {
                 "image_id": image_id,
             }, 
