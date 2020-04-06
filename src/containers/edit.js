@@ -9,6 +9,8 @@ const ID = 0;
 const STATUS = 1;
 const FILENAME = 2;
 
+const COUNT_PAGE = 25;
+
 class Edit extends Component {
     constructor(props) {
         super(props);
@@ -67,9 +69,9 @@ class Edit extends Component {
     render() {
         let active = this.state.active;
         let items = [];
-        let max_number = this.state.count/25;
+        let max_number = this.state.count/COUNT_PAGE;
         
-        if (this.state.count%25 !== 0) {
+        if (this.state.count%COUNT_PAGE !== 0) {
             max_number += 1;
         }
         for (let number = 1; number <= max_number; number++) {
@@ -99,7 +101,7 @@ class Edit extends Component {
                                 {
                                     this.state.images.map((image, i) => (
                                         <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}>
-                                            <td>{i + (this.state.active - 1)*25 + 1}</td>
+                                            <td>{i + (this.state.active - 1)*COUNT_PAGE + 1}</td>
                                             <td>{image[FILENAME]}</td>
                                             {
                                                 image[STATUS] === UNLABELED && <td className='edit-image-unlabeled'>{image[STATUS]}</td>
@@ -118,7 +120,7 @@ class Edit extends Component {
                     }
                     <div className='center'>
                         {
-                            this.state.count > 25 && <Pagination>{items}</Pagination>
+                            this.state.count > COUNT_PAGE && <Pagination>{items}</Pagination>
                         }
                     </div>
                 </div>

@@ -134,5 +134,3 @@ class Workspace extends Component{
 }
 
 export default Workspace;
-
-
