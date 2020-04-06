@@ -10,6 +10,7 @@ const STATUS = 1;
 const FILENAME = 2;
 
 const COUNT_PAGE = 25;
+const WIDTH_PAGINATION = 4;
 
 class Edit extends Component {
     constructor(props) {
@@ -69,12 +70,57 @@ class Edit extends Component {
     render() {
         let active = this.state.active;
         let items = [];
-        let max_number = this.state.count/COUNT_PAGE;
+        let max_number = Math.ceil(this.state.count/COUNT_PAGE);
         
-        if (this.state.count%COUNT_PAGE !== 0) {
-            max_number += 1;
+        // if (this.state.count%COUNT_PAGE !== 0) {
+        //     max_number += 1;
+        // }
+
+        let start_count = active - WIDTH_PAGINATION;
+        let end_count = active + WIDTH_PAGINATION;
+        let append = false;
+        
+        if (end_count >= (max_number - 1)) {
+            start_count = start_count - WIDTH_PAGINATION - 2 + (max_number + WIDTH_PAGINATION - end_count);
         }
-        for (let number = 1; number <= max_number; number++) {
+
+        if (start_count <= 2) {
+            end_count = end_count + WIDTH_PAGINATION + 2 - (start_count + WIDTH_PAGINATION - 1);
+
+            start_count = 1;
+        } else {
+            let number = 1;
+            items.push(
+                <Pagination.Item key={number} active={number === active} onClick={() => this.handleChangeActivePage(number)}>
+                {number}
+                </Pagination.Item>,
+            );
+
+            items.push(
+                <Pagination.Ellipsis />
+            );
+        }
+
+        if (end_count >= (max_number - 1)) {
+            end_count = max_number;
+        } else {
+            append = true;
+        }
+
+        for (let number = start_count; number <= end_count; number++) {
+            items.push(
+                <Pagination.Item key={number} active={number === active} onClick={() => this.handleChangeActivePage(number)}>
+                {number}
+                </Pagination.Item>,
+            );
+        }
+
+        if (append) {
+            items.push(
+                <Pagination.Ellipsis />
+            );
+
+            let number = max_number;
             items.push(
                 <Pagination.Item key={number} active={number === active} onClick={() => this.handleChangeActivePage(number)}>
                 {number}
