@@ -4,9 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
 import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
-import { Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
-
 import { getWorkingImage, saveImage } from '../api/selection';
 
 
@@ -101,54 +99,34 @@ class Workspace extends Component{
         
     }
 
-    render() {  
-        const title = {
-            fontWeight: "bold"
-        }
+    render() {
         console.log(this.props.isAuth)
         return !this.props.isAuth ? <Redirect to='/login'/> : (       
-            <Row>
-                <Col>
+            <div id="workspace">
+                <div className="workspace-wrapper">
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
                         <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
+                    </div>
+                </div>
+                <div id='recommendation'>
+                    <div className='recommendation-label'>
+                        <h4>Most Used Label</h4>
+                        {
+                            this.state.labelList.map((label, i) => ( 
+                                <Button variant="info" size='lg' onClick={() => this.handleLabelInput(label)}>{label}</Button>
+                                ))
+                            }
+                    </div>
+                    <div>
                         {
                             this.state.isInitiated ?
-                            <div>
-                                <Button variant="success" onClick={() => this.handleOnClick(true, "Next")}>{this.state.buttonText}</Button> 
-                            </div> 
-                            
-                            : (
-                                <Button variant="primary" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
-                            )    
+                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick(true, "Next")}>{this.state.buttonText}</Button> 
+                            : <Button variant="primary" size='lg' block onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button> 
                         }
-                        {console.log("State bapak")}
-                        {console.log("rectangle: " + this.state.rectangle)}
-                        {console.log("edit: " + this.state.edit)}
-                        {console.log("delete: " + this.state.delete)}
-                        {console.log("active: " + this.state.anActive)}
-                        {console.log("resize: " + this.state.resize)}
                     </div>
-                </Col>
-
-                <Col>
-                    <Row>
-                        <h3 style={title}>Most Used Label</h3>
-                    </Row>
-                    <Row>
-                        <Table striped bordered hover responsive id="tabel">
-                            <tbody>
-                                {
-                                    this.state.labelList.map((label, i) => ( 
-                                        <tr key={i}>
-                                            <td onClick={() => this.handleLabelInput(label)}>{label}</td>
-                                        </tr>))
-                                }
-                            </tbody>
-                        </Table>
-                    </Row>
-                </Col>
-            </Row> 
+                </div>
+            </div> 
         )
     }    
 }
