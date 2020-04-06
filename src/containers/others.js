@@ -90,10 +90,10 @@ class Others extends Component {
                         <ModalUpload handleUpload={this.handleUpload} />
                     }
                     
-                </div>
-                <div>
-                    <button onClick={() => this.downloadXML()}>Download XML</button>
-                    <button onClick={() => this.downloadJSON()}>Download JSON</button>
+                    <h2 className='page-title'>Download</h2>
+                    <p>Below is output of selection in JSON and XML format.</p>
+                    <Button onClick={() => this.downloadXML()}>Download XML</Button> {'  '}
+                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button>
                 </div>
             </div>
         )
