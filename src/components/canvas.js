@@ -264,8 +264,44 @@ export class canvas extends React.Component {
 
             this.lastPos = {offsetX,offsetY};
 
+            //Handle UpperLeft resize                
+            if(this.isPointNWRect(
+                this.lastPos.offsetX,this.lastPos.offsetY,
+                this.startPos.offsetX, this.startPos.offsetY, this.width, this.height)) {
+                    let _height  = this.lastPos.offsetY - this.startPos.offsetY;
+                    this.startPos.offsetY = this.lastPos.offsetY;
+                    this.height -= _height;
+                    let _width  = this.lastPos.offsetX - this.startPos.offsetX;
+                    this.startPos.offsetX = this.lastPos.offsetX;
+                    this.width -= _width;
+                }             
+            //Handle UpperRight resize                
+            else if(this.isPointNERect(
+                this.lastPos.offsetX,this.lastPos.offsetY,
+                this.startPos.offsetX, this.startPos.offsetY, this.width, this.height)) {
+                    let _height  = this.lastPos.offsetY - this.startPos.offsetY;
+                    this.startPos.offsetY = this.lastPos.offsetY;
+                    this.height -= _height;
+                    this.width = this.lastPos.offsetX - this.startPos.offsetX;
+                }   
+            //Handle DownLeft resize
+            else if(this.isPointSWRect(
+                this.lastPos.offsetX,this.lastPos.offsetY,
+                this.startPos.offsetX, this.startPos.offsetY, this.width, this.height)) {
+                    let _width  = this.lastPos.offsetX - this.startPos.offsetX;
+                    this.startPos.offsetX = this.lastPos.offsetX;
+                    this.width -= _width;
+                    this.height = this.lastPos.offsetY - this.startPos.offsetY;
+                }
+            //Handle DownRight resize
+            else if(this.isPointSERect(
+                this.lastPos.offsetX,this.lastPos.offsetY,
+                this.startPos.offsetX, this.startPos.offsetY, this.width, this.height)) {
+                    this.width = this.lastPos.offsetX - this.startPos.offsetX;
+                    this.height = this.lastPos.offsetY - this.startPos.offsetY;
+                }
             //Handle Right resize
-            if(this.isPointERect(
+            else if(this.isPointERect(
                 this.lastPos.offsetX,this.lastPos.offsetY,
                 this.startPos.offsetX, this.startPos.offsetY, this.width, this.height)) {
                     this.width = this.lastPos.offsetX - this.startPos.offsetX;
@@ -291,7 +327,8 @@ export class canvas extends React.Component {
                     let _height  = this.lastPos.offsetY - this.startPos.offsetY;
                     this.startPos.offsetY = this.lastPos.offsetY;
                     this.height -= _height;
-                }                
+                } 
+            
            
             this.clear();
             this.drawAllSelection();
@@ -343,6 +380,8 @@ export class canvas extends React.Component {
 
 
     //All method for checking point position toward selection
+
+    //For cursor behavior
     isPointInsideRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight){
         return  (rectX <= pointX) && (rectX + rectWidth >= pointX) &&
                      (rectY <= pointY) && (rectY + rectHeight >= pointY);
@@ -358,6 +397,17 @@ export class canvas extends React.Component {
             || (rectY <= pointY && rectY + rectHeight >= pointY && pointX >= (rectX + rectWidth) - ERROR &&  pointX <= (rectX + rectWidth) + ERROR );
     }
 
+    isPointNESWRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectX + rectWidth + ERROR >= pointX && rectX + rectWidth - ERROR <= pointX &&  rectY + ERROR >= pointY && rectY - ERROR <= pointY )
+            || (rectY + rectHeight + ERROR >= pointY && rectY + rectHeight - ERROR <= pointY &&  rectX + ERROR >= pointX && rectX - ERROR <= pointX )
+    }
+    
+    isPointNWSERect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectX + rectWidth + ERROR >= pointX && rectX + rectWidth - ERROR <= pointX && rectY + rectHeight + ERROR >= pointY && rectY + rectHeight - ERROR <= pointY  )
+            || (rectY + ERROR >= pointY && rectY - ERROR <= pointY  &&  rectX + ERROR >= pointX && rectX - ERROR <= pointX )
+    }
+
+    //For cursor behavior on update resize
     isPointERect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
         return (rectY <= pointY && rectY + rectHeight >= pointY && pointX >= (rectX + rectWidth) - ERROR &&  pointX <= (rectX + rectWidth) + ERROR );
     }
@@ -372,6 +422,22 @@ export class canvas extends React.Component {
 
     isPointSRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
         return (rectX <= pointX && rectX + rectWidth >= pointX && pointY >= (rectY + rectHeight) - ERROR && pointY <= (rectY + rectHeight) + ERROR);
+    }
+
+    isPointNERect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectX + rectWidth + ERROR >= pointX && rectX + rectWidth - ERROR <= pointX &&  rectY + ERROR >= pointY && rectY - ERROR <= pointY )            
+    }
+
+    isPointSWRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectY + rectHeight + ERROR >= pointY && rectY + rectHeight - ERROR <= pointY &&  rectX + ERROR >= pointX && rectX - ERROR <= pointX )
+    }    
+
+    isPointSERect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectX + rectWidth + ERROR >= pointX && rectX + rectWidth - ERROR <= pointX && rectY + rectHeight + ERROR >= pointY && rectY + rectHeight - ERROR <= pointY  )            
+    }
+    
+    isPointNWRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight) {
+        return (rectY + ERROR >= pointY && rectY - ERROR <= pointY  &&  rectX + ERROR >= pointX && rectX - ERROR <= pointX )
     }
 
     //Handle mouse cursor
@@ -408,6 +474,28 @@ export class canvas extends React.Component {
                 }
                 else{
                     this.setState({cursor: "ns-resize"});
+                }
+            }
+            else if(this.isPointNESWRect(x,y,obj.getX(),
+            obj.getY(),obj.getWidth(),obj.getHeight())
+            && this.onResize === false) {
+                this.canResize = true;
+                if(this.state.cursor === "nesw-resize") {
+                    return;
+                }
+                else{
+                    this.setState({cursor: "nesw-resize"});
+                }
+            }
+            else if(this.isPointNWSERect(x,y,obj.getX(),
+            obj.getY(),obj.getWidth(),obj.getHeight())
+            && this.onResize === false) {
+                this.canResize = true;
+                if(this.state.cursor === "nwse-resize") {
+                    return;
+                }
+                else{
+                    this.setState({cursor: "nwse-resize"});
                 }
             }
             else if (this.onResize === false) {
