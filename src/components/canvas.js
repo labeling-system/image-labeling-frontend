@@ -25,7 +25,11 @@ export class canvas extends React.Component {
     tempHeight = 0;
     onSelection = false; 
     onResize = false;
-    canResize = false;   
+    canResize = false;
+    scaledHeight = 0;
+    scaledWidth = 0;
+    actualHeight = 0;
+    actualWidth = 0;
 
     //data = "url(" + this.props.parentState.data + ")";
 
@@ -45,6 +49,36 @@ export class canvas extends React.Component {
         };
         console.log("yuhu", this.data);
         return _setWorkspaceSetting;
+    }
+
+    // Get Image Dimension
+    getImgDimension(){
+        var imageSrc = document
+        .getElementById('canvas')
+         .style
+          .backgroundImage
+           .replace(/url\((['"])?(.*?)\1\)/gi, '$2')
+            .split(',')[0];
+
+        console.log("check " + imageSrc);
+
+        var image = new Image();
+        image.src = imageSrc;
+
+        this.actualWidth = image.width;
+        this.actualHeight = image.height;
+
+        console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
+
+        if(this.actualWidth > this.actualHeight){
+            this.scaledWidth = this.widthSize;           
+            this.scaledHeight = this.actualHeight / this.actualWidth * this.scaledWidth;
+        }else{
+            this.scaledHeight = this.heightSize;
+            this.scaledWidth = this.actualWidth / this.actualHeight * this.scaledHeight;      
+        }
+
+        console.log('scaledWidth =' + this.scaledWidth + '  scaledHeight = ' + this.scaledHeight);    
     }
 
     // Style for input label 
@@ -521,6 +555,7 @@ export class canvas extends React.Component {
 
     componentDidUpdate() {
 
+        this.getImgDimension();
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
@@ -556,13 +591,13 @@ export class canvas extends React.Component {
         this.canvas.height = this.heightSize;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.strokeStyle = "red";
-        this.ctx.lineWidth = 2;        
+        this.ctx.lineWidth = 2;      
     }
 
     //Render Canvas
     render() {
         return (
-            <div style = {this.setWorkspaceSetting()} >                
+            <div id = "canvas" style = {this.setWorkspaceSetting()} >                
                 <canvas className="canvas"
                 ref = {(ref) => (this.canvas = ref)}
                 onMouseDown = {this.onMouseDown}

@@ -25,3 +25,4 @@ yarn-error.log*
 # Temporary client file
 upload/
 public/images/
+public/tes/

@@ -16,40 +16,42 @@ class Others extends Component {
         this.handleClose = this.handleClose.bind(this);
     }
 
-    async handleUpload(files) {
-        let _files = []
-
-        let _URL = window.URL || window.webkitURL;
-
-        Array.from(files).forEach(file => {
-            let _file = [];
-            let  img = new Image();
-            let error = false;
-
-            _file.push(file.name);
-            img.onload = function() {
+    getImage(url, filename){
+        return new Promise(function(resolve, reject){
+            var img = new Image()
+            img.onload = function(){
+                let _file = [];
+                _file.push(filename);
                 _file.push(this.width);
                 _file.push(this.height);
-            };
-            
-            img.onerror = function() {
-                error = true;
-                console.log( "not a valid file: " + file.type);
-            };
-            
-            img.src = _URL.createObjectURL(file); 
-
-            if (!error) {
-                _files.push(_file);
+                resolve(_file);
             }
+            img.onerror = function(){
+                reject(url)
+            }
+            img.src = url
+        })
+    }
+
+    processFiles(files) {
+        let _filesPromises = []
+        let _URL = window.URL || window.webkitURL;
+    
+        Array.from(files).forEach(file => {
+            _filesPromises.push(this.getImage(_URL.createObjectURL(file), file.name))
         });
 
+        return _filesPromises;
+    }
+        
+    async handleUpload(files) {
         try {
+            let _files = await Promise.all(this.processFiles(files))
             await deleteAllImages();
             await postImage(_files);
             this.setState({ uploaded: true });
             this.setState({ error: '' });
-        } catch (err) {
+        } catch(err) {
             console.log(err);
             this.setState({ uploaded: false });
             this.setState({ error: err + ', please contact the administrator' });
