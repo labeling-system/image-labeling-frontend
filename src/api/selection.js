@@ -35,3 +35,16 @@ export const saveImage = (image_id) => {
         });
     });
 };
+
+export const getSelectionImage = (image_id) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'get',
+            url: API + '/selection/' + image_id,
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
