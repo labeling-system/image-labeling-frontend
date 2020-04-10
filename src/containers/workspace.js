@@ -17,6 +17,7 @@ class Workspace extends Component{
             delete: false,
             resize: false,
             anActive: false,
+            finish: false,
             idData: '',
             data: '',
             buttonText: 'Save',
@@ -33,13 +34,24 @@ class Workspace extends Component{
         this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
     }
 
+    // click handler for Save button
     async handleOnClick(){
         let result;
         try {
             result = await saveImage(this.state.idData);
             console.log(result);
-            this.setState({ idData: result.data.image_id,
-                data: 'images/' + result.data.filename });
+            if (typeof result.data.error === 'undefined')
+            {
+                this.setState({ idData: result.data.image_id,
+                                data: 'images/' + result.data.filename,
+                                finish: false});
+                console.log(this.state.finish);
+            }
+            else
+            {
+                alert("All images are done processed!");
+                this.setState({finish: true});
+            }
         } catch (err) {
             this.setState({ error: err });
         }
@@ -60,11 +72,22 @@ class Workspace extends Component{
             this.setState({ error: err });
         }
 
+        // get image for the first time
         try {
             let imageResult = await getWorkingImage();
             console.log(imageResult);
-            this.setState({ idData: imageResult.data.image_id,
-                data: 'images/' + imageResult.data.filename });
+            if (typeof imageResult.data.error === 'undefined')
+            {
+                this.setState({ idData: imageResult.data.image_id,
+                                data: 'images/' + imageResult.data.filename,
+                                finish: false});
+                console.log(this.state.finish);
+            }
+            else
+            {
+                alert("All images are done processed!");
+                this.setState({finish: true});
+            }
             
         } catch (err) {
             this.setState({ error: err });
@@ -124,7 +147,7 @@ class Workspace extends Component{
                     </div>
                     <div>
                         {
-                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick()}>{this.state.buttonText}</Button>
+                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick()} disabled={this.state.finish}>{this.state.buttonText}</Button>
                              
                         }
                     </div>
