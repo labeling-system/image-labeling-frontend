@@ -117,8 +117,18 @@ code {
 }
 
 /*WorkSpace*/
+#workspace {
+	display: flex;
+	height: 100vh;
+}
+
+.workspace-wrapper { 
+	flex: 1;
+}
+
 .workspace {
 	display:flex;
+	height: 100%;
 }
 
 .workspace-edit  {
@@ -127,48 +137,54 @@ code {
 	display: flex;
 }
 
-
-
 /* Tools Bar */
-.tools-word {
-	background: rgb(139, 139, 139);
-	font-size: large;
-	/* width:auto; */
+#tools {
+	display: flex;
+	flex-direction: column;
+	padding: 15px 0;
+	border: 1px solid gray;
+	background-color: #343a40;
+}
+#tools > * {
+	margin: 15px;
 }
 
-.tools {
-	/* float:left; */
-	margin-top: 10px;
-	text-align: center;
-	padding: 7px 15px;
-	border-radius: 4px;
-	color: white;
+#tools .active {
+	color: #fff;
+	background-color: #17a2b8;
+	border-color: #17a2b8;
+	cursor: auto;
+}
+
+#tools .disabled {
+	cursor: not-allowed;
+}
+
+/* Recommendation */
+#recommendation {
+	height: auto;
+	padding: 30px 15px;
+	border: 1px solid gray;
+	background-color: #343a40;
+	color: #fff;
+	width: 25%;
+	max-width: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#recommendation h4 {
+	padding-bottom: 15px;
 	font-weight: bold;
-	background-color: rgb(209, 209, 209);
-
 }
 
-.tools .active {
-	padding: 7px 15px;
-	border-radius: 4px;
-	color: white;
-	font-size: 13px;
-	font-weight: bold;
-	background: rgb(56, 56, 56);
-	margin: 10px;
+.recommendation-label button {
+	border-radius: 100px;
+	margin-bottom: 15px;
+	margin-right: 15px;
+	min-width: 70px;
 }
-
-.tools .not-active {
-	padding: 7px 15px;
-	border-radius: 4px;
-	color: white;
-	font-size: 13px;
-	font-weight: bold;
-	background: rgb(109, 109, 109);
-	margin: 10px;
-}
-
-
 
 /* Login, Register */
 #login, #register {
@@ -229,3 +245,4 @@ table tr th:last-child, table tr td:last-child {
 #input-label {
 	position: absolute;
 }
+

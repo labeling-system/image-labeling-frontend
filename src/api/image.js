@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { API } from '../config';
 
-export const postImage = (filenames) => {
+export const postImage = (files) => {
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',
             url: API + '/image',
             data: {
-                "filenames": filenames,
+                "files": files,
             },
             headers: {
                 'Content-Type': 'application/json'
@@ -51,6 +51,19 @@ export const pingImage = (id) => {
         axios({
             method: 'post',
             url: API + '/image/ping/' + id
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
+
+export const getAllLabeled = () => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'get',
+            url: API + '/download'
         }).then((res) => {
             resolve(res);
         }).catch((err) => {

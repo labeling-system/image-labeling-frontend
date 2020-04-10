@@ -4,53 +4,75 @@ import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
 import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
-import { Container, Table, Row, Col } from 'react-bootstrap';
 import { getMostUsedLabels } from '../api/label';
 import { pingImage } from '../api/image';
+import { getWorkingImage, saveImage } from '../api/selection';
 
 
 class Workspace extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            edit: true,
-            rectangle: false,
+            edit: false,
+            rectangle: true,
             delete: false,
             resize: false,
             anActive: false,
-            isInitiated: false,
-            data: 'images/data.jpeg',
-            buttonText: 'Start',
+            idData: '',
+            data: '',
+            buttonText: 'Save',
             labelList : [],
-            error: '',
-            intervalId: 0
+            selectedLabel : '',
+            intervalId: 0,
+            error: ''               
         };
         
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handler = this.handler.bind(this);
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
-        // this.handleGetAllImages = this.handleGetAllImages.bind(this);
-        // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
+        this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
     }
 
-    handleOnClick(parameter, text){
-        this.setState({isInitiated: parameter,
-                        buttonText: text});
-        console.log(parameter);
+    async handleOnClick(){
+        let result;
+        try {
+            result = await saveImage(this.state.idData);
+            console.log(result);
+            this.setState({ idData: result.data.image_id,
+                data: 'images/' + result.data.filename });
+        } catch (err) {
+            this.setState({ error: err });
+        }
+        console.log(this.state.data);
+        console.log(this.state.idData);
+    }
+
+    resetSelectedLabel() {
+        this.setState({selectedLabel : ""});
     }
 
     async componentDidMount() {
         try {
-            let result = await getMostUsedLabels();
-            this.setState({ labelList: result.data.labelList });
+            let labelResult = await getMostUsedLabels();
+            this.setState({ labelList: labelResult.data.labelList });
 
             // ping backend
             let intervalId = setInterval(async () => {
                 await pingImage(1);
             }, 3000);
             this.setState({ intervalId: intervalId });
+            
+        } catch (err) {
+            this.setState({ error: err });
+        }
 
+        try {
+            let imageResult = await getWorkingImage();
+            console.log(imageResult);
+            this.setState({ idData: imageResult.data.image_id,
+                data: 'images/' + imageResult.data.filename });
+            
         } catch (err) {
             this.setState({ error: err });
         }
@@ -67,6 +89,10 @@ class Workspace extends Component{
     makeNotActive(){
         this.setState({anActive: false});
     }
+
+    handleLabelInput(label) {
+        this.setState({selectedLabel : label});
+    }   
 
 
     handler(someState){
@@ -86,58 +112,37 @@ class Workspace extends Component{
         
     }
 
-    render() {  
-        const title = {
-            fontWeight: "bold"
-        }
+    render() {
         console.log(this.props.isAuth)
         return !this.props.isAuth ? <Redirect to='/login'/> : (       
-            <Row>
-                <Col>
+            <div id="workspace">
+                <div className="workspace-wrapper">
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
-                        <Canvas parentState = {this.state} parentActive = {this.makeActive} />
-                        {
-                            this.state.isInitiated ?
-                            <div> 
-                                <Button variant="success" onClick={() => this.handleOnClick(false, "Start")}>{this.state.buttonText}</Button> 
-                            </div> 
-                            
-                            : (
-                                <Button variant="primary" onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button>
-                            )    
-                        }
-                        {console.log("State bapak")}
-                        {console.log("rectangle: " + this.state.rectangle)}
-                        {console.log("edit: " + this.state.edit)}
-                        {console.log("delete: " + this.state.delete)}
-                        {console.log("active: " + this.state.anActive)}
-                        {console.log("resize: " + this.state.resize)}
+                        <div>
+                            <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
+                        </div>
                     </div>
-                </Col>
-
-                <Col>
-                    <Row>
-                        <h3 style={title}>Most Used Label</h3>
-                    </Row>
-                    <Row>
-                        <Table striped bordered hover responsive id="tabel">
-                            <tbody>
-                                {
-                                    this.state.labelList.map((label, i) => ( 
-                                        <tr key={i}>
-                                            <td>{label}</td>
-                                        </tr>))
-                                }
-                            </tbody>
-                        </Table>
-                    </Row>
-                </Col>
-            </Row> 
+                </div>
+                <div id='recommendation'>
+                    <div className='recommendation-label'>
+                        <h4>Most Used Label</h4>
+                        {
+                            this.state.labelList.map((label, i) => ( 
+                                <Button variant="info" size='lg' onClick={() => this.handleLabelInput(label)}>{label}</Button>
+                                ))
+                            }
+                    </div>
+                    <div>
+                        {
+                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick()}>{this.state.buttonText}</Button>
+                             
+                        }
+                    </div>
+                </div>
+            </div> 
         )
     }    
 }
 
 export default Workspace;
-
-
