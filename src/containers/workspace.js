@@ -17,10 +17,10 @@ class Workspace extends Component{
             delete: false,
             resize: false,
             anActive: false,
-            isInitiated: false,
+            finish: false,
             idData: '',
             data: '',
-            buttonText: 'Start',
+            buttonText: 'Save',
             labelList : [],
             selectedLabel : '',
             error: ''  
@@ -32,25 +32,29 @@ class Workspace extends Component{
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
         this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
-        // this.handleGetAllImages = this.handleGetAllImages.bind(this);
-        // this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
     }
 
-    async handleOnClick(parameter, text){
+    // click handler for Save button
+    async handleOnClick(){
         let result;
-        if (this.state.isInitiated) {
-            //will be changed to save
+        try {
             result = await saveImage(this.state.idData);
-        } 
-        else {
-            result = await getWorkingImage();
+            console.log(result);
+            if (typeof result.data.error === 'undefined')
+            {
+                this.setState({ idData: result.data.image_id,
+                                data: 'images/' + result.data.filename,
+                                finish: false});
+                console.log(this.state.finish);
+            }
+            else
+            {
+                alert("All images are done processed!");
+                this.setState({finish: true});
+            }
+        } catch (err) {
+            this.setState({ error: err });
         }
-        this.setState({ idData: result.data.image_id,
-                        data: 'images/' + result.data.filename });
-
-        this.setState({isInitiated: parameter,
-                        buttonText: text});
-        console.log(parameter);
         console.log(this.state.data);
         console.log(this.state.idData);
     }
@@ -61,8 +65,29 @@ class Workspace extends Component{
 
     async componentDidMount() {
         try {
-            let result = await getMostUsedLabels();
-            this.setState({ labelList: result.data.labelList });
+            let labelResult = await getMostUsedLabels();
+            this.setState({ labelList: labelResult.data.labelList });
+            
+        } catch (err) {
+            this.setState({ error: err });
+        }
+
+        // get image for the first time
+        try {
+            let imageResult = await getWorkingImage();
+            console.log(imageResult);
+            if (typeof imageResult.data.error === 'undefined')
+            {
+                this.setState({ idData: imageResult.data.image_id,
+                                data: 'images/' + imageResult.data.filename,
+                                finish: false});
+                console.log(this.state.finish);
+            }
+            else
+            {
+                alert("All images are done processed!");
+                this.setState({finish: true});
+            }
             
         } catch (err) {
             this.setState({ error: err });
@@ -122,9 +147,8 @@ class Workspace extends Component{
                     </div>
                     <div>
                         {
-                            this.state.isInitiated ?
-                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick(true, "Next")}>{this.state.buttonText}</Button> 
-                            : <Button variant="primary" size='lg' block onClick={() => this.handleOnClick(true, "Save")}>{this.state.buttonText}</Button> 
+                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick()} disabled={this.state.finish}>{this.state.buttonText}</Button>
+                             
                         }
                     </div>
                 </div>

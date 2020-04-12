@@ -1,5 +1,5 @@
 import React from 'react';
-// import data from '../static/img/data.jpeg';
+import { getSelectionImage } from '../api/selection';
 import Selection from './selection'
 import {ERROR} from '../util/const'
 export class canvas extends React.Component {
@@ -25,7 +25,11 @@ export class canvas extends React.Component {
     tempHeight = 0;
     onSelection = false; 
     onResize = false;
-    canResize = false;   
+    canResize = false;
+    scaledHeight = 0;
+    scaledWidth = 0;
+    actualHeight = 0;
+    actualWidth = 0;
 
     //data = "url(" + this.props.parentState.data + ")";
 
@@ -47,6 +51,36 @@ export class canvas extends React.Component {
         return _setWorkspaceSetting;
     }
 
+    // Get Image Dimension
+    getImgDimension(){
+        var imageSrc = document
+        .getElementById('canvas')
+         .style
+          .backgroundImage
+           .replace(/url\((['"])?(.*?)\1\)/gi, '$2')
+            .split(',')[0];
+
+        console.log("check " + imageSrc);
+
+        var image = new Image();
+        image.src = imageSrc;
+
+        this.actualWidth = image.width;
+        this.actualHeight = image.height;
+
+        console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
+
+        if(this.actualWidth > this.actualHeight){
+            this.scaledWidth = this.widthSize;           
+            this.scaledHeight = this.actualHeight / this.actualWidth * this.scaledWidth;
+        }else{
+            this.scaledHeight = this.heightSize;
+            this.scaledWidth = this.actualWidth / this.actualHeight * this.scaledHeight;      
+        }
+
+        console.log('scaledWidth =' + this.scaledWidth + '  scaledHeight = ' + this.scaledHeight);    
+    }
+
     // Style for input label 
     setInputLabel() {
         let posInputLabel = {
@@ -54,6 +88,32 @@ export class canvas extends React.Component {
             left: this.getActiveSelection().getX()
         };
         return posInputLabel
+    }
+
+    async handleGetAllSelection(image_id) {
+        let result = null;
+        try {
+            result = await getSelectionImage(image_id);
+        } catch (err) {
+            console.log(err);
+            
+        }    
+        if(result != null){
+            const count = result.data.count[0];
+            const _selections = result.data.selections; 
+
+            for(let i = 0; i < count; i++) {
+                let selection = new Selection(this.currentId);
+                selection.setCoordinates(_selections[i][0],_selections[i][1]);
+                selection.setWidth(_selections[i][2]);
+                selection.setHeight(_selections[i][3]);
+                if(_selections[i][4] != null){
+                    selection.setLabel(_selections[i][4]);
+                }
+                this.mySelection.push(selection);
+                this.currentId +=1;
+            }
+        }
     }
 
     // Handle input label
@@ -521,6 +581,7 @@ export class canvas extends React.Component {
 
     componentDidUpdate() {
 
+        this.getImgDimension();
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
@@ -556,13 +617,15 @@ export class canvas extends React.Component {
         this.canvas.height = this.heightSize;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.strokeStyle = "red";
-        this.ctx.lineWidth = 2;        
+        this.ctx.lineWidth = 2;      
+        console.log("alive");
+        // this.handleGetAllSelection(331);
     }
 
     //Render Canvas
     render() {
         return (
-            <div style = {this.setWorkspaceSetting()} >                
+            <div id = "canvas" style = {this.setWorkspaceSetting()} >                
                 <canvas className="canvas"
                 ref = {(ref) => (this.canvas = ref)}
                 onMouseDown = {this.onMouseDown}
