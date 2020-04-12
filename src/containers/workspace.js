@@ -43,7 +43,9 @@ class Workspace extends Component{
             if (typeof result.data.error === 'undefined')
             {
                 this.setState({ idData: result.data.image_id,
-                                data: 'images/' + result.data.filename,
+                                data: result.data.filename,
+                                width: result.data.width,
+                                height: result.data.height,
                                 finish: false});
                 console.log(this.state.finish);
             }
@@ -75,11 +77,13 @@ class Workspace extends Component{
         // get image for the first time
         try {
             let imageResult = await getWorkingImage();
-            console.log(imageResult);
+            console.log(imageResult)
             if (typeof imageResult.data.error === 'undefined')
             {
                 this.setState({ idData: imageResult.data.image_id,
-                                data: 'images/' + imageResult.data.filename,
+                                data: imageResult.data.filename,
+                                width: imageResult.data.width,
+                                height: imageResult.data.height,
                                 finish: false});
                 console.log(this.state.finish);
             }

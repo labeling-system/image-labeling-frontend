@@ -1,5 +1,5 @@
 import React from 'react';
-// import data from '../static/img/data.jpeg';
+import { getSelectionImage } from '../api/selection';
 import Selection from './selection'
 import {ERROR} from '../util/const'
 export class canvas extends React.Component {
@@ -53,20 +53,9 @@ export class canvas extends React.Component {
 
     // Get Image Dimension
     getImgDimension(){
-        var imageSrc = document
-        .getElementById('canvas')
-         .style
-          .backgroundImage
-           .replace(/url\((['"])?(.*?)\1\)/gi, '$2')
-            .split(',')[0];
 
-        console.log("check " + imageSrc);
-
-        var image = new Image();
-        image.src = imageSrc;
-
-        this.actualWidth = image.width;
-        this.actualHeight = image.height;
+        this.actualWidth = this.props.parentState.width;
+        this.actualHeight = this.props.parentState.height;
 
         console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
 
@@ -88,6 +77,32 @@ export class canvas extends React.Component {
             left: this.getActiveSelection().getX()
         };
         return posInputLabel
+    }
+
+    async handleGetAllSelection(image_id) {
+        let result = null;
+        try {
+            result = await getSelectionImage(image_id);
+        } catch (err) {
+            console.log(err);
+            
+        }    
+        if(result != null){
+            const count = result.data.count[0];
+            const _selections = result.data.selections; 
+
+            for(let i = 0; i < count; i++) {
+                let selection = new Selection(this.currentId);
+                selection.setCoordinates(_selections[i][0],_selections[i][1]);
+                selection.setWidth(_selections[i][2]);
+                selection.setHeight(_selections[i][3]);
+                if(_selections[i][4] != null){
+                    selection.setLabel(_selections[i][4]);
+                }
+                this.mySelection.push(selection);
+                this.currentId +=1;
+            }
+        }
     }
 
     // Handle input label
@@ -592,6 +607,8 @@ export class canvas extends React.Component {
         this.ctx = this.canvas.getContext("2d");
         this.ctx.strokeStyle = "red";
         this.ctx.lineWidth = 2;      
+        console.log("alive");
+        // this.handleGetAllSelection(331);
     }
 
     //Render Canvas

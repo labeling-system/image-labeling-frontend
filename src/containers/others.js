@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+import Resizer from 'react-image-file-resizer'; 
 
 class Others extends Component {
     constructor(props) {
@@ -16,8 +17,23 @@ class Others extends Component {
         this.handleClose = this.handleClose.bind(this);
     }
 
-    getImage(url, filename){
+    getImage(url, file){
         return new Promise(function(resolve, reject){
+
+            let filename = '';
+            Resizer.imageFileResizer(
+                file,
+                500,
+                500,
+                'JPEG',
+                30,
+                0,
+                uri => {
+                    filename = uri;
+                },
+                'base64'
+            );
+
             var img = new Image()
             img.onload = function(){
                 let _file = [];
@@ -36,9 +52,11 @@ class Others extends Component {
     processFiles(files) {
         let _filesPromises = []
         let _URL = window.URL || window.webkitURL;
+        let uriFile = '';
     
         Array.from(files).forEach(file => {
-            _filesPromises.push(this.getImage(_URL.createObjectURL(file), file.name))
+
+            _filesPromises.push(this.getImage(_URL.createObjectURL(file), file))
         });
 
         return _filesPromises;
@@ -124,6 +142,23 @@ class Others extends Component {
 
     async downloadJSON() {
         console.log("download JSON")
+        try {
+            fetch('http://localhost:5000/downloadjson')
+			.then(response => {
+				response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'label.zip';
+					a.click();
+				});
+				//window.location.href = response.url;
+		    });
+            this.setState({ error: '' });
+        } catch (err) {
+            console.log(err);
+            this.setState({ error: 'Error, please contact the administrator' });
+        }
     }
     
 }
