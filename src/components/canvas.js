@@ -53,20 +53,9 @@ export class canvas extends React.Component {
 
     // Get Image Dimension
     getImgDimension(){
-        var imageSrc = document
-        .getElementById('canvas')
-         .style
-          .backgroundImage
-           .replace(/url\((['"])?(.*?)\1\)/gi, '$2')
-            .split(',')[0];
 
-        console.log("check " + imageSrc);
-
-        var image = new Image();
-        image.src = imageSrc;
-
-        this.actualWidth = image.width;
-        this.actualHeight = image.height;
+        this.actualWidth = this.props.parentState.width;
+        this.actualHeight = this.props.parentState.height;
 
         console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
 
