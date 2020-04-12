@@ -407,7 +407,9 @@ export class canvas extends React.Component {
             if(!this.select.empty()) {
                 this.mySelection.push(this.select);            
                 this.currentId += 1;
+                this.props.handleSelections(this.mySelection);
             }
+            
             console.log("Result: ", this.select);
             console.log(this.mySelection);
         }
@@ -420,6 +422,7 @@ export class canvas extends React.Component {
             this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
             this.select.setHeight(this.height);
             this.select.setWidth(this.width);
+            this.props.handleSelections(this.mySelection);
 
             console.log("Result: ", this.select);
             console.log(this.mySelection);

@@ -23,6 +23,7 @@ class Workspace extends Component{
             buttonText: 'Save',
             labelList : [],
             selectedLabel : '',
+            selections: [],
             error: ''  
              
         };
@@ -32,6 +33,7 @@ class Workspace extends Component{
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
         this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
+        this.handleSelections = this.handleSelections.bind(this);
     }
 
     // click handler for Save button
@@ -128,6 +130,12 @@ class Workspace extends Component{
         
     }
 
+    handleSelections(mySelections){
+        this.setState({selections: mySelections});
+        console.log(this.state.selections.length, "yuhu");
+        console.log(this.state.selections);
+    }
+
     render() {
         console.log(this.props.isAuth)
         return !this.props.isAuth ? <Redirect to='/login'/> : (       
@@ -136,7 +144,7 @@ class Workspace extends Component{
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
                         <div>
-                            <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
+                            <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel} handleSelections = {this.handleSelections}/>
                         </div>
                     </div>
                 </div>
