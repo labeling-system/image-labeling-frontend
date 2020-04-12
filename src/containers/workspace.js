@@ -102,7 +102,7 @@ class Workspace extends Component{
         this.setState({anActive: false});
     }
 
-    handleLabelInput(label) {
+    handleLabelInput(label) { 
         this.setState({selectedLabel : label});
     }   
 
