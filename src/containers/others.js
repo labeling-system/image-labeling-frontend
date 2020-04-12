@@ -142,6 +142,23 @@ class Others extends Component {
 
     async downloadJSON() {
         console.log("download JSON")
+        try {
+            fetch('http://localhost:5000/downloadjson')
+			.then(response => {
+				response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'label.zip';
+					a.click();
+				});
+				//window.location.href = response.url;
+		    });
+            this.setState({ error: '' });
+        } catch (err) {
+            console.log(err);
+            this.setState({ error: 'Error, please contact the administrator' });
+        }
     }
     
 }
