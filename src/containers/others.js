@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 import Resizer from 'react-image-file-resizer'; 
 
 class Others extends Component {
@@ -12,6 +13,7 @@ class Others extends Component {
         this.state = {
             uploaded: false,
             error: '',
+            isLoading: false,
         }
         this.handleUpload = this.handleUpload.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -62,6 +64,8 @@ class Others extends Component {
     }
         
     async handleUpload(files) {
+        this.setState({ isLoading: true });
+        
         try {
             let _files = await Promise.all(this.processFiles(files))
             await deleteAllImages();
@@ -73,6 +77,7 @@ class Others extends Component {
             this.setState({ uploaded: false });
             this.setState({ error: err + ', please contact the administrator' });
         }
+        this.setState({ isLoading: false }); 
     }
 
     handleClose() {
@@ -106,7 +111,7 @@ class Others extends Component {
                     {
                         this.state.uploaded ?
                         <Alert variant='success'>Successfully Uploaded Images</Alert> :
-                        <ModalUpload handleUpload={this.handleUpload} />
+                        <ModalUpload handleUpload={this.handleUpload} isLoading={this.state.isLoading} />
                     }
                     
                     <h2 className='page-title'>Download</h2>
@@ -169,10 +174,24 @@ function ModalUpload(props) {
     const handleShow = () => setShow(true);
   
     return (
-        <>
-            <Button variant="primary" onClick={handleShow}>
-                Upload
-            </Button>
+        <>  
+            {
+                props.isLoading?
+                <Button variant="primary" onClick={handleShow} disabled>
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    {' '}Uploading...
+                </Button>
+                : 
+                <Button variant="primary" onClick={handleShow}>
+                    Upload
+                </Button>
+            }
     
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
