@@ -20,8 +20,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        isAuth: false,
-        role:''
+        isAuth: true,
+        role:'admin'
     }
 
     this.handler = this.handler.bind(this)

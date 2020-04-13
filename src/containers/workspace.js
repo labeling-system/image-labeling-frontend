@@ -22,10 +22,13 @@ class Workspace extends Component{
             idData: '',
             data: '',
             buttonText: 'Save',
+            isNext: false,
             labelList : [],
             selectedLabel : '',
-            intervalId: 0,
-            error: ''               
+            intervalId: 0,             
+            selections: [],
+            error: ''  
+             
         };
         
         this.handleOnClick = this.handleOnClick.bind(this);
@@ -33,23 +36,29 @@ class Workspace extends Component{
         this.makeActive = this.makeActive.bind(this);
         this.makeNotActive = this.makeNotActive.bind(this);
         this.resetSelectedLabel = this.resetSelectedLabel.bind(this);
+        this.handleSelections = this.handleSelections.bind(this);
     }
 
     // click handler for Save button
     async handleOnClick(){
         let result;
         try {
-            result = await saveImage(this.state.idData);
+            result = await saveImage(this.state.idData, this.state.selections);
             console.log(result);
             if (typeof result.data.error === 'undefined')
             {
                 this.setState({ idData: result.data.image_id,
-                                data: 'images/' + result.data.filename,
+                                data: result.data.filename,
+                                width: result.data.width,
+                                height: result.data.height,
+                                selections: [],
+                                isNext: true,
                                 finish: false});
                 console.log(this.state.finish);
             }
             else
             {
+                console.log(result.data.error);
                 alert("All images are done processed!");
                 this.setState({finish: true});
             }
@@ -58,6 +67,7 @@ class Workspace extends Component{
         }
         console.log(this.state.data);
         console.log(this.state.idData);
+        this.setState({isNext: false})
     }
 
     resetSelectedLabel() {
@@ -82,11 +92,13 @@ class Workspace extends Component{
         // get image for the first time
         try {
             let imageResult = await getWorkingImage();
-            console.log(imageResult);
+            console.log(imageResult)
             if (typeof imageResult.data.error === 'undefined')
             {
                 this.setState({ idData: imageResult.data.image_id,
-                                data: 'images/' + imageResult.data.filename,
+                                data: imageResult.data.filename,
+                                width: imageResult.data.width,
+                                height: imageResult.data.height,
                                 finish: false});
                 console.log(this.state.finish);
             }
@@ -113,7 +125,7 @@ class Workspace extends Component{
         this.setState({anActive: false});
     }
 
-    handleLabelInput(label) {
+    handleLabelInput(label) { 
         this.setState({selectedLabel : label});
     }   
 
@@ -135,6 +147,12 @@ class Workspace extends Component{
         
     }
 
+    handleSelections(mySelections){
+        this.setState({selections: mySelections});
+        console.log(this.state.selections.length, "yuhu");
+        console.log(this.state.selections);
+    }
+
     render() {
         console.log(this.props.isAuth)
         return !this.props.isAuth ? <Redirect to='/login'/> : (       
@@ -143,7 +161,7 @@ class Workspace extends Component{
                     <div className ="workspace">
                         <Tools parentState ={this.state} parentHandler = {this.handler} parentNotActive = {this.makeNotActive} />
                         <div>
-                            <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel}/>
+                            <Canvas parentState = {this.state} parentActive = {this.makeActive} parentNotActive = {this.makeNotActive} resetSelectedLabel = {this.resetSelectedLabel} handleSelections = {this.handleSelections}/>
                         </div>
                     </div>
                 </div>

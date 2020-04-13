@@ -53,20 +53,9 @@ export class canvas extends React.Component {
 
     // Get Image Dimension
     getImgDimension(){
-        var imageSrc = document
-        .getElementById('canvas')
-         .style
-          .backgroundImage
-           .replace(/url\((['"])?(.*?)\1\)/gi, '$2')
-            .split(',')[0];
 
-        console.log("check " + imageSrc);
-
-        var image = new Image();
-        image.src = imageSrc;
-
-        this.actualWidth = image.width;
-        this.actualHeight = image.height;
+        this.actualWidth = this.props.parentState.width;
+        this.actualHeight = this.props.parentState.height;
 
         console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
 
@@ -418,7 +407,9 @@ export class canvas extends React.Component {
             if(!this.select.empty()) {
                 this.mySelection.push(this.select);            
                 this.currentId += 1;
+                this.props.handleSelections(this.mySelection);
             }
+            
             console.log("Result: ", this.select);
             console.log(this.mySelection);
         }
@@ -431,6 +422,7 @@ export class canvas extends React.Component {
             this.select.setCoordinates(this.startPos.offsetX,this.startPos.offsetY);
             this.select.setHeight(this.height);
             this.select.setWidth(this.width);
+            this.props.handleSelections(this.mySelection);
 
             console.log("Result: ", this.select);
             console.log(this.mySelection);
@@ -582,9 +574,15 @@ export class canvas extends React.Component {
     componentDidUpdate() {
 
         this.getImgDimension();
+
+        //Initialize mySelection
+        if(this.props.parentState.isNext === true){
+            this.mySelection = [];
+        }
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
+            this.props.handleSelections(this.mySelection);
             console.log(this.mySelection);
             this.clear();
             this.drawAllSelection();

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API } from '../config';
 
 export const postImage = (files) => {
+    console.log(files)
     return new Promise((resolve, reject) => {
         axios({
             method: 'post',
