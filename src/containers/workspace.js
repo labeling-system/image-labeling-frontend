@@ -5,7 +5,8 @@ import Tools from "../components/tools";
 import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
 import { Redirect } from 'react-router-dom';
 import { getMostUsedLabels } from '../api/label';
-import { getWorkingImage, saveImage } from '../api/selection';
+import { getWorkingImage, saveImage, getSpecificImage } from '../api/selection';
+import {REDIRECT_ADDRESS} from '../util/const'
 
 
 class Workspace extends Component{
@@ -25,7 +26,8 @@ class Workspace extends Component{
             labelList : [],
             selectedLabel : '',
             selections: [],
-            error: ''  
+            error: ''  ,
+            redirectId: null
              
         };
         
@@ -73,7 +75,19 @@ class Workspace extends Component{
         this.setState({selectedLabel : ""});
     }
 
+
     async componentDidMount() {
+        console.log("alive===========================================");
+        let separator = REDIRECT_ADDRESS;
+        let link = window.location.href;
+        let result = null;
+        if(link !== separator){
+            separator += "/";
+            result = link.match(new RegExp(separator  + '(\\w+)'))[1];
+            // this.setState({redirectId : result});
+            console.log("result nya " + result);
+        }
+
         try {
             let labelResult = await getMostUsedLabels();
             this.setState({ labelList: labelResult.data.labelList });
@@ -82,8 +96,10 @@ class Workspace extends Component{
             this.setState({ error: err });
         }
 
-        // get image for the first time
-        try {
+        
+        if(result === null){
+                // get image for the first time
+            try {
             let imageResult = await getWorkingImage();
             console.log(imageResult)
             if (typeof imageResult.data.error === 'undefined')
@@ -100,12 +116,38 @@ class Workspace extends Component{
                 alert("All images are done processed!");
                 this.setState({finish: true});
             }
-            
-        } catch (err) {
-            this.setState({ error: err });
+                
+            } catch (err) {
+                this.setState({ error: err });
+            }
+        }
+
+        else { //redirected from edit
+            try {
+                let imageResult = await getSpecificImage(result);
+                console.log("CUYYYYYYYY   ");
+                console.log(imageResult.data);
+                if (typeof imageResult.data.error === 'undefined')
+                {
+                    this.setState({ idData: imageResult.data.image_id,
+                                    data: imageResult.data.uri,
+                                    width: imageResult.data.width,
+                                    height: imageResult.data.height,
+                                    finish: false});
+                    console.log(this.state.finish);
+                }
+                else
+                {
+                    alert("All images are done processed!");
+                    this.setState({finish: true});
+                }
+                    
+                } catch (err) {
+                    this.setState({ error: err });
+                }
         }
     }
-
+    
     makeActive(){
         this.setState({anActive: true});
     }
@@ -143,7 +185,7 @@ class Workspace extends Component{
     }
 
     render() {
-        console.log(this.props.isAuth)
+        console.log(this.props.isAuth);
         return !this.props.isAuth ? <Redirect to='/login'/> : (       
             <div id="workspace">
                 <div className="workspace-wrapper">

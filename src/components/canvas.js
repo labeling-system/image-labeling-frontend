@@ -1,7 +1,7 @@
 import React from 'react';
 import { getSelectionImage } from '../api/selection';
 import Selection from './selection'
-import {ERROR} from '../util/const'
+import {ERROR, REDIRECT_ADDRESS} from '../util/const'
 export class canvas extends React.Component {
 
     constructor(props) {
@@ -14,7 +14,7 @@ export class canvas extends React.Component {
 
         this.state = {
             cursor: "default",
-            inputLabel: ""
+            inputLabel: "",
         }
     }
 
@@ -35,7 +35,7 @@ export class canvas extends React.Component {
 
     // Style for canvas
     setWorkspaceSetting(){
-        console.log("ini data: " +this.props.parentState.data)
+        // console.log("ini data: " +this.props.parentState.data)
         let _setWorkspaceSetting = {
             marginTop: "10px",
             marginLeft: "10px",
@@ -58,7 +58,7 @@ export class canvas extends React.Component {
         this.actualWidth = this.props.parentState.width;
         this.actualHeight = this.props.parentState.height;
 
-        console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
+        // console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
 
         if(this.actualWidth > this.actualHeight){
             this.scaledWidth = this.widthSize;           
@@ -68,7 +68,7 @@ export class canvas extends React.Component {
             this.scaledWidth = this.actualWidth / this.actualHeight * this.scaledHeight;      
         }
 
-        console.log('scaledWidth =' + this.scaledWidth + '  scaledHeight = ' + this.scaledHeight);    
+        // console.log('scaledWidth =' + this.scaledWidth + '  scaledHeight = ' + this.scaledHeight);    
     }
 
     // Style for input label 
@@ -95,15 +95,17 @@ export class canvas extends React.Component {
             for(let i = 0; i < count; i++) {
                 let selection = new Selection(this.currentId);
                 selection.setCoordinates(_selections[i][0],_selections[i][1]);
-                selection.setWidth(_selections[i][2]);
-                selection.setHeight(_selections[i][3]);
+                selection.setHeight(parseInt(_selections[i][2]));
+                selection.setWidth(parseInt(_selections[i][3]));
                 if(_selections[i][4] != null){
                     selection.setLabel(_selections[i][4]);
                 }
                 this.mySelection.push(selection);
                 this.currentId +=1;
+                this.props.handleSelections(this.mySelection);
             }
         }
+        console.log(this.mySelection);
     }
 
     // Handle input label
@@ -618,8 +620,15 @@ export class canvas extends React.Component {
         this.ctx = this.canvas.getContext("2d");
         this.ctx.strokeStyle = "red";
         this.ctx.lineWidth = 2;      
-        console.log("alive");
-        // this.handleGetAllSelection(331);
+        console.log("alive_CANVAS===========================================");
+        let separator = REDIRECT_ADDRESS;
+        let link = window.location.href;
+        let result = null;
+        if(link !== separator){
+            separator += "/";
+            result = link.match(new RegExp(separator  + '(\\w+)'))[1];
+            this.handleGetAllSelection(result);
+        }
     }
 
     //Render Canvas
