@@ -40,7 +40,7 @@ class Workspace extends Component{
     async handleOnClick(){
         let result;
         try {
-            result = await saveImage(this.state.idData);
+            result = await saveImage(this.state.idData, this.state.selections);
             console.log(result);
             if (typeof result.data.error === 'undefined')
             {
@@ -48,11 +48,13 @@ class Workspace extends Component{
                                 data: result.data.filename,
                                 width: result.data.width,
                                 height: result.data.height,
+                                selections: [],
                                 finish: false});
                 console.log(this.state.finish);
             }
             else
             {
+                console.log(result.data.error);
                 alert("All images are done processed!");
                 this.setState({finish: true});
             }
