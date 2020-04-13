@@ -20,7 +20,7 @@ class Others extends Component {
     getImage(url, file){
         return new Promise(function(resolve, reject){
 
-            let filename = '';
+            let uriFile = '';
             Resizer.imageFileResizer(
                 file,
                 500,
@@ -29,7 +29,7 @@ class Others extends Component {
                 30,
                 0,
                 uri => {
-                    filename = uri;
+                    uriFile = uri;
                 },
                 'base64'
             );
@@ -37,9 +37,10 @@ class Others extends Component {
             var img = new Image()
             img.onload = function(){
                 let _file = [];
-                _file.push(filename);
+                _file.push(file.name);
                 _file.push(this.width);
                 _file.push(this.height);
+                _file.push(uriFile);
                 resolve(_file);
             }
             img.onerror = function(){
@@ -52,7 +53,6 @@ class Others extends Component {
     processFiles(files) {
         let _filesPromises = []
         let _URL = window.URL || window.webkitURL;
-        let uriFile = '';
     
         Array.from(files).forEach(file => {
 
