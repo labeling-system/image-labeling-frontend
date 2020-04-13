@@ -35,6 +35,7 @@ export class canvas extends React.Component {
 
     // Style for canvas
     setWorkspaceSetting(){
+        console.log("ini data: " +this.props.parentState.data)
         let _setWorkspaceSetting = {
             marginTop: "10px",
             marginLeft: "10px",

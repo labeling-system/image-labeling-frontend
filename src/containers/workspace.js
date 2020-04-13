@@ -48,13 +48,14 @@ class Workspace extends Component{
             if (typeof result.data.error === 'undefined')
             {
                 this.setState({ idData: result.data.image_id,
-                                data: result.data.filename,
+                                data: result.data.uri,
                                 width: result.data.width,
                                 height: result.data.height,
                                 selections: [],
                                 isNext: true,
                                 finish: false});
                 console.log(this.state.finish);
+                console.log("data hasil req: " +this.state.data)
             }
             else
             {
@@ -96,7 +97,7 @@ class Workspace extends Component{
             if (typeof imageResult.data.error === 'undefined')
             {
                 this.setState({ idData: imageResult.data.image_id,
-                                data: imageResult.data.filename,
+                                data: imageResult.data.uri,
                                 width: imageResult.data.width,
                                 height: imageResult.data.height,
                                 finish: false});
