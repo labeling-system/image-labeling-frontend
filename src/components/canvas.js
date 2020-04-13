@@ -168,6 +168,7 @@ export class canvas extends React.Component {
             for(let i = 0; i < this.mySelection.length; i++) {
                 if(this.mySelection[i].getId() === id) {
                     this.mySelection.splice(i,1);              
+                    this.props.handleSelections(this.mySelection);
                     break;
                 }
             }
@@ -584,7 +585,6 @@ export class canvas extends React.Component {
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
-            this.props.handleSelections(this.mySelection);
             console.log(this.mySelection);
             this.clear();
             this.drawAllSelection();
