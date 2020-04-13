@@ -21,6 +21,7 @@ class Workspace extends Component{
             idData: '',
             data: '',
             buttonText: 'Save',
+            isNext: false,
             labelList : [],
             selectedLabel : '',
             selections: [],
@@ -49,6 +50,7 @@ class Workspace extends Component{
                                 width: result.data.width,
                                 height: result.data.height,
                                 selections: [],
+                                isNext: true,
                                 finish: false});
                 console.log(this.state.finish);
             }
@@ -63,6 +65,7 @@ class Workspace extends Component{
         }
         console.log(this.state.data);
         console.log(this.state.idData);
+        this.setState({isNext: false})
     }
 
     resetSelectedLabel() {

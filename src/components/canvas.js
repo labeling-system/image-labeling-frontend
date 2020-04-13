@@ -574,6 +574,11 @@ export class canvas extends React.Component {
     componentDidUpdate() {
 
         this.getImgDimension();
+
+        //Initialize mySelection
+        if(this.props.parentState.isNext === true){
+            this.mySelection = [];
+        }
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
