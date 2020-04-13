@@ -582,6 +582,7 @@ export class canvas extends React.Component {
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
+            this.props.handleSelections(this.mySelection);
             console.log(this.mySelection);
             this.clear();
             this.drawAllSelection();
