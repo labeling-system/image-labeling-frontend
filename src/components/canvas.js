@@ -579,6 +579,7 @@ export class canvas extends React.Component {
         //Initialize mySelection
         if(this.props.parentState.isNext === true){
             this.mySelection = [];
+            this.clear();
         }
         //Handle delete selection
         if(this.props.parentState.delete === true ) {
