@@ -19,8 +19,7 @@ class Others extends Component {
 
     getImage(url, file){
         return new Promise(function(resolve, reject){
-
-            let uriFile = '';
+            
             Resizer.imageFileResizer(
                 file,
                 500,
@@ -29,24 +28,24 @@ class Others extends Component {
                 30,
                 0,
                 uri => {
-                    uriFile = uri;
+                    let uriFile = uri
+
+                    var img = new Image()
+                    img.onload = function(){
+                        let _file = [];
+                        _file.push(file.name);
+                        _file.push(this.width);
+                        _file.push(this.height);
+                        _file.push(uriFile);
+                        resolve(_file);
+                    }
+                    img.onerror = function(){
+                        reject(url)
+                    }
+                    img.src = url
                 },
                 'base64'
             );
-
-            var img = new Image()
-            img.onload = function(){
-                let _file = [];
-                _file.push(file.name);
-                _file.push(this.width);
-                _file.push(this.height);
-                _file.push(uriFile);
-                resolve(_file);
-            }
-            img.onerror = function(){
-                reject(url)
-            }
-            img.src = url
         })
     }
 
@@ -54,9 +53,9 @@ class Others extends Component {
         let _filesPromises = []
         let _URL = window.URL || window.webkitURL;
     
-        Array.from(files).forEach(file => {
+        Array.from(files).forEach(async file => {
 
-            _filesPromises.push(this.getImage(_URL.createObjectURL(file), file))
+            await _filesPromises.push(this.getImage(_URL.createObjectURL(file), file))
         });
 
         return _filesPromises;
