@@ -109,12 +109,12 @@ export class canvas extends React.Component {
     }
 
     // Handle input label
-    handleChange = (e) => {
-        this.setState({
+    handleChange = async function(e) {
+        await this.setState({
             [e.target.name]: e.target.value
         });
-        this.getActiveSelection().setLabel(this.state.inputLabel);
-        this.props.resetSelectedLabel();
+        await this.getActiveSelection().setLabel(this.state.inputLabel);
+        await this.props.resetSelectedLabel();
     }
 
     // Draw all selection from mySelection to canvas
@@ -645,7 +645,7 @@ export class canvas extends React.Component {
                     />
                 {
                     (this.activeId != null && this.props.parentState.edit === true) ?
-                    <input name="inputLabel" style = {this.setInputLabel()} type="text" id="input-label" value={this.state.inputLabel} onChange={this.handleChange}/>
+                    <input name="inputLabel" style = {this.setInputLabel()} type="text" id="input-label" value={this.state.inputLabel} onChange={(e) => {this.handleChange(e)}}/>
 
                     : null
                 }
