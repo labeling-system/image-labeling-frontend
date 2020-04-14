@@ -17,6 +17,22 @@ export const getWorkingImage = () => {
     });
 };
 
+export const getSpecificImage = (image_id) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'get',
+            url: API + '/selection/img/' + image_id,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
+
 export const saveImage = (image_id, selections) => {
     return new Promise((resolve, reject) => {
         axios({

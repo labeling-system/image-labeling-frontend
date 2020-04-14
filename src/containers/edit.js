@@ -21,6 +21,7 @@ class Edit extends Component {
             redirect: false,
             active: 1,
             count: 1,
+            editId: ''
         };
         this.handleGetAllImages = this.handleGetAllImages.bind(this);
         this.handleRedirectToWorkspace = this.handleRedirectToWorkspace.bind(this);
@@ -40,13 +41,18 @@ class Edit extends Component {
     }
 
     // TODO: tell workspace its id
-    handleRedirectToWorkspace() {
-        this.setState({ redirect: true })
+    handleRedirectToWorkspace(imageId, status) {
+        if(status !== EDITING){
+            this.setState({ redirect: true })
+            this.setState({ editId: imageId })
+        }
     }
 
     renderRedirect() {
         if (this.state.redirect) {
-            return <Redirect to='/workspace' />
+            let redirectPage = '/workspace/' + this.state.editId;
+            this.setState({ editId: '' });
+            return <Redirect to= {redirectPage} />
         }
     }
 
@@ -146,7 +152,8 @@ class Edit extends Component {
                             <tbody>
                                 {
                                     this.state.images.map((image, i) => (
-                                        <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}>
+                                        <tr id={'edit-image-' + image[ID]} key={i} onClick={() => this.handleRedirectToWorkspace(image[ID],image[STATUS])}>
+                                        {/* <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}> */}
                                             <td>{i + (this.state.active - 1)*COUNT_PAGE + 1}</td>
                                             <td>{image[FILENAME]}</td>
                                             {

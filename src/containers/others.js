@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 import Resizer from 'react-image-file-resizer'; 
 
 class Others extends Component {
@@ -12,6 +13,7 @@ class Others extends Component {
         this.state = {
             uploaded: false,
             error: '',
+            isLoading: false,
         }
         this.handleUpload = this.handleUpload.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -19,8 +21,7 @@ class Others extends Component {
 
     getImage(url, file){
         return new Promise(function(resolve, reject){
-
-            let uriFile = '';
+            
             Resizer.imageFileResizer(
                 file,
                 500,
@@ -29,24 +30,24 @@ class Others extends Component {
                 30,
                 0,
                 uri => {
-                    uriFile = uri;
+                    let uriFile = uri
+
+                    var img = new Image()
+                    img.onload = function(){
+                        let _file = [];
+                        _file.push(file.name);
+                        _file.push(this.width);
+                        _file.push(this.height);
+                        _file.push(uriFile);
+                        resolve(_file);
+                    }
+                    img.onerror = function(){
+                        reject(url)
+                    }
+                    img.src = url
                 },
                 'base64'
             );
-
-            var img = new Image()
-            img.onload = function(){
-                let _file = [];
-                _file.push(file.name);
-                _file.push(this.width);
-                _file.push(this.height);
-                _file.push(uriFile);
-                resolve(_file);
-            }
-            img.onerror = function(){
-                reject(url)
-            }
-            img.src = url
         })
     }
 
@@ -54,15 +55,17 @@ class Others extends Component {
         let _filesPromises = []
         let _URL = window.URL || window.webkitURL;
     
-        Array.from(files).forEach(file => {
+        Array.from(files).forEach(async file => {
 
-            _filesPromises.push(this.getImage(_URL.createObjectURL(file), file))
+            await _filesPromises.push(this.getImage(_URL.createObjectURL(file), file))
         });
 
         return _filesPromises;
     }
         
     async handleUpload(files) {
+        this.setState({ isLoading: true });
+        
         try {
             let _files = await Promise.all(this.processFiles(files))
             await deleteAllImages();
@@ -74,6 +77,7 @@ class Others extends Component {
             this.setState({ uploaded: false });
             this.setState({ error: err + ', please contact the administrator' });
         }
+        this.setState({ isLoading: false }); 
     }
 
     handleClose() {
@@ -107,7 +111,7 @@ class Others extends Component {
                     {
                         this.state.uploaded ?
                         <Alert variant='success'>Successfully Uploaded Images</Alert> :
-                        <ModalUpload handleUpload={this.handleUpload} />
+                        <ModalUpload handleUpload={this.handleUpload} isLoading={this.state.isLoading} />
                     }
                     
                     <h2 className='page-title'>Download</h2>
@@ -170,10 +174,24 @@ function ModalUpload(props) {
     const handleShow = () => setShow(true);
   
     return (
-        <>
-            <Button variant="primary" onClick={handleShow}>
-                Upload
-            </Button>
+        <>  
+            {
+                props.isLoading?
+                <Button variant="primary" onClick={handleShow} disabled>
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                    {' '}Uploading...
+                </Button>
+                : 
+                <Button variant="primary" onClick={handleShow}>
+                    Upload
+                </Button>
+            }
     
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
