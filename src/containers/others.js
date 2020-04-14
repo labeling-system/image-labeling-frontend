@@ -93,11 +93,7 @@ class Others extends Component {
                         By uploading new images, you will lost all your labeled images you have
                         now. Please make sure you have download all xml/json output file before.
                     </Alert>
-                    <p>Please follow this steps to upload images</p>
-                    <ol>
-                        <li>Put all images in directory <code>public/images</code>.</li>
-                        <li>Click the Choose File below, and choose the <code>public/images</code> folder.</li>
-                    </ol>
+                    <p>Choose images from a directory to upload</p>
                     {
                         this.state.error !== '' ? 
                         <Alert variant="danger" onClose={this.handleClose} dismissible>
@@ -200,7 +196,7 @@ function ModalUpload(props) {
                 <Modal.Body>
                     By uploading new images, you will <b className='red'>lost</b> all your labeled images you have
                     now. Please make sure you have <b className='green'>download</b> all xml/json output file before.
-                    If you want to proceed, browse <code>public/images</code> folder.
+                    If you want to proceed, browse the directory.
                 </Modal.Body>
                 <Modal.Footer>
                     <input

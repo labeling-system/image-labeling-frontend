@@ -21,7 +21,6 @@ class Workspace extends Component{
             finish: false,
             idData: '',
             data: '',
-            buttonText: 'Save',
             isNext: false,
             labelList : [],
             selectedLabel : '',
@@ -225,7 +224,9 @@ class Workspace extends Component{
                     </div>
                     <div>
                         {
-                            <Button variant="success" size='lg' block onClick={() => this.handleOnClick()} disabled={this.state.finish}>{this.state.buttonText}</Button>
+                            <Button variant="info" size='lg' block onClick={() => this.handleOnClick()} disabled={this.state.finish}>
+                                Save & Next
+                            </Button>
                              
                         }
                     </div>
