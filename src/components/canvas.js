@@ -1,9 +1,10 @@
 import React from 'react';
 import { getSelectionImage } from '../api/selection';
-import Selection from './selection'
-import {ERROR, REDIRECT_ADDRESS} from '../util/const'
-export class canvas extends React.Component {
+import Selection from './selection';
+import {ERROR, REDIRECT_ADDRESS} from '../util/const';
+import { BASE_URL } from '../config';
 
+export class canvas extends React.Component {
     constructor(props) {
         super(props);
         this.mySelection = [];
@@ -625,10 +626,18 @@ export class canvas extends React.Component {
         console.log("alive_CANVAS===========================================");
         let separator = REDIRECT_ADDRESS;
         let link = window.location.href;
+        let links = link.split('/');
+        if (links.length > 4) {
+            console.log("wakgeng");
+            console.log(links)
+            console.log("spes")
+            console.log(links[3]);
+        }
         let result = null;
         if(link !== separator){
             separator += "/";
             result = link.match(new RegExp(separator  + '(\\w+)'))[1];
+            console.log(result)
             this.handleGetAllSelection(result);
         }
     }
