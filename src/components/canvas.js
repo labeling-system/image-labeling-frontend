@@ -609,7 +609,9 @@ export class canvas extends React.Component {
             if(this.props.parentState.selectedLabel !== "" && this.props.parentState.selectedLabel !== this.state.inputLabel) {
                 this.setState({inputLabel: this.props.parentState.selectedLabel});
             }
-            this.getActiveSelection().setLabel(this.state.inputLabel);
+            if (this.getActiveSelection().getLabel() === "") {
+                this.getActiveSelection().setLabel(this.state.inputLabel);
+            }
         }
     }
 
