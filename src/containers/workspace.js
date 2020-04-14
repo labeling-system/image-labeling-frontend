@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Canvas from "../components/canvas";
 import Button from 'react-bootstrap/Button';
 import Tools from "../components/tools";
-import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE} from "../util/const";
+import { STATE_EDIT, STATE_RECTANGLE, STATE_DELETE, STATE_RESIZE, INTERVAL} from "../util/const";
 import { Redirect } from 'react-router-dom';
 import { getMostUsedLabels } from '../api/label';
-import { pingImage } from '../api/image';
+import { pingImage, updateStatusImage } from '../api/image';
 import { getWorkingImage, saveImage, getSpecificImage } from '../api/selection';
 import { REDIRECT_ADDRESS } from '../util/const'
 
@@ -92,14 +92,14 @@ class Workspace extends Component{
         try {
             let labelResult = await getMostUsedLabels();
             this.setState({ labelList: labelResult.data.labelList });
-
+            
             // ping backend
             let intervalId = setInterval(async () => {
-                print(this.state.idData)
+                console.log(this.state.idData)
                 if (this.state.idData !== '') {
                     await pingImage(this.state.idData);
                 }
-            }, 3000);
+            }, INTERVAL * 60 * 1000);
             this.setState({ intervalId: intervalId });
             
         } catch (err) {
@@ -159,8 +159,11 @@ class Workspace extends Component{
     
     }
 
-    componentWillUnmount() {
+    async componentWillUnmount() {
         clearInterval(this.state.intervalId);
+        if (this.state.finish !== true) {
+            await(updateStatusImage(this.state.idData));
+        }
     }
     
     makeActive(){

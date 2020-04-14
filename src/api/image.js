@@ -60,6 +60,19 @@ export const pingImage = (id) => {
     });
 };
 
+export const updateStatusImage = (id) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'post',
+            url: API + '/image/update/' + id
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
+
 export const getAllLabeled = () => {
     return new Promise((resolve, reject) => {
         axios({
