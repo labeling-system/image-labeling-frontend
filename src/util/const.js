@@ -22,7 +22,6 @@ export const STATE_RESIZE = 'resize';
 
 // Var
 export const ERROR = 15;
-export const REDIRECT_ADDRESS = "http://localhost:3000/workspace";
 
 // PING 
 // in minutes

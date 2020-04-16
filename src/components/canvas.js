@@ -31,8 +31,6 @@ export class canvas extends React.Component {
     actualHeight = 0;
     actualWidth = 0;
 
-    //data = "url(" + this.props.parentState.data + ")";
-
     // Style for canvas
     setWorkspaceSetting(){
         // console.log("ini data: " +this.props.parentState.data)
@@ -48,27 +46,8 @@ export class canvas extends React.Component {
             position: "relative",
             cursor: `${this.state.cursor}`
         };
-        console.log("yuhu", this.data);
+        // console.log("yuhu", this.data);
         return _setWorkspaceSetting;
-    }
-
-    // Get Image Dimension
-    getImgDimension(){
-
-        this.actualWidth = this.props.parentState.width;
-        this.actualHeight = this.props.parentState.height;
-
-        // console.log('actualWidth =' + this.actualWidth + '  actualHeight = ' + this.actualHeight);    
-
-        if(this.actualWidth > this.actualHeight){
-            this.scaledWidth = this.widthSize;           
-            this.scaledHeight = this.actualHeight / this.actualWidth * this.scaledWidth;
-        }else{
-            this.scaledHeight = this.heightSize;
-            this.scaledWidth = this.actualWidth / this.actualHeight * this.scaledHeight;      
-        }
-
-        // console.log('scaledWidth =' + this.scaledWidth + '  scaledHeight = ' + this.scaledHeight);    
     }
 
     // Style for input label 
@@ -80,6 +59,7 @@ export class canvas extends React.Component {
         return posInputLabel
     }
 
+    //Show all selection have been selected from daatabase
     async handleGetAllSelection(image_id) {
         let result = null;
         try {
@@ -158,8 +138,7 @@ export class canvas extends React.Component {
     getActiveSelection() {
         var result = this.mySelection.find(obj => {
             return obj.id === this.activeId
-          })
-        
+          })        
         return result
     } 
     
@@ -436,7 +415,6 @@ export class canvas extends React.Component {
 
 
     //All method for checking point position toward selection
-
     //For cursor behavior
     isPointInsideRect(pointX,pointY,rectX,rectY,rectWidth,rectHeight){
         return  (rectX <= pointX) && (rectX + rectWidth >= pointX) &&
@@ -577,8 +555,6 @@ export class canvas extends React.Component {
 
     componentDidUpdate() {
 
-        this.getImgDimension();
-
         //Initialize mySelection
         if(this.props.parentState.isNext === true){
             this.mySelection = [];
@@ -617,19 +593,27 @@ export class canvas extends React.Component {
 
     // Canvas properties
     componentDidMount() {
+
         this.canvas.width = this.widthSize;
         this.canvas.height = this.heightSize;
         this.ctx = this.canvas.getContext("2d");
         this.ctx.strokeStyle = "red";
         this.ctx.lineWidth = 2;      
-        console.log("alive_CANVAS===========================================");
-        let separator = REDIRECT_ADDRESS;
-        let link = window.location.href;
+
+        //Check Redirected from edit or not
+        let initialURL = window.location.href;
+        let temp = initialURL.split('/')[2].split(':')[0];
+        temp = "http://" + temp + ":3000/workspace";
         let result = null;
-        if(link !== separator){
-            separator += "/";
-            result = link.match(new RegExp(separator  + '(\\w+)'))[1];
-            this.handleGetAllSelection(result);
+        if(initialURL !== temp){
+            temp += "/";
+            try{
+                result = initialURL.match(new RegExp(temp  + '(\\w+)'))[1];
+                this.handleGetAllSelection(result);
+            }
+            catch (err){
+                alert("Click OK to continue");
+            }
         }
     }
 

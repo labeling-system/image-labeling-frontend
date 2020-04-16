@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom';
 import { getMostUsedLabels } from '../api/label';
 import { pingImage, updateStatusImage } from '../api/image';
 import { getWorkingImage, saveImage, getSpecificImage } from '../api/selection';
-import { REDIRECT_ADDRESS } from '../util/const'
 
 class Workspace extends Component{
     constructor(props) {
@@ -77,15 +76,18 @@ class Workspace extends Component{
 
 
     async componentDidMount() {
-        console.log("alive===========================================");
-        let separator = REDIRECT_ADDRESS;
-        let link = window.location.href;
+        let initialURL = window.location.href;
+        let temp = initialURL.split('/')[2].split(':')[0];
+        temp = "http://" + temp + ":3000/workspace";
         let result = null;
-        if(link !== separator){
-            separator += "/";
-            result = link.match(new RegExp(separator  + '(\\w+)'))[1];
-            // this.setState({redirectId : result});
-            console.log("result nya " + result);
+        if(initialURL !== temp){
+            temp += "/";
+            try{
+                result = initialURL.match(new RegExp(temp  + '(\\w+)'))[1];
+            }
+            catch (err){
+                alert("Click OK to continue");
+            }
         }
 
         try {
