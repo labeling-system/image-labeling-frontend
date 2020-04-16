@@ -1,7 +1,7 @@
 import React from 'react';
 import { getSelectionImage } from '../api/selection';
 import Selection from './selection'
-import {ERROR, REDIRECT_ADDRESS} from '../util/const'
+import {ERROR} from '../util/const'
 export class canvas extends React.Component {
 
     constructor(props) {
