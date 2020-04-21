@@ -1,5 +1,8 @@
 image: node:10
 
+before_script:
+  - yarn install
+
 cache:
   key: one-key-to-rule-them-all
   paths:
