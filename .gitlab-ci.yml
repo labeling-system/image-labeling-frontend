@@ -1,4 +1,11 @@
-image: node:latest
+image: node:10
+
+before_script:
+  - yarn
+cache:
+  key: one-key-to-rule-them-all
+  paths:
+    - node_modules/
 
 stages:
   - lint
