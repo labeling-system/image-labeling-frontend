@@ -1,42 +1,41 @@
-import React, { Component } from "react";
+import React, { Component } from 'react'
 import {
   BrowserRouter as Router,
   Switch,
   Route
-} from "react-router-dom";
-import './static/css/style.css';
-import Navigation from "./components/navigation";
-import Workspace from "./containers/workspace";
-import UserRole from "./containers/userrole";
-import Edit from "./containers/edit";
-import Others from "./containers/others";
-import Login from "./containers/login";
-import Register from "./containers/register"
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { WORKSPACE, USER, EDIT, UPLOAD, ADMIN, EDITOR } from "./util/const";
-
+} from 'react-router-dom'
+import './static/css/style.css'
+import Navigation from './components/navigation'
+import Workspace from './containers/workspace'
+import UserRole from './containers/userrole'
+import Edit from './containers/edit'
+import Others from './containers/others'
+import Login from './containers/login'
+import Register from './containers/register'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { WORKSPACE, USER, EDIT, UPLOAD, ADMIN, EDITOR } from './util/const'
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
     this.state = {
-        isAuth: false,
-        role:''
+      isAuth: false,
+      role: ''
     }
 
     this.handler = this.handler.bind(this)
     this.roleHandler = this.roleHandler.bind(this)
   }
 
-  handler(bool) {
-    this.setState({isAuth: bool})
+  handler (bool) {
+    this.setState({ isAuth: bool })
   }
 
-  roleHandler(role) {
-    this.setState({role : role})
+  roleHandler (role) {
+    this.setState({ role: role })
   }
 
-  render() {
+  render () {
     return (
       <Router>
         <div id='app'>
@@ -69,8 +68,8 @@ class App extends Component {
           </Switch>
         </div>
       </Router>
-    );  
+    )
   }
 }
 
-export default App;
+export default App
