@@ -3,11 +3,6 @@ image: node:latest
 before_script:
   - npm install
 
-cache:
-  key: one-key-to-rule-them-all
-  paths:
-    - node_modules/
-
 stages:
   - lint
   - test
