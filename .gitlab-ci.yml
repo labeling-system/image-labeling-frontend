@@ -1,7 +1,4 @@
-image: node:10
-
-before_script:
-  - npm install
+image: node:latest
 
 cache:
   key: one-key-to-rule-them-all
