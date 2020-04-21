@@ -5,10 +5,10 @@ stages:
   - test
   - deploy
 
-# lint:
-#   stage: lint
-#   script:
-
+lint:
+  stage: lint
+  script:
+    - yarn run lint
 
 # test:
 #   stage: test
