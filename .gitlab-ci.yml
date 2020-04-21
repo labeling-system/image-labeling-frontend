@@ -1,0 +1,25 @@
+image: node:latest
+
+stages:
+  - lint
+  - test
+  - deploy
+
+# lint:
+#   stage: lint
+#   script:
+
+
+# test:
+#   stage: test
+#   script:
+
+deploy:
+  only:
+    - deploy
+    - master
+  stage: deploy
+  script:
+    - (docker stop label-2-fe-app || true) && (docker rm label-2-fe-app || true)
+    - docker build -t label-2-fe-app .
+    - docker run --name label-2-fe-app -p 3000:80 -d label-2-fe-app
