@@ -167,8 +167,9 @@ class Edit extends Component {
                                                 e.stopPropagation();
                                                 this.handleRedirectToWorkspace(image[ID],image[STATUS])
                                             }}
+                                            className={'edit-row-' + image[STATUS]}
                                         >
-                                        {/* <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}> */}
+                                            
                                             <td>{i + (this.state.active - 1)*COUNT_PAGE + 1}</td>
                                             <td>{image[FILENAME]}</td>
                                             {

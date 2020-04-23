@@ -220,6 +220,9 @@ code {
 table tr:hover {
 	cursor: pointer;
 }
+.edit-row-editing {
+	cursor: initial !important;
+}
 table td {
 	vertical-align: middle !important;
 }
