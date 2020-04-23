@@ -250,6 +250,14 @@ table tr th:last-child, table tr td:last-child {
 .edit-image-editing {
 	color: red;
 }
+.edit-loading {
+	display: flex;
+	align-items: center;
+}
+.edit-loading span {
+	margin-left: 15px;
+}
+
 
 /* Input label */
 #input-label {

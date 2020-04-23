@@ -88,10 +88,6 @@ class Others extends Component {
             <div id='other' className='parent-wrapper'>
                 <div className='wrapper'>
                     <h2 className='page-title'>Upload Images</h2>
-                    <Alert variant='danger'>
-                        By uploading new images, you will lost all your labeled images you have
-                        now. Please make sure you have download all xml/json output file before.
-                    </Alert>
                     <p>Choose images from a directory to upload</p>
                     {
                         this.state.error !== '' ? 
@@ -189,12 +185,10 @@ function ModalUpload(props) {
     
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Warning</Modal.Title>
+                    <Modal.Title>Upload</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    By uploading new images, you will <b className='red'>lost</b> all your labeled images you have
-                    now. Please make sure you have <b className='green'>download</b> all xml/json output file before.
-                    If you want to proceed, browse the directory.
+                    Choose a folder. 
                 </Modal.Body>
                 <Modal.Footer>
                     <input
