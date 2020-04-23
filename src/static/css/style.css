@@ -223,6 +223,13 @@ table tr:hover {
 .edit-row-editing {
 	cursor: initial !important;
 }
+.edit-image-button {
+	z-index: 100;
+	position: relative;
+}
+#edit table tr th:nth-child(3), table tr td:nth-child(3) {
+	width: 150px;
+}
 table td {
 	vertical-align: middle !important;
 }

@@ -5,6 +5,7 @@ import { UNLABELED, LABELED, EDITING } from '../util/const';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
+import { deleteImageById } from '../api/image';
 
 const ID = 0;
 const STATUS = 1;
@@ -42,9 +43,11 @@ class Edit extends Component {
 
     async handleDelete(imageId) {
         try {
-            console.log("delete");
-            console.log(imageId);
-            // await postImage(_files);
+            await deleteImageById(imageId);
+            let result = await getAllImages(1);
+            this.setState({ images: result.data.images });
+            this.setState({ count: result.data.count})
+            this.setState({ error: '' });
         } catch(err) {
             console.log(err);
         }
@@ -87,10 +90,6 @@ class Edit extends Component {
         let active = this.state.active;
         let items = [];
         let max_number = Math.ceil(this.state.count/COUNT_PAGE);
-        
-        // if (this.state.count%COUNT_PAGE !== 0) {
-        //     max_number += 1;
-        // }
 
         let start_count = active - WIDTH_PAGINATION;
         let end_count = active + WIDTH_PAGINATION;
@@ -184,9 +183,11 @@ class Edit extends Component {
                                             <td>
                                                 {
                                                     image[STATUS] === EDITING? 
-                                                    <Button variant="danger" disabled onClick={() => this.handleDelete(image[ID])}>Delete</Button>
+                                                    <Button variant="danger" className='edit-image-button' disabled onClick={() => this.handleDelete(image[ID])}>Delete</Button>
                                                     :
-                                                    <Button variant="danger" onClick={() => this.handleDelete(image[ID])}>Delete</Button>
+                                                    <Button variant="danger" className='edit-image-button' onClick={(e) =>{
+                                                        e.stopPropagation();
+                                                        this.handleDelete(image[ID])}}>Delete</Button>
                                                 }
                                             </td>
                                         </tr>
