@@ -3,6 +3,7 @@ import { getAllImages } from '../api/image';
 import { Redirect } from 'react-router-dom';
 import { UNLABELED, LABELED, EDITING } from '../util/const';
 import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import Pagination from 'react-bootstrap/Pagination';
 
 const ID = 0;
@@ -37,7 +38,16 @@ class Edit extends Component {
             console.log(err);
             this.setState({ error: 'Error, please contact the administrator' });
         }
+    }
 
+    async handleDelete(imageId) {
+        try {
+            console.log("delete");
+            console.log(imageId);
+            // await postImage(_files);
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     // TODO: tell workspace its id
@@ -147,12 +157,17 @@ class Edit extends Component {
                                     <th>No</th>
                                     <th>Filename</th>
                                     <th>Status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {
                                     this.state.images.map((image, i) => (
-                                        <tr id={'edit-image-' + image[ID]} key={i} onClick={() => this.handleRedirectToWorkspace(image[ID],image[STATUS])}>
+                                        <tr id={'edit-image-' + image[ID]} key={i} onClick={(e) => {
+                                                e.stopPropagation();
+                                                this.handleRedirectToWorkspace(image[ID],image[STATUS])
+                                            }}
+                                        >
                                         {/* <tr id={'edit-image-' + image[ID]} key={i} onClick={this.handleRedirectToWorkspace}> */}
                                             <td>{i + (this.state.active - 1)*COUNT_PAGE + 1}</td>
                                             <td>{image[FILENAME]}</td>
@@ -165,6 +180,14 @@ class Edit extends Component {
                                             {
                                                 image[STATUS] === EDITING && <td className='edit-image-editing'>{image[STATUS]}</td>
                                             }
+                                            <td>
+                                                {
+                                                    image[STATUS] === EDITING? 
+                                                    <Button variant="danger" disabled onClick={() => this.handleDelete(image[ID])}>Delete</Button>
+                                                    :
+                                                    <Button variant="danger" onClick={() => this.handleDelete(image[ID])}>Delete</Button>
+                                                }
+                                            </td>
                                         </tr>
                                     ))}
                             </tbody>

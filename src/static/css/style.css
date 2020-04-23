@@ -227,7 +227,7 @@ table tr th:first-child, table tr td:first-child {
 	width: 52px;
 }
 table tr th:last-child, table tr td:last-child {
-	width: 160px;
+	width: 100px;
 }
 
 /* Edit Page */

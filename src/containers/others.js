@@ -67,8 +67,7 @@ class Others extends Component {
         this.setState({ isLoading: true });
         
         try {
-            let _files = await Promise.all(this.processFiles(files))
-            await deleteAllImages();
+            let _files = await Promise.all(this.processFiles(files));
             await postImage(_files);
             this.setState({ uploaded: true });
             this.setState({ error: '' });
@@ -120,7 +119,6 @@ class Others extends Component {
     }
 
     async downloadXML() {
-        console.log('download XML')
         try {
             fetch('http://localhost:5000/downloadxml')
 			.then(response => {
