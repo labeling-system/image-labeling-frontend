@@ -220,6 +220,16 @@ code {
 table tr:hover {
 	cursor: pointer;
 }
+.edit-row-editing {
+	cursor: initial !important;
+}
+.edit-image-button {
+	z-index: 100;
+	position: relative;
+}
+#edit table tr th:nth-child(3), table tr td:nth-child(3) {
+	width: 150px;
+}
 table td {
 	vertical-align: middle !important;
 }
@@ -227,7 +237,7 @@ table tr th:first-child, table tr td:first-child {
 	width: 52px;
 }
 table tr th:last-child, table tr td:last-child {
-	width: 160px;
+	width: 100px;
 }
 
 /* Edit Page */
@@ -240,6 +250,14 @@ table tr th:last-child, table tr td:last-child {
 .edit-image-editing {
 	color: red;
 }
+.edit-loading {
+	display: flex;
+	align-items: center;
+}
+.edit-loading span {
+	margin-left: 15px;
+}
+
 
 /* Input label */
 #input-label {
