@@ -59,8 +59,19 @@ class Workspace extends Component{
             else
             {
                 console.log(result.data.error);
-                alert("All images are done processed!");
-                this.setState({finish: true});
+                if (result.data.error === "all images are done being labeled"){
+                    console.log(result.data.error);
+                    alert("All images are done processed!");
+                    this.setState({finish: true});
+                }
+                if (result.data.error === "error occured. can't get image from database"){
+                    console.log(result.data.error);
+                    alert("All images are done processed!");
+                    this.setState({finish: true});
+                }
+                else {
+                    alert(result.data.error);
+                }
             }
         } catch (err) {
             this.setState({ error: err });
@@ -124,8 +135,20 @@ class Workspace extends Component{
             }
             else
             {
-                alert("All images are done processed!");
-                this.setState({finish: true});
+                console.log(imageResult.data.error);
+                if (imageResult.data.error === "all images are done being labeled"){
+                    console.log(imageResult.data.error);
+                    alert("All images are done processed!");
+                    this.setState({finish: true});
+                }
+                if (imageResult.data.error === "error occured. can't get image from database"){
+                    console.log(imageResult.data.error);
+                    alert("All images are done processed!");
+                    this.setState({finish: true});
+                }
+                else {
+                    alert(imageResult.data.error);
+                }
             }
                 
             } catch (err) {
