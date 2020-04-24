@@ -5,7 +5,8 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
-import Resizer from 'react-image-file-resizer'; 
+import Resizer from 'react-image-file-resizer';
+import { API } from '../config';
 
 class Others extends Component {
     constructor(props) {
@@ -122,7 +123,8 @@ class Others extends Component {
     async downloadXML() {
         console.log('download XML')
         try {
-            fetch('http://localhost:5000/downloadxml')
+            let url = API + '/downloadxml'
+            fetch(url)
 			.then(response => {
 				response.blob().then(blob => {
 					let url = window.URL.createObjectURL(blob);
@@ -143,7 +145,8 @@ class Others extends Component {
     async downloadJSON() {
         console.log("download JSON")
         try {
-            fetch('http://localhost:5000/downloadjson')
+            let url = API + '/downloadjson'
+            fetch(url)
 			.then(response => {
 				response.blob().then(blob => {
 					let url = window.URL.createObjectURL(blob);
