@@ -47,6 +47,19 @@ export const deleteAllImages = () => {
     });
 };
 
+export const deleteImageById = (id) => {
+    return new Promise((resolve, reject) => {
+        axios({
+            method: 'delete',
+            url: API + '/image/' + id
+        }).then((res) => {
+            resolve(res);
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+};
+
 export const pingImage = (id) => {
     return new Promise((resolve, reject) => {
         axios({
