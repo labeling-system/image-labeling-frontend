@@ -21,6 +21,39 @@ class Others extends Component {
     }
 
     getImage(url, file){
+
+        if (file.size > 3000000 ) {
+            return new Promise(function(resolve, reject){
+            
+                Resizer.imageFileResizer(
+                    file,
+                    500,
+                    500,
+                    'JPEG',
+                    50,
+                    0,
+                    uri => {
+                        let uriFile = uri
+    
+                        var img = new Image()
+                        img.onload = function(){
+                            let _file = [];
+                            _file.push(file.name);
+                            _file.push(this.width);
+                            _file.push(this.height);
+                            _file.push(uriFile);
+                            resolve(_file);
+                        }
+                        img.onerror = function(){
+                            reject(url)
+                        }
+                        img.src = url
+                    },
+                    'base64'
+                );
+            })
+        } 
+
         return new Promise(function(resolve, reject){
             
             Resizer.imageFileResizer(
@@ -28,7 +61,7 @@ class Others extends Component {
                 500,
                 500,
                 'JPEG',
-                30,
+                100,
                 0,
                 uri => {
                     let uriFile = uri
