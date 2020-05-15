@@ -142,7 +142,8 @@ class Others extends Component {
                     <h2 className='page-title'>Download</h2>
                     <p>Below is output of selection in JSON and XML format.</p>
                     <Button onClick={() => this.downloadXML()}>Download XML</Button> {'  '}
-                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button>
+                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button> {'  '}
+                    <Button onClick={() => this.downloadImages()}>Download Images</Button>
                 </div>
             </div>
         )
@@ -189,6 +190,10 @@ class Others extends Component {
             console.log(err);
             this.setState({ error: 'Error, please contact the administrator' });
         }
+    }
+
+    async downloadImages() {
+        console.log("download all images")
     }
     
 }
