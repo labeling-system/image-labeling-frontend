@@ -581,7 +581,7 @@ export class canvas extends React.Component {
         } 
         
         // Handle onClick change input label state
-        if(this.props.parentState.anActive === true) {
+        if(this.props.parentState.anActive === true || this.props.parentState.isNext === true) {
             if(this.props.parentState.selectedLabel !== "" && this.props.parentState.selectedLabel !== this.state.inputLabel) {
                 this.setState({inputLabel: this.props.parentState.selectedLabel});
             }
