@@ -21,6 +21,39 @@ class Others extends Component {
     }
 
     getImage(url, file){
+
+        if (file.size > 3000000 ) {
+            return new Promise(function(resolve, reject){
+            
+                Resizer.imageFileResizer(
+                    file,
+                    500,
+                    500,
+                    'JPEG',
+                    50,
+                    0,
+                    uri => {
+                        let uriFile = uri
+    
+                        var img = new Image()
+                        img.onload = function(){
+                            let _file = [];
+                            _file.push(file.name);
+                            _file.push(this.width);
+                            _file.push(this.height);
+                            _file.push(uriFile);
+                            resolve(_file);
+                        }
+                        img.onerror = function(){
+                            reject(url)
+                        }
+                        img.src = url
+                    },
+                    'base64'
+                );
+            })
+        } 
+
         return new Promise(function(resolve, reject){
             
             Resizer.imageFileResizer(
@@ -28,7 +61,7 @@ class Others extends Component {
                 500,
                 500,
                 'JPEG',
-                30,
+                100,
                 0,
                 uri => {
                     let uriFile = uri
@@ -109,7 +142,8 @@ class Others extends Component {
                     <h2 className='page-title'>Download</h2>
                     <p>Below is output of selection in JSON and XML format.</p>
                     <Button onClick={() => this.downloadXML()}>Download XML</Button> {'  '}
-                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button>
+                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button> {'  '}
+                    <Button onClick={() => this.downloadImages()}>Download Images</Button>
                 </div>
             </div>
         )
@@ -124,7 +158,7 @@ class Others extends Component {
 					let url = window.URL.createObjectURL(blob);
 					let a = document.createElement('a');
 					a.href = url;
-					a.download = 'label.zip';
+					a.download = 'xml.zip';
 					a.click();
 				});
 				//window.location.href = response.url;
@@ -146,7 +180,29 @@ class Others extends Component {
 					let url = window.URL.createObjectURL(blob);
 					let a = document.createElement('a');
 					a.href = url;
-					a.download = 'label.zip';
+					a.download = 'json.zip';
+					a.click();
+				});
+				//window.location.href = response.url;
+		    });
+            this.setState({ error: '' });
+        } catch (err) {
+            console.log(err);
+            this.setState({ error: 'Error, please contact the administrator' });
+        }
+    }
+
+    async downloadImages() {
+        console.log("download all images")
+        try {
+            let url = API + '/downloadimg'
+            fetch(url)
+			.then(response => {
+				response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'images.zip';
 					a.click();
 				});
 				//window.location.href = response.url;

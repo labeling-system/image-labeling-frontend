@@ -557,36 +557,42 @@ export class canvas extends React.Component {
 
         //Initialize mySelection
         if(this.props.parentState.isNext === true){
+            if(this.props.parentState.anActive === true){
+                this.activeId = null;
+                this.props.parentNotActive();
+            }
             this.mySelection = [];
             this.clear();
         }
-        //Handle delete selection
-        if(this.props.parentState.delete === true ) {
+        else{
+            //Handle delete selection
+            if(this.props.parentState.delete === true ) {
             this.deleteSelection(this.activeId);
             console.log(this.mySelection);
             this.clear();
             this.drawAllSelection();
             this.activeId = null;
-        }
-        //Rectangle cursor trigger
-        if(this.props.parentState.rectangle === true) {
-            this.setCursor(0,0);
-            this.clear();
-            this.drawAllSelection();
-            this.activeId = null;
-        }
-        // Default cursor trigger
-        if(this.props.parentState.edit === true) {
-            this.setCursor(0,0);
-        } 
-        
-        // Handle onClick change input label state
-        if(this.props.parentState.anActive === true || this.props.parentState.isNext === true) {
-            if(this.props.parentState.selectedLabel !== "" && this.props.parentState.selectedLabel !== this.state.inputLabel) {
-                this.setState({inputLabel: this.props.parentState.selectedLabel});
             }
-            if (this.getActiveSelection().getLabel() === "") {
-                this.getActiveSelection().setLabel(this.state.inputLabel);
+            //Rectangle cursor trigger
+            if(this.props.parentState.rectangle === true) {
+                this.setCursor(0,0);
+                this.clear();
+                this.drawAllSelection();
+                this.activeId = null;
+            }
+            // Default cursor trigger
+            if(this.props.parentState.edit === true) {
+                this.setCursor(0,0);
+            } 
+            
+            // Handle onClick change input label state
+            if(this.props.parentState.anActive === true) {
+                if(this.props.parentState.selectedLabel !== "" && this.props.parentState.selectedLabel !== this.state.inputLabel) {
+                    this.setState({inputLabel: this.props.parentState.selectedLabel});
+                }
+                if (this.getActiveSelection().getLabel() === "") {
+                    this.getActiveSelection().setLabel(this.state.inputLabel);
+                }
             }
         }
     }
