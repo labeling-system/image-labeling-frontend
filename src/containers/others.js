@@ -142,7 +142,8 @@ class Others extends Component {
                     <h2 className='page-title'>Download</h2>
                     <p>Below is output of selection in JSON and XML format.</p>
                     <Button onClick={() => this.downloadXML()}>Download XML</Button> {'  '}
-                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button>
+                    <Button onClick={() => this.downloadJSON()}>Download JSON</Button> {'  '}
+                    <Button onClick={() => this.downloadImages()}>Download Images</Button>
                 </div>
             </div>
         )
@@ -157,7 +158,7 @@ class Others extends Component {
 					let url = window.URL.createObjectURL(blob);
 					let a = document.createElement('a');
 					a.href = url;
-					a.download = 'label.zip';
+					a.download = 'xml.zip';
 					a.click();
 				});
 				//window.location.href = response.url;
@@ -179,7 +180,29 @@ class Others extends Component {
 					let url = window.URL.createObjectURL(blob);
 					let a = document.createElement('a');
 					a.href = url;
-					a.download = 'label.zip';
+					a.download = 'json.zip';
+					a.click();
+				});
+				//window.location.href = response.url;
+		    });
+            this.setState({ error: '' });
+        } catch (err) {
+            console.log(err);
+            this.setState({ error: 'Error, please contact the administrator' });
+        }
+    }
+
+    async downloadImages() {
+        console.log("download all images")
+        try {
+            let url = API + '/downloadimg'
+            fetch(url)
+			.then(response => {
+				response.blob().then(blob => {
+					let url = window.URL.createObjectURL(blob);
+					let a = document.createElement('a');
+					a.href = url;
+					a.download = 'images.zip';
 					a.click();
 				});
 				//window.location.href = response.url;
